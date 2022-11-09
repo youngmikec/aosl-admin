@@ -1,0 +1,6 @@
+.content-wrapper{
+    background-color: #fbffff;
+    width: 100%;
+    min-height: 100vh;
+    max-height: max-content;
+}

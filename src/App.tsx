@@ -1,25 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { RouteType } from './routes/auth-routes';
+import { authRoutes, privateRoutes } from './routes';
+import ProtectedRoute, { NotProtectedRoute } from './routes/protected-routes';
+
 
 function App() {
+  const getRoutes = (routes: RouteType[]) => routes.map((route: RouteType, index: number) => {
+    const Component = route.component;
+    return <Route key={index} path={route.path} element={ 
+      <NotProtectedRoute>
+        {Component}
+      </NotProtectedRoute>
+    } />
+  })
+
+  const getPrivateRoutes = (routes: RouteType[]) => routes.map((route: RouteType, index: number) => {
+    const Component = route.component;
+    return <Route key={index} path={route.path} element={ <ProtectedRoute>{Component}</ProtectedRoute>} />
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {getRoutes(authRoutes)}
+        {getPrivateRoutes(privateRoutes)}
+      </Routes>
+    </Router>
   );
 }
 
