@@ -21,35 +21,31 @@ const Sidebar = ({sidebarMenus}: Props) => {
                         </Link>
                     </li>
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
-                        <Link to="/dashboard">
-                            Wallet       
+                        <Link to="/users">
+                            Users       
                         </Link>
                     </li>
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
-                        <Link to="/sell-crypto">
-                            Sell Crypto       
+                        <Link to="/cryptos">
+                            Cryptos     
                         </Link>
                     </li>
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
-                        <Link to="/buy-crypto">
-                            Buy Crypto       
-                        </Link>
-                    </li>
-                    <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
-                        <Link to="/trade-giftcard">
-                            Trade Giftcard       
+                        <Link to="/giftcards">
+                            Giftcards     
                         </Link>
                     </li>
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
                         <Link to="/airtime">
-                            Airtime to Cash      
+                            Airtime       
                         </Link>
                     </li>
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
-                        <Link to="/history">
-                            Order History      
+                        <Link to="/orders">
+                            Orders     
                         </Link>
                     </li>
+                    
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
                         <Link to="/account">
                             Account Settings     

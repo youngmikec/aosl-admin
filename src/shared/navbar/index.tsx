@@ -32,19 +32,19 @@ const Navbar = () => {
                 <div className='flex justify-between w-4/12'>
                     <div className="text-[#8652A4] text-sm font-semibold">
                         <span>
-                            <Link to="/users-dashboard">Home</Link>
+                            <Link to="/users-dashboard">Add new post</Link>
                         </span>
                     </div>
                     <div className="text-[#8c8c8c] text-sm font-semibold">
                         <span>
-                            <Link to="/users-dashboard">How to trade</Link>
+                            <Link to="/users-dashboard">Add Content</Link>
                         </span>
                     </div>
-                    <div className="text-[#8c8c8c] text-sm font-semibold">
+                    {/* <div className="text-[#8c8c8c] text-sm font-semibold">
                         <span>
                             <Link to="/users-dashboard">chat</Link>
                         </span>
-                    </div>
+                    </div> */}
 
                     
                 </div>

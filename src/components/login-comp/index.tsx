@@ -3,7 +3,6 @@ import { Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 import logo from '../../assets/images/logo.png';
-import googleIcon from '../../assets/icons/google-icon.png';
 import './style.css';
 
 const LoginComp = () => {
