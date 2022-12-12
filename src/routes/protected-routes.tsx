@@ -8,8 +8,8 @@ type Props = {
 
 const ProtectedRoute = ({ children }: Props) => {
     
-	const token = getItem('token');
-	if (token) {
+	const clientToken = getItem('clientToken');
+	if (clientToken) {
 		return children;
 	}
 	return <Navigate to={'/'} replace />;
@@ -17,8 +17,8 @@ const ProtectedRoute = ({ children }: Props) => {
 
 
 export  const NotProtectedRoute = ({children}:Props)=>{
-    const token = getItem('token');
-    if(token){
+    const clientToken = getItem('clientToken');
+    if(clientToken){
         return <Navigate to={'/dashboard'} replace />;
     }
     return children;

@@ -1,0 +1,40 @@
+export enum UserType {
+    ADMIN = "ADMIN",
+    EDITOR = 'EDITOR',
+    USER = 'USER'
+}
+
+export enum GIFTCARD_TYPE {
+    PHYSICAL ='PHYSICAL',
+    ECODE ='ECODE'
+}
+export enum GIFTCARD_STATUS {
+    ACTIVE = 'ACTIVE',
+    DEACTIVATED = 'DEACTIVATED'
+}
+
+export enum ORDER_TYPE {
+    AIRTIME = 'AIRTIME',
+    GIFTCARD = 'GIFTCARD',
+    BUY_CRYPTO = 'BUY_CRYPTO',
+    SELL_CRYPTO = 'SELL_CRYPTO'
+}
+
+export enum ORDER_STATUS {
+    PENDING = 'PENDING',
+    PROOFED = 'PROOFED',
+    APPROVED = 'APPROVED',
+    DECLINED = 'DECLINED',
+    COMPLETED = 'COMPLETED',
+    CANCLED = 'CANCLED'
+}
+
+export enum  ORDER_PAYMENT_METHOD {
+    BANK = 'BANK',
+    WALLET = 'WALLET'
+}
+
+export enum  AIRTIME_STATUS {
+    ACTIVE = 'ACTIVE',
+    DEACTIVATED = 'DEACTIVATED'
+}
