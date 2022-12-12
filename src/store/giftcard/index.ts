@@ -6,18 +6,18 @@ const initialState: GiftcardState = {
     value: [],
 }
 
-export const cryptosSlice = createSlice({
+export const giftcardSlice = createSlice({
     name: "giftcardsState",
     initialState,
     reducers: {
-        INITIALIZE_CRYPTOS: (state, action: PayloadAction<GiftCard[]>) => {
+        INITIALIZE_GIFTCARDS: (state, action: PayloadAction<GiftCard[]>) => {
             state.value = action.payload;
         },
-        ADD_TO_CRYPTOS: (state, action: PayloadAction<GiftCard>) => {
+        ADD_TO_GIFTCARDS: (state, action: PayloadAction<GiftCard>) => {
             const { value } = state;
             state.value = [action.payload, ...value];
         },
-        UPDATE_CRYPTO_STATE: (state, action: PayloadAction<GiftCard>) => {
+        UPDATE_GIFTCARD_STATE: (state, action: PayloadAction<GiftCard>) => {
             for(let i = 0; i < state.value.length; i++){
                 if(state.value[i].id === action.payload.id){
                     state.value[i] = action.payload;
@@ -25,13 +25,13 @@ export const cryptosSlice = createSlice({
                 }
             }
         },
-        REMOVE_CRYPTO: (state, action: PayloadAction<string>) => {
+        REMOVE_GIFTCARD: (state, action: PayloadAction<string>) => {
             const newState: GiftCard[] = state.value.filter((item: GiftCard) => item.id !== action.payload);
             state.value = [...newState];
         }
     }
 })
 
-export const { INITIALIZE_CRYPTOS, ADD_TO_CRYPTOS, UPDATE_CRYPTO_STATE, REMOVE_CRYPTO } = cryptosSlice.actions;
+export const { INITIALIZE_GIFTCARDS, ADD_TO_GIFTCARDS, UPDATE_GIFTCARD_STATE, REMOVE_GIFTCARD } = giftcardSlice.actions;
 
-export default cryptosSlice.reducer;
+export default giftcardSlice.reducer;

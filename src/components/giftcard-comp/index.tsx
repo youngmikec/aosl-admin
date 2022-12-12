@@ -6,27 +6,26 @@ import { AxiosResponse } from 'axios';
 import moment from 'moment';
 
 //icons
+import { BiEditAlt } from 'react-icons/bi';
 import { BsFillCaretDownFill } from 'react-icons/bs';
 
 import Card from '../../shared/card';
-import { RootState } from '../../store';
-import { DELETE_CRYPTO, RETRIEVE_CRYPTOS } from '../../service';
-import { ApiResponse, CryptoCurrency } from '../../models';
-import { INITIALIZE_CRYPTOS, REMOVE_CRYPTO } from '../../store/cryptos';
 import { sortArray } from '../../utils';
-import { CloseAppModal, OpenAppModal } from '../../store/modal';
+import { RootState } from '../../store';
+import { ApiResponse, GiftCard } from '../../models';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
-import defaultImg from '../../assets/images/default.jpg';
-import { BiEditAlt } from 'react-icons/bi';
+import { CloseAppModal, OpenAppModal } from '../../store/modal';
+import { DELETE_GIFTCARD, RETRIEVE_GIFTCARDS } from '../../service';
+import { INITIALIZE_GIFTCARDS, REMOVE_GIFTCARD } from '../../store/giftcard';
 
 const GiftcardComp = () => {
     const dispatch = useDispatch();
-    const cryptoCurrencies: CryptoCurrency[] = useSelector((state: RootState) => state.cryptosState.value);
+    const Giftcards: GiftCard[] = useSelector((state: RootState) => state.giftcardsState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
-    const [cryptos, setCryptos] = useState<CryptoCurrency[]>([]);
-    const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency | undefined>();
+    const [giftcards, setGiftcards] = useState<GiftCard[]>([]);
+    const [selectedGiftcard, setSelectedGiftcard] = useState<GiftCard | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
 
     const notify = (type: string, msg: string) => {
@@ -43,14 +42,14 @@ const GiftcardComp = () => {
         }
     };
 
-    const retrieveCryptos = () => {
+    const retrieveGiftcards = () => {
         const query: string = `?sort=-createdAt`;
-        RETRIEVE_CRYPTOS(query)
+        RETRIEVE_GIFTCARDS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
-            setCryptos(payload);
-            dispatch(INITIALIZE_CRYPTOS(payload));
+            setGiftcards(payload);
+            dispatch(INITIALIZE_GIFTCARDS(payload));
         })
         .catch((err: any) => {
             const { message } = err.response.data;
@@ -59,9 +58,9 @@ const GiftcardComp = () => {
     };
 
     const sortData = (field: string) => {
-        const sortedArray: any[] = sortArray(cryptos, field);
+        const sortedArray: any[] = sortArray(giftcards, field);
         if (sortedArray.length > 0) {
-          setCryptos(sortedArray);
+          setGiftcards(sortedArray);
         }
     };
 
@@ -72,13 +71,13 @@ const GiftcardComp = () => {
 
     const handleDeleteRecord = (id: string) => {
         setDeleting(true);
-        DELETE_CRYPTO(id)
+        DELETE_GIFTCARD(id)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload, success } = res.data;
             if(success){
                 setDeleting(false);
                 notify("success", message);
-                dispatch(REMOVE_CRYPTO(payload.id));
+                dispatch(REMOVE_GIFTCARD(payload.id));
                 dispatch(CloseAppModal());
             }
         })
@@ -90,12 +89,12 @@ const GiftcardComp = () => {
     }
     
     useEffect(() => {
-        retrieveCryptos();
+        retrieveGiftcards();
     }, []);
 
     useEffect(() => {
-        setCryptos(cryptoCurrencies)
-    }, [cryptoCurrencies]);
+        setGiftcards(Giftcards);
+    }, [Giftcards]);
 
     return (
         <>
@@ -104,8 +103,8 @@ const GiftcardComp = () => {
                     {/* Title section */}
                     <div id="title">
                         <div className='mb-8'>
-                            <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Crypto Records Table</h3>
-                            <p className='text-[#7F7F80] text-sm'>Displaying {cryptoCurrencies.length} of {cryptoCurrencies.length} Airtime Record(s)</p>
+                            <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Giftcard Records Table</h3>
+                            <p className='text-[#7F7F80] text-sm'>Displaying {giftcards.length} of {giftcards.length} Giftcard Record(s)</p>
                         </div>
 
                         <div className="flex justify-between">
@@ -131,10 +130,9 @@ const GiftcardComp = () => {
                             <table className='table border w-full'>
                                 <thead>
                                     <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Crypto code</th>
+                                        <th className="text-left">Giftcard code</th>
                                         <th>Name</th>
                                         <th>Rate</th>
-                                        <th>Image</th>
                                         <th>Status</th>
                                         <th>Date</th>
                                         <th>Action</th>
@@ -143,15 +141,12 @@ const GiftcardComp = () => {
                                 
                                 <tbody className='text-[#7F7F80]'>
                                     {
-                                        cryptoCurrencies.length > 0 ?
-                                        cryptoCurrencies.map((item: CryptoCurrency) => {
+                                        giftcards.length > 0 ?
+                                        giftcards.map((item: GiftCard) => {
                                             return <tr key={item.code}>
                                                 <td className='text-left border-spacing-y-4'>{item?.code}</td>
                                                 <td className="text-center py-3">{item?.name}</td>
                                                 <td className="text-center py-3">{ item?.rate}</td>
-                                                <td className="text-center py-3">
-                                                    <img src={item?.cryptoImage || defaultImg } width="25px" height="25px" alt="crypto" />
-                                                </td>
                                                 <td className="text-center py-3">
                                                     {
                                                         item.status === 'ACTIVE' ? 
@@ -185,7 +180,7 @@ const GiftcardComp = () => {
                                                         <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                    setSelectedCrypto(item)
+                                                                    setSelectedGiftcard(item)
                                                                     openCryptoModal('view');
                                                                 }}
                                                             >
@@ -197,11 +192,11 @@ const GiftcardComp = () => {
                                                             <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                    setSelectedCrypto(item)
+                                                                    setSelectedGiftcard(item)
                                                                     openCryptoModal('update');
                                                                 }}
                                                             >
-                                                                Update Crypto
+                                                                Update Giftcard
                                                             </span>
                                                         </li>
 
@@ -209,11 +204,11 @@ const GiftcardComp = () => {
                                                             <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                setSelectedCrypto(item)
+                                                                setSelectedGiftcard(item)
                                                                 openCryptoModal('delete')
                                                                 }}
                                                             >
-                                                                Delete User
+                                                                Delete Giftcard
                                                             </span>
                                                         </li>
                                                     </ul>
@@ -245,7 +240,7 @@ const GiftcardComp = () => {
                     modalMode === 'update' && <CryptoUpdateForm crypto={selectedCrypto}  />
                 } */}
                 {
-                    modalMode === 'delete' && <DeleteComp id={selectedCrypto?.id} action={handleDeleteRecord} deleting={deleting} />
+                    modalMode === 'delete' && <DeleteComp id={selectedGiftcard?.id} action={handleDeleteRecord} deleting={deleting} />
                 }
             </AppModalComp>
 
