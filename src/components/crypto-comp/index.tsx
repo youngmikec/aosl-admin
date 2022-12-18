@@ -6,6 +6,7 @@ import { AxiosResponse } from 'axios';
 import moment from 'moment';
 
 //icons
+import { BiEditAlt } from 'react-icons/bi';
 import { BsFillCaretDownFill } from 'react-icons/bs';
 
 import Card from '../../shared/card';
@@ -18,8 +19,6 @@ import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import defaultImg from '../../assets/images/default.jpg';
-import { Link } from 'react-router-dom';
-import { BiEditAlt } from 'react-icons/bi';
 
 const CryptoComp = () => {
     const dispatch = useDispatch();
@@ -250,7 +249,7 @@ const CryptoComp = () => {
                 }
             </AppModalComp>
 
-        <ToastContainer />
+            <ToastContainer />
 
         </>
     )

@@ -6,6 +6,7 @@ import { ORDER_PAYMENT_METHOD, ORDER_STATUS, ORDER_TYPE } from "./enums";
 
 export type Order = {
     id: string;
+    code: string;
     orderCode: string;
     sendersPhone: string;
     amount: number;
