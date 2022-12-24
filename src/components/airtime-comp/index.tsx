@@ -20,15 +20,20 @@ import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import defaultImg from '../../assets/images/default.jpg';
 import { INITIALIZE_AIRTIMES } from '../../store/airtime';
+import AirtimeForm from './airtime-form';
+import SortComp from '../../shared/sort-comp';
 
 const AirtimeComp = () => {
     const dispatch = useDispatch();
     const Airtimes: Airtime[] = useSelector((state: RootState) => state.airtimeState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
+    const [searching, setSearching] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [airtimes, setAirtimes] = useState<Airtime[]>([]);
     const [selectedCrypto, setSelectedCrypto] = useState<Airtime | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
+
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -66,7 +71,7 @@ const AirtimeComp = () => {
         }
     };
 
-    const openCryptoModal = (mode: string = 'create', id: string = '') => {
+    const openModal = (mode: string = 'create', id: string = '') => {
         setModalMode(mode);
         dispatch(OpenAppModal());
     }
@@ -89,6 +94,18 @@ const AirtimeComp = () => {
             notify("error", message);
         });
     }
+
+    const handleSearchQuery = () => {
+        setSearching(true);
+        if(searchQuery !== '') {
+            const filteredResults: Airtime[] = airtimes.filter((item: Airtime) => Object.values(item).includes(searchQuery));
+            setAirtimes(filteredResults);
+            setSearching(false);
+        }else {
+            setAirtimes(Airtimes);
+            setSearching(false);
+        }
+    }
     
     useEffect(() => {
         retrieveAirtimes();
@@ -104,23 +121,42 @@ const AirtimeComp = () => {
                 <Card type='lg'>
                     {/* Title section */}
                     <div id="title">
-                        <div className='mb-8'>
-                            <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Airtime Records Table</h3>
-                            <p className='text-[#7F7F80] text-sm'>Displaying {airtimes.length} of {airtimes.length} Airtime Record(s)</p>
+                        <div className="flex justify-between w-full">
+                            <div className='mb-8'>
+                                <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Airtime Records Table</h3>
+                                <p className='text-[#7F7F80] text-sm'>Displaying {airtimes.length} of {airtimes.length} Airtime Record(s)</p>
+                            </div>
+
+                            <div className='mb-8'>
+                                <button 
+                                    className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
+                                    onClick={() => openModal('create')}
+                                >
+                                    create Airtime
+                                </button>
+                            </div>
+
                         </div>
 
                         <div className="flex justify-between">
                             <div>
-                                <div className='w-max text-[#7F7F80] text-sm py-1 px-4 border-2 border-[#ececec] rounded-md'>
-                                    <span className='mx-1 inline-block'>sort by type</span>
-                                    <span className='mx-1 inline-block'> <BsFillCaretDownFill /> </span>
-                                </div>
+                                <SortComp sortData={sortData} />
                             </div>
 
                             <div>
                                 <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input type="text" className='lg:w-80' />
-                                    <button className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'>Search</button>
+                                    <input 
+                                        type="text" 
+                                        className='lg:w-80 px-3 py-1'
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <button 
+                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
+                                        onClick={() => handleSearchQuery()}
+                                    >
+                                        { searching ? 'searching...' : 'Search' }
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +168,7 @@ const AirtimeComp = () => {
                             <table className='table border w-full'>
                                 <thead>
                                     <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Crypto code</th>
+                                        <th className="text-left">Airtime code</th>
                                         <th>Name</th>
                                         <th>Rate</th>
                                         <th>Image</th>
@@ -187,7 +223,7 @@ const AirtimeComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                     setSelectedCrypto(item)
-                                                                    openCryptoModal('view');
+                                                                    openModal('view');
                                                                 }}
                                                             >
                                                                 View Detail
@@ -199,10 +235,10 @@ const AirtimeComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                     setSelectedCrypto(item)
-                                                                    openCryptoModal('update');
+                                                                    openModal('update');
                                                                 }}
                                                             >
-                                                                Update Crypto
+                                                                Update Airtime
                                                             </span>
                                                         </li>
 
@@ -211,10 +247,10 @@ const AirtimeComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                 setSelectedCrypto(item)
-                                                                openCryptoModal('delete')
+                                                                openModal('delete')
                                                                 }}
                                                             >
-                                                                Delete User
+                                                                Delete Airtime
                                                             </span>
                                                         </li>
                                                     </ul>
@@ -236,10 +272,10 @@ const AirtimeComp = () => {
             </div>
 
             <AppModalComp title=''>
-                {/* {
-                    modalMode === 'create' && <CryptoForm />
-                }
                 {
+                    modalMode === 'create' && <AirtimeForm />
+                }
+                {/* {
                     modalMode === 'view' && <div>welcome to view product modal</div>
                 }
                 {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { AiOutlineSetting, AiOutlineDollar } from 'react-icons/ai';
+import { CgLogOff } from 'react-icons/cg';
+import { AiOutlineDollar } from 'react-icons/ai';
 import { RiDashboardFill } from 'react-icons/ri';
 import { FiUsers } from 'react-icons/fi';
 import { IoCardOutline, IoCopyOutline } from 'react-icons/io5';
@@ -15,6 +16,16 @@ type Props = {
 const Sidebar = ({sidebarMenus}: Props) => {
     const location = useLocation();
     const { pathname } = location;
+
+    const handleLogout = () => {
+        localStorage.removeItem("auth");
+        localStorage.removeItem("clientId");
+        localStorage.removeItem("clientID");
+        localStorage.removeItem("clientD");
+        localStorage.removeItem("clientToken");
+        window.location.href = "/login";
+    };
+    
 
     return (
         <>
@@ -91,13 +102,12 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     <li 
                         className={`${ pathname === '/account' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
                         title="account"
+                        onClick={() => handleLogout()}
                     >
-                        <Link to="/account">
-                            <div className='flex justify-start'>
-                                <div><span><AiOutlineSetting className='text-xl'/></span></div>
-                                <div className='mx-2'>Account Settings</div>
-                            </div>           
-                        </Link>
+                        <div className='flex justify-start'>
+                            <div><span><CgLogOff className='text-xl'/></span></div>
+                            <div className='mx-2'>Log Out</div>
+                        </div>           
                     </li>       
                     
                 </ul>

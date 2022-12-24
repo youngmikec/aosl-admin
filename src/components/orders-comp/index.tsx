@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import moment from 'moment';
 
 //icons
-import { BsFillCaretDownFill } from 'react-icons/bs';
+import { BsFillCaretDownFill, BsImage } from 'react-icons/bs';
 
 import { ApiResponse, Order } from '../../models';
 import Card from '../../shared/card';
@@ -170,7 +170,10 @@ const OrdersComp = () => {
                                                                 setSelectedOrder(item)
                                                                 openCryptoModal('preview')
                                                             }}
-                                                        >view</button>
+                                                        >
+                                                            <span className='mr-1 text-xs inline-flex'><BsImage /></span>
+                                                            view
+                                                        </button>
                                                         :
                                                         <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>No proof</button>
                                                     }

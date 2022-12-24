@@ -7,23 +7,26 @@ import moment from 'moment';
 
 //icons
 import { BiEditAlt } from 'react-icons/bi';
-import { BsFillCaretDownFill } from 'react-icons/bs';
 
 import Card from '../../shared/card';
 import { sortArray } from '../../utils';
 import { RootState } from '../../store';
+import SortComp from '../../shared/sort-comp';
 import { ApiResponse, GiftCard } from '../../models';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import { DELETE_GIFTCARD, RETRIEVE_GIFTCARDS } from '../../service';
 import { INITIALIZE_GIFTCARDS, REMOVE_GIFTCARD } from '../../store/giftcard';
+import GiftcardForm from './giftcard-form';
 
 const GiftcardComp = () => {
     const dispatch = useDispatch();
     const Giftcards: GiftCard[] = useSelector((state: RootState) => state.giftcardsState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
+    const [searching, setSearching] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [giftcards, setGiftcards] = useState<GiftCard[]>([]);
     const [selectedGiftcard, setSelectedGiftcard] = useState<GiftCard | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
@@ -64,7 +67,19 @@ const GiftcardComp = () => {
         }
     };
 
-    const openCryptoModal = (mode: string = 'create', id: string = '') => {
+    const handleSearchQuery = () => {
+        setSearching(true);
+        if(searchQuery !== '') {
+            const filteredResults: GiftCard[] = giftcards.filter((item: GiftCard) => Object.values(item).includes(searchQuery));
+            setGiftcards(filteredResults);
+            setSearching(false);
+        }else {
+            setGiftcards(Giftcards);
+            setSearching(false);
+        }
+    }
+
+    const openModal = (mode: string = 'create', id: string = '') => {
         setModalMode(mode);
         dispatch(OpenAppModal());
     }
@@ -102,23 +117,42 @@ const GiftcardComp = () => {
                 <Card type='lg'>
                     {/* Title section */}
                     <div id="title">
-                        <div className='mb-8'>
-                            <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Giftcard Records Table</h3>
-                            <p className='text-[#7F7F80] text-sm'>Displaying {giftcards.length} of {giftcards.length} Giftcard Record(s)</p>
+                        <div className="flex justify-between w-full">
+                            <div className='mb-8'>
+                                <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Giftcard Records Table</h3>
+                                <p className='text-[#7F7F80] text-sm'>Displaying {giftcards.length} of {giftcards.length} Giftcard Record(s)</p>
+                            </div>
+
+                            <div className='mb-8'>
+                                <button 
+                                    className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
+                                    onClick={() => openModal('create')}
+                                >
+                                    create giftcard
+                                </button>
+                            </div>
+
                         </div>
 
                         <div className="flex justify-between">
                             <div>
-                                <div className='w-max text-[#7F7F80] text-sm text-sm py-1 px-4 border-2 border-[#ececec] rounded-md'>
-                                    <span className='mx-1 inline-block'>sort by type</span>
-                                    <span className='mx-1 inline-block'> <BsFillCaretDownFill /> </span>
-                                </div>
+                                <SortComp sortData={sortData} />
                             </div>
 
                             <div>
                                 <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input type="text" className='lg:w-80' />
-                                    <button className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'>Search</button>
+                                    <input 
+                                        type="text" 
+                                        className='lg:w-80 px-3 py-1'
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <button 
+                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
+                                        onClick={() => handleSearchQuery()}
+                                    >
+                                        { searching ? 'searching...' : 'Search' }
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +215,7 @@ const GiftcardComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                     setSelectedGiftcard(item)
-                                                                    openCryptoModal('view');
+                                                                    openModal('view');
                                                                 }}
                                                             >
                                                                 View Detail
@@ -193,7 +227,7 @@ const GiftcardComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                     setSelectedGiftcard(item)
-                                                                    openCryptoModal('update');
+                                                                    openModal('update');
                                                                 }}
                                                             >
                                                                 Update Giftcard
@@ -205,7 +239,7 @@ const GiftcardComp = () => {
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
                                                                 setSelectedGiftcard(item)
-                                                                openCryptoModal('delete')
+                                                                openModal('delete')
                                                                 }}
                                                             >
                                                                 Delete Giftcard
@@ -230,10 +264,10 @@ const GiftcardComp = () => {
             </div>
 
             <AppModalComp title=''>
-                {/* {
-                    modalMode === 'create' && <CryptoForm />
-                }
                 {
+                    modalMode === 'create' && <GiftcardForm />
+                }
+                {/* {
                     modalMode === 'view' && <div>welcome to view product modal</div>
                 }
                 {
