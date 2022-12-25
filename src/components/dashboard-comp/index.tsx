@@ -1,112 +1,89 @@
-import React from 'react';
-
-// icons
-import {HiUsers} from 'react-icons/hi'
-import{BiMenuAltRight} from 'react-icons/bi';
-import{HiOutlineTrash} from 'react-icons/hi';
-
-// image
-import image from '../../assets/images/account-balance-bg.png';
+import React, { useState } from 'react';
 
 // style
 // import "./style.css";
 import Card from "../../shared/card";
+import DashboardCard from '../dashboard-card';
 
 const DashboardComp = () => {
-  return (
-    <>
-        <div>    
-            {/* FIRST SECTION STARTS HERE */}
+    const [searching, setSearching] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    
+    const handleSearchQuery = () => {
+        setSearching(true);
+        // if(searchQuery !== '') {
+        //     const filteredResults: CryptoCurrency[] = cryptos.filter((item: CryptoCurrency) => Object.values(item).includes(searchQuery));
+        //     setCryptos(filteredResults);
+        //     setSearching(false);
+        // }else {
+        //     setCryptos(cryptoCurrencies);
+        //     setSearching(false);
+        // }
+    }
 
-            <div className='section-1'>
-                <section>
-                    <img src={image} alt="img" className='wallet' />
-                    <HiUsers className='icon-acct'/>
-                    <p className='visitor'>Total Visitor</p>
-                    <h1 className='money'>1,123</h1>
-                    <BiMenuAltRight className='total-orders'/>
-                    <p className='orders'>Total Orders</p>
-                    <h1 className='total-amount'>1,000</h1>
-                    <img src={image} alt="" className='pending-orders'/>
-                    <HiUsers className='pending-visitor'/>
-                    <p className='total-prnding'>Total pending orders</p>
-                    <h1 className='total_pending-amount'>1,123</h1>
-                    <BiMenuAltRight className='total_successful-orders'/>
-                    <p className='successful-orders'>Total Orders</p>
-                    <h1 className='successful-amount'>1,000</h1>
-                
-                    <div className='Recent-order'>
-                    Recent order
-                    </div>
-                </section>
-
-                <section className='section-2'>
-                    <div className='customer-table'>
-                        <h2>Customers Table</h2>
-                        <p className='displaying'>Displaying 3 of 3  User(s)</p>
-                        <input type="text" className='search-order' />
-                        <button>search</button>
-                    </div>
-
-                    <div>
-                        <h3 className='text-[#121212]'>Recent Transanctions</h3>
-                        <Card type='lg'>
-                        <table className='table mx-auto  px-5 my-16' id='table'>
-                            <thead className='text-left'>
-                                <tr className='flex justify-around'>
-                                    <th>Action(s)</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th className='pl-20'>Created at</th>
-                                    <th>Status</th>
-                                </tr>
-                                <hr/>
-                            </thead>
-                            <tbody className='w-10/12 text-sm '>
-                                <tr className='flex justify-around mb-2 mt-4 pl-12	'>
-                                    <td><HiOutlineTrash className='HiOutlineTrash'/></td>
-                                    <td className='pl-12'>princess amaka</td>
-                                    <td>princesobinan@gmail.com</td>
-                                    <td>2021-12-08 19:50:00</td>
-                                    <td className='completed'>Completed</td>
-
-                                </tr>
-                                <hr />
-                                <tr className='flex justify-around mb-2 mt-4 pl-12' >
-                                    <td><HiOutlineTrash className='HiOutlineTrash'/></td>
-                                    <td className='pl-12'>princess amaka</td>
-                                    <td>princesobinan@gmail.com</td>
-                                    <td>2021-12-08 19:50:00</td>
-                                    <td className='completed'>Completed</td>
-                                </tr>
-                                <hr />
-                                <tr className='flex justify-around mb-2 mt-4 pl-12'>
-                                <td className='HiOutlineTrash'><HiOutlineTrash className='HiOutlineTrash'/></td>
-                                <td className='pl-12'>princess amaka</td>
-                                <td>princesobinan@gmail.com</td>
-                                <td>2021-12-08 19:50:00</td>
-                                <td className='completed'>Completed</td>
-                                </tr>
-                                <hr />
-
-                                <tr className='flex justify-around mb-2 mt-4 pl-12'>
-                                    <td className='HiOutlineTrash'><HiOutlineTrash className='HiOutlineTrash'/></td>
-                                    <td className='pl-12'>princess amaka</td>
-                                    <td>princesobinan@gmail.com</td>
-                                    <td>2021-12-08 19:50:00</td>
-                                    <td className='completed'>Completed</td>
-                                </tr>
-                                <hr />
-                            </tbody>
-
-                        </table>
-                        </Card>
-                    </div>
-                </section>
+    return (
+        <>
+            <div 
+                className='grid 
+                    grid-cols-1 space-y-2
+                    sm:grid-cols-2 sm:space-x-2 sm:space-y-2
+                    md:grid-cols-2 md:space-x-2 md:space-y-2
+                    lg:grid-cols-4 lg:space-x-3 lg:space-y-0'
+            >
+                <div>
+                    <DashboardCard title='Total Visitors' value={1123} bgColor="#8652a49a" txtColor='#ffffff' />
+                </div>
+                <div>
+                    <DashboardCard title='Total Visitors' value={1123} bgColor="#ffffff" txtColor='#8652A4' />
+                </div>
+                <div>
+                    <DashboardCard title='Total Visitors' value={1123} bgColor="#ff6702b9" txtColor='#ffffff' />
+                </div>
+                <div>
+                    <DashboardCard title='Total Visitors' value={1123} bgColor="#ffffff" txtColor='#8652A4' />
+                </div>
+                        
             </div>
-        </div>
-    </>
-  )
+
+            <section className='mt-8 mb-4'>
+                <h4 className='text-xl text-[#8652a4] font-bold'>Recent Orders</h4>
+            </section>
+
+            <section>
+                <Card type='sm'>
+                    {/* Title section */}
+                    <div id="title">
+                        <div className="flex justify-between w-full">
+                            <div className='mb-8'>
+                                <h3 className='text-[#8652A4] text-xl mb-1'>Orders Records Table</h3>
+                                <p className='text-[#7F7F80] text-sm'>Displaying 3 of 3 Order Record(s)</p>
+                            </div>
+
+                            
+                            <div>
+                                <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
+                                    <input 
+                                        type="text" 
+                                        className='lg:w-80 px-3 py-1'
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <button 
+                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
+                                        onClick={() => handleSearchQuery()}
+                                    >
+                                        { searching ? 'searching...' : 'Search' }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {/* Title section */}
+                </Card>
+            </section>
+        </>
+    )
 }
 
-export default DashboardComp
+export default DashboardComp;

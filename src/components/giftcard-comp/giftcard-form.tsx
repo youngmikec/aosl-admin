@@ -276,6 +276,24 @@ const GiftcardForm = () => {
 
                         <div className="my-3">
                             <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
+                                Rate in Usd*
+                            </label>
+                            <input
+                                type="number"
+                                name="rate"
+                                min={0}
+                                value={rate.value}
+                                onChange={(e) =>
+                                    setRate({ ...rate, value: parseInt(e.target.value) })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    rate.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            />
+                        </div>
+
+                        <div className="my-3">
+                            <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
                                 Card Type*
                             </label>
                             <select 
@@ -283,30 +301,13 @@ const GiftcardForm = () => {
                                 id="type"
                                 onChange={(e) => setType({ ...type, value: e.target.value })}
                                 className={`bg-white text-[#6A6A6A] border-2 ${
-                                    rate.error ? 'error-border' : 'input-border'
+                                    type.error ? 'error-border' : 'input-border'
                                 } rounded-md px-4 py-2 w-full`}
                             >
                                 <option value="">card type</option>
                                 <option value="PHYSICAL">Physical card</option>
                                 <option value="ECODE">Ecode</option>
                             </select>
-                        </div>
-
-                        <div className="my-3">
-                            <label htmlFor="walletAddress" className="text-[#BFBFBF] text-sm block">
-                                Wallet Address*
-                            </label>
-                            <input
-                                type="text"
-                                name="walletAddress"
-                                value={walletAddress.value}
-                                onChange={(e) =>
-                                    setWalletAddress({ ...walletAddress, value: e.target.value })
-                                }
-                                className={`bg-white text-[#6A6A6A] border-2 ${
-                                    walletAddress.error ? 'error-border' : 'input-border'
-                                } rounded-md px-4 py-2 w-full`}
-                            />
                         </div>
 
                         <div className="my-3">
