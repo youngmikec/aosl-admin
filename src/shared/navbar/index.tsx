@@ -28,31 +28,20 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className='bg-white flex justify-between py-4 mb-4'>
-                <div className='flex justify-between w-4/12'>
+            <nav className='bg-white flex justify-start lg:justify-end py-4 mb-4'>
+                {/* <div className='flex justify-between w-4/12'>
                     <div className="text-[#8652A4] text-sm font-semibold">
                         <span>
-                            <Link to="/users-dashboard">Add new post</Link>
+                            Welcome
                         </span>
                     </div>
-                    <div className="text-[#8c8c8c] text-sm font-semibold">
-                        <span>
-                            <Link to="/users-dashboard">Add Content</Link>
-                        </span>
-                    </div>
-                    {/* <div className="text-[#8c8c8c] text-sm font-semibold">
-                        <span>
-                            <Link to="/users-dashboard">chat</Link>
-                        </span>
-                    </div> */}
-
                     
-                </div>
+                </div> */}
 
                 <div className='flex justify-end ml-4'>
                     <div className="flex justify-start border-2 border-[#f0f0f0] rounded-md">
                         <CiSearch className="text-xl my-auto text-[#8c8c8c] ml-2 mr-4" />
-                        <input type="text" placeholder='Search.....' className='w-80' onChange={(e)=>setSearch(e.target.value)}/>
+                        <input type="text" placeholder='Search.....' className='w-40 sm:w-50 md:w-60 lg:w-80' onChange={(e)=>setSearch(e.target.value)}/>
                     </div>
                     <div className="mx-4 my-auto">
                         <CiBellOn className='inline-flex text-xl font-semibold my-auto text-[#8c8c8c]'/>
