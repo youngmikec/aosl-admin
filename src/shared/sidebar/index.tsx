@@ -33,7 +33,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                 <div className="my-5 px-4">
                     <img src={logo} alt="logo" width="100px" height="100px" />
                 </div>
-                <ul className="list-none">
+                <ul className="list-none text-[#8c8c8c]">
                     <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
                         <Link to="/dashboard">
                             <div className='flex justify-start'>
