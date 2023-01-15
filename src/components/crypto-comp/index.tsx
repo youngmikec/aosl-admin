@@ -20,6 +20,8 @@ import DeleteComp from '../../shared/delete-comp/delete-comp';
 import defaultImg from '../../assets/images/default.jpg';
 import SortComp from '../../shared/sort-comp';
 import CryptoForm from './crypto-form';
+import CryptoDetailComp from './crypto-detail';
+import CryptoUpdateForm from './crypto-update-form';
 
 const CryptoComp = () => {
     const dispatch = useDispatch();
@@ -96,6 +98,7 @@ const CryptoComp = () => {
         setSearching(true);
         if(searchQuery !== '') {
             const filteredResults: CryptoCurrency[] = cryptos.filter((item: CryptoCurrency) => Object.values(item).includes(searchQuery));
+            console.log('got here', filteredResults);
             setCryptos(filteredResults);
             setSearching(false);
         }else {
@@ -177,8 +180,8 @@ const CryptoComp = () => {
                                 
                                 <tbody className='text-[#7F7F80]'>
                                     {
-                                        cryptoCurrencies.length > 0 ?
-                                        cryptoCurrencies.map((item: CryptoCurrency) => {
+                                        cryptos.length > 0 ?
+                                        cryptos.map((item: CryptoCurrency) => {
                                             return <tr key={item.code}>
                                                 <td className='text-left border-spacing-y-4'>{item?.code}</td>
                                                 <td className="text-center py-3">{item?.name}</td>
@@ -272,12 +275,12 @@ const CryptoComp = () => {
                 {
                     modalMode === 'create' && <CryptoForm />
                 }
-                {/* {
-                    modalMode === 'view' && <div>welcome to view product modal</div>
+                {
+                    modalMode === 'view' && <CryptoDetailComp crypto={selectedCrypto} />
                 }
                 {
                     modalMode === 'update' && <CryptoUpdateForm crypto={selectedCrypto}  />
-                } */}
+                }
                 {
                     modalMode === 'delete' && <DeleteComp id={selectedCrypto?.id} action={handleDeleteRecord} deleting={deleting} />
                 }

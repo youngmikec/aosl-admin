@@ -7,21 +7,21 @@ import moment from 'moment';
 
 //icons
 import { BiEditAlt } from 'react-icons/bi';
-import { BsFillCaretDownFill } from 'react-icons/bs';
 
 import Card from '../../shared/card';
 import { sortArray } from '../../utils';
 import { RootState } from '../../store';
-import { DELETE_CRYPTO, RETREIVE_AIRTIME } from '../../service';
+import { DELETE_AIRTIME, RETREIVE_AIRTIME } from '../../service';
 import { Airtime, ApiResponse } from '../../models';
-import { REMOVE_CRYPTO } from '../../store/cryptos';
 import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import defaultImg from '../../assets/images/default.jpg';
-import { INITIALIZE_AIRTIMES } from '../../store/airtime';
+import { INITIALIZE_AIRTIMES, REMOVE_AIRTIME } from '../../store/airtime';
 import AirtimeForm from './airtime-form';
 import SortComp from '../../shared/sort-comp';
+import AirtimeDetailComp from './airtime-details';
+import AirtimeUpdateForm from './airtime-update-form';
 
 const AirtimeComp = () => {
     const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const AirtimeComp = () => {
     const [searching, setSearching] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [airtimes, setAirtimes] = useState<Airtime[]>([]);
-    const [selectedCrypto, setSelectedCrypto] = useState<Airtime | undefined>();
+    const [selectedAirtime, setSelectedAirtime] = useState<Airtime | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
 
 
@@ -50,7 +50,7 @@ const AirtimeComp = () => {
     };
 
     const retrieveAirtimes = () => {
-        const query: string = `?sort=-createdAt`;
+        const query: string = `?sort=-name&populate=createdBy`;
         RETREIVE_AIRTIME(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
@@ -78,13 +78,13 @@ const AirtimeComp = () => {
 
     const handleDeleteRecord = (id: string) => {
         setDeleting(true);
-        DELETE_CRYPTO(id)
+        DELETE_AIRTIME(id)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload, success } = res.data;
             if(success){
                 setDeleting(false);
                 notify("success", message);
-                dispatch(REMOVE_CRYPTO(payload.id));
+                dispatch(REMOVE_AIRTIME(payload.id));
                 dispatch(CloseAppModal());
             }
         })
@@ -222,7 +222,7 @@ const AirtimeComp = () => {
                                                         <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                    setSelectedCrypto(item)
+                                                                    setSelectedAirtime(item)
                                                                     openModal('view');
                                                                 }}
                                                             >
@@ -234,7 +234,7 @@ const AirtimeComp = () => {
                                                             <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                    setSelectedCrypto(item)
+                                                                    setSelectedAirtime(item)
                                                                     openModal('update');
                                                                 }}
                                                             >
@@ -246,7 +246,7 @@ const AirtimeComp = () => {
                                                             <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
-                                                                setSelectedCrypto(item)
+                                                                setSelectedAirtime(item)
                                                                 openModal('delete')
                                                                 }}
                                                             >
@@ -275,14 +275,14 @@ const AirtimeComp = () => {
                 {
                     modalMode === 'create' && <AirtimeForm />
                 }
-                {/* {
-                    modalMode === 'view' && <div>welcome to view product modal</div>
+                {
+                    modalMode === 'view' && <AirtimeDetailComp airtime={selectedAirtime} />
                 }
                 {
-                    modalMode === 'update' && <CryptoUpdateForm crypto={selectedCrypto}  />
-                } */}
+                    modalMode === 'update' && <AirtimeUpdateForm airtime={selectedAirtime}  />
+                }
                 {
-                    modalMode === 'delete' && <DeleteComp id={selectedCrypto?.id} action={handleDeleteRecord} deleting={deleting} />
+                    modalMode === 'delete' && <DeleteComp id={selectedAirtime?.id} action={handleDeleteRecord} deleting={deleting} />
                 }
             </AppModalComp>
 

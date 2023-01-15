@@ -1,30 +1,33 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from 'react-redux';
 import { AxiosResponse } from 'axios';
 
 import './style.css';
-import { ApiResponse, Network } from '../../models';
-import { CREATE_CRYPTO } from '../../service';
-import { ADD_TO_CRYPTOS } from '../../store/cryptos';
+import { ApiResponse, CryptoCurrency, Network } from '../../models';
+import { UPDATE_CRYPTO } from '../../service';
 import NetworkAddComp from './network-add-comp';
+import { UPDATE_CRYPTO_STATE } from '../../store/cryptos';
 
+type Props = {
+    crypto?: CryptoCurrency
+}
 
-const CryptoForm = () => {
+const CryptoUpdateForm = ({ crypto }: Props) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [cryptoImage, setCryptoImage] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [name, setName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [shortName, setShortName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [rate, setRate] = useState<{value: number, error: boolean }>({value: 0, error: false});
-    const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [bankName, setBankName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [accountName, setAccountName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [networks, setNetworks] = useState<{value: any[], error: boolean }>({value: [], error: false});
+    const [cryptoImage, setCryptoImage] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [name, setName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [shortName, setShortName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [rate, setRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
+    const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [bankName, setBankName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [accountName, setAccountName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [networks, setNetworks] = useState<{value: any[], error: boolean } | any>({value: [], error: false});
 
     const handleAddNetwork = ( data: any ) => {
         setNetworks({value: [data, ...networks.value], error: false});
@@ -74,73 +77,6 @@ const CryptoForm = () => {
         }
     };
 
-    const inputCheck = (): boolean => {
-        let isValid: boolean = true;
-        if (name.value === "" || undefined || null) {
-          isValid = false;
-          setName({ ...name, error: true });
-        } else {
-          setName({ ...name, error: false });
-        }
-
-        if (shortName.value === "" || undefined || null) {
-          isValid = false;
-          setShortName({ ...shortName, error: true });
-        } else {
-          setShortName({ ...shortName, error: false });
-        }
-        
-        if (walletAddress.value === "" || undefined || null) {
-          isValid = false;
-          setWalletAddress({ ...walletAddress, error: true });
-        } else {
-          setWalletAddress({ ...walletAddress, error: false });
-        }
-
-        if (exchangePlatform.value === "" || undefined || null) {
-          isValid = false;
-          setExchangePlatform({ ...exchangePlatform, error: true });
-        } else {
-          setExchangePlatform({ ...exchangePlatform, error: false });
-        }
-
-        if (bankName.value === "" || undefined || null) {
-          isValid = false;
-          setBankName({ ...bankName, error: true });
-        } else {
-          setBankName({ ...bankName, error: false });
-        }
-
-        if (accountName.value === "" || undefined || null) {
-          isValid = false;
-          setAccountName({ ...accountName, error: true });
-        } else {
-          setAccountName({ ...accountName, error: false });
-        }
-
-        if (accountNumber.value === "" || undefined || null) {
-          isValid = false;
-          setAccountNumber({ ...accountNumber, error: true });
-        } else {
-          setAccountNumber({ ...accountNumber, error: false });
-        }
-
-        if (cryptoImage.value === "" || undefined || null) {
-          isValid = false;
-          setCryptoImage({ ...cryptoImage, error: true });
-        } else {
-          setCryptoImage({ ...cryptoImage, error: false });
-        }
-
-        if (rate.value === 0 || undefined || null) {
-          isValid = false;
-          setRate({ ...rate, error: true });
-        } else {
-          setRate({ ...rate, error: false });
-        }
-
-        return isValid;
-    };
 
     const clearFormStates = () => {
         setCryptoImage({value: '', error: false});
@@ -156,26 +92,26 @@ const CryptoForm = () => {
     }
 
     const handleSubmit = () => {
-        if (inputCheck()) {
-            setLoading(true);
-            const data = { 
-                name: name.value,
-                shortName: shortName.value,
-                rate: rate.value,
-                networks: networks.value,
-                walletAddress: walletAddress.value,
-                exchangePlatform: exchangePlatform.value,
-                cryptoImage: cryptoImage.value,
-                bankName: bankName.value,
-                accountName: accountName.value,
-                accountNumber: accountNumber.value,
-            };
-          CREATE_CRYPTO(data)
+        setLoading(true);
+        const data = { 
+            name: name.value,
+            shortName: shortName.value,
+            rate: rate.value,
+            networks: networks.value,
+            walletAddress: walletAddress.value,
+            exchangePlatform: exchangePlatform.value,
+            cryptoImage: cryptoImage.value,
+            bankName: bankName.value,
+            accountName: accountName.value,
+            accountNumber: accountNumber.value,
+        };
+        const id: string = crypto?.id ? crypto.id : '';
+        UPDATE_CRYPTO(id, data)
             .then((res: AxiosResponse<ApiResponse>) => {
                 const { message, payload } = res.data;
                 setLoading(false);
                 notify("success", message);
-                dispatch(ADD_TO_CRYPTOS(payload));
+                dispatch(UPDATE_CRYPTO_STATE(payload));
                 clearFormStates();
             })
             .catch((err: any) => {
@@ -183,11 +119,21 @@ const CryptoForm = () => {
                 notify("error", message);
                 setLoading(false);
             });
-        }else {
-            notify("error", `Fill in all required fields`);
-        }  
+         
     };
 
+    useEffect(() => {
+        setName({value: crypto?.name, error: false});
+        setShortName({value: crypto?.shortName, error: false});
+        setRate({value: crypto?.rate, error: false});
+        setNetworks({value: crypto?.networks, error: false});
+        setWalletAddress({value: crypto?.walletAddress, error: false});
+        setExchangePlatform({value: crypto?.exchangePlatform, error: false});
+        setBankName({value: crypto?.bankName, error: false});
+        setAccountName({value: crypto?.accountName, error: false});
+        setAccountNumber({value: crypto?.accountNumber, error: false});
+        setCryptoImage({value: crypto?.cryptoImage, error: false});
+    }, [])
 
     return (
         <>
@@ -354,7 +300,7 @@ const CryptoForm = () => {
                             />
                         </div>
 
-                        <NetworkAddComp 
+                        <NetworkAddComp
                             networks={networks.value}
                             addFunc={handleAddNetwork}
                             removeFunc={removeNetwork}
@@ -365,7 +311,7 @@ const CryptoForm = () => {
                                 onClick={() => handleSubmit()}
                                 className="bg-[#8652A4] text-white py-1 px-10 rounded-2xl"
                             >
-                                {loading ? "Processing..." : "Create"}
+                                {loading ? "Processing..." : "Update"}
                             </button>
                         </div>
                     </div>
@@ -377,4 +323,4 @@ const CryptoForm = () => {
     )
 }
 
-export default CryptoForm;
+export default CryptoUpdateForm;

@@ -1,3 +1,5 @@
+import { User } from "../models";
+
 export const getItem = (key: string) => {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
@@ -6,6 +8,10 @@ export const getItem = (key: string) => {
 export const setItem = (key: string, value: any) => {
     const data: string = JSON.stringify(value);
     localStorage.setItem(key, data);
+}
+
+export const getFullName = (user: User | undefined ): string => {
+    return user ? `${user?.firstName} ${user?.lastName}` : '' ;
 }
 
 export const sortArray = (unsortedArray: any[], field: string): Array<any> => {

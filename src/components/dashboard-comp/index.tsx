@@ -145,7 +145,7 @@ const DashboardComp = () => {
                                     recentOrders.length > 0 ?
                                     recentOrders.map((item: Order, idx: number) => {
                                         return <tr key={idx}>
-                                            <td>{item.orderCode}</td>
+                                            <td>#{idx}</td>
                                             <td>{item.orderType}</td>
                                             {/* <td>{item.user?.email}</td> */}
                                             <td className="text-center py-3">

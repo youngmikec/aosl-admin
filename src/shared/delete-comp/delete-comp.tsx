@@ -25,7 +25,7 @@ const DeleteComp = ({ id, action, deleting }: Props) => {
             <div className='mx-auto w-full lg:w-4/12'>
                 <h3 className='my-5 text-[#8c8c8c] font-bold text-center'>Proceed to delete record? </h3>
 
-                <div className='flex justify-between'>
+                <div className='flex justify-around'>
                     <div>
                         <button
                             className='bg-gray-50 text-gray-400 rounded-lg px-4 
