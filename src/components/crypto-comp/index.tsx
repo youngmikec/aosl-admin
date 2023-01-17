@@ -49,7 +49,7 @@ const CryptoComp = () => {
     };
 
     const retrieveCryptos = () => {
-        const query: string = `?sort=-createdAt`;
+        const query: string = `?sort=-createdAt&populate=createdBy`;
         RETRIEVE_CRYPTOS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
@@ -98,7 +98,6 @@ const CryptoComp = () => {
         setSearching(true);
         if(searchQuery !== '') {
             const filteredResults: CryptoCurrency[] = cryptos.filter((item: CryptoCurrency) => Object.values(item).includes(searchQuery));
-            console.log('got here', filteredResults);
             setCryptos(filteredResults);
             setSearching(false);
         }else {

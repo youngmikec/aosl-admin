@@ -19,6 +19,8 @@ import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import { DELETE_GIFTCARD, RETRIEVE_GIFTCARDS } from '../../service';
 import { INITIALIZE_GIFTCARDS, REMOVE_GIFTCARD } from '../../store/giftcard';
 import GiftcardForm from './giftcard-form';
+import GiftcardUpdateForm from './giftcard-update-form';
+import GiftcardDetailComp from './giftcard-detail';
 
 const GiftcardComp = () => {
     const dispatch = useDispatch();
@@ -46,7 +48,7 @@ const GiftcardComp = () => {
     };
 
     const retrieveGiftcards = () => {
-        const query: string = `?sort=-createdAt`;
+        const query: string = `?sort=-createdAt&populate=createdBy`;
         RETRIEVE_GIFTCARDS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
@@ -267,12 +269,12 @@ const GiftcardComp = () => {
                 {
                     modalMode === 'create' && <GiftcardForm />
                 }
-                {/* {
-                    modalMode === 'view' && <div>welcome to view product modal</div>
+                {
+                    modalMode === 'view' && <GiftcardDetailComp giftcard={selectedGiftcard} />
                 }
                 {
-                    modalMode === 'update' && <CryptoUpdateForm crypto={selectedCrypto}  />
-                } */}
+                    modalMode === 'update' && <GiftcardUpdateForm giftcard={selectedGiftcard}  />
+                }
                 {
                     modalMode === 'delete' && <DeleteComp id={selectedGiftcard?.id} action={handleDeleteRecord} deleting={deleting} />
                 }

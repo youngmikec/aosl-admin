@@ -1,29 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from 'react-redux';
 import { AxiosResponse } from 'axios';
 
 import './style.css';
-import { ApiResponse } from '../../models';
-import { CREATE_GIFTCARD } from '../../service';
-import { ADD_TO_GIFTCARDS } from '../../store/giftcard';
+import { ApiResponse, GiftCard } from '../../models';
+import { UPDATE_GIFTCARD } from '../../service';
+import { UPDATE_GIFTCARD_STATE } from '../../store/giftcard';
 
+type Props = {
+    giftcard?: GiftCard
+}
 
-const GiftcardForm = () => {
+const GiftcardUpdateForm = ({ giftcard }: Props) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [giftcardImage, setGiftcardImage] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [barcode, setBarcode] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [name, setName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [type, setType] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [rate, setRate] = useState<{value: number, error: boolean }>({value: 0, error: false});
-    const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [bankName, setBankName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [accountName, setAccountName] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean }>({value: '', error: false});
+    const [giftcardImage, setGiftcardImage] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [barcode, setBarcode] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [name, setName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [type, setType] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [rate, setRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
+    const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [bankName, setBankName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [accountName, setAccountName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean } | any>({value: '', error: false});
 
     const fileRef = useRef<HTMLInputElement>(null);
 
@@ -69,57 +72,6 @@ const GiftcardForm = () => {
         }
     };
 
-    const inputCheck = (): boolean => {
-        let isValid: boolean = true;
-        if (name.value === "" || undefined || null) {
-          isValid = false;
-          setName({ ...name, error: true });
-        } else {
-          setName({ ...name, error: false });
-        }
-        
-        if (walletAddress.value === "" || undefined || null) {
-          isValid = false;
-          setWalletAddress({ ...walletAddress, error: true });
-        } else {
-          setWalletAddress({ ...walletAddress, error: false });
-        }
-
-        if (bankName.value === "" || undefined || null) {
-          isValid = false;
-          setBankName({ ...bankName, error: true });
-        } else {
-          setBankName({ ...bankName, error: false });
-        }
-        if (accountName.value === "" || undefined || null) {
-          isValid = false;
-          setAccountName({ ...accountName, error: true });
-        } else {
-          setAccountName({ ...accountName, error: false });
-        }
-        if (accountNumber.value === "" || undefined || null) {
-          isValid = false;
-          setAccountNumber({ ...accountNumber, error: true });
-        } else {
-          setAccountNumber({ ...accountNumber, error: false });
-        }
-
-        if (exchangePlatform.value === "" || undefined || null) {
-          isValid = false;
-          setExchangePlatform({ ...exchangePlatform, error: true });
-        } else {
-          setExchangePlatform({ ...exchangePlatform, error: false });
-        }
-
-        if (rate.value === 0 || undefined || null) {
-          isValid = false;
-          setRate({ ...rate, error: true });
-        } else {
-          setRate({ ...rate, error: false });
-        }
-
-        return isValid;
-    };
 
     const clearFormStates = () => {
         setGiftcardImage({value: '', error: false});
@@ -134,42 +86,46 @@ const GiftcardForm = () => {
     }
 
     const handleSubmit = () => {
-        if (inputCheck()) {
-            setLoading(true);
-            let data = { 
-                name: name.value,
-                rate: rate.value,
-                type: type.value,
-                walletAddress: walletAddress.value,
-                bankName: bankName.value,
-                giftcardImage: '',
-                accountName: accountName.value,
-                accountNumber: accountNumber.value,
-                exchangePlatform: exchangePlatform.value,
-            };
-            if(giftcardImage.value !== ''){
-                data.giftcardImage = giftcardImage.value;
-            }
-            // if(barcode.value !== ''){
-            //     data.barcode = barcode.value;
-            // }
-          CREATE_GIFTCARD(data)
-            .then((res: AxiosResponse<ApiResponse>) => {
-                const { message, payload } = res.data;
-                setLoading(false);
-                notify("success", message);
-                dispatch(ADD_TO_GIFTCARDS(payload));
-                clearFormStates();
-            })
-            .catch((err: any) => {
-                const { message } = err.response.data;
-                notify("error", message);
-                setLoading(false);
-            });
-        }else {
-            notify("error", `Fill in all required fields`);
-        }  
+        setLoading(true);
+        let data = { 
+            name: name.value,
+            rate: rate.value,
+            type: type.value,
+            walletAddress: walletAddress.value,
+            bankName: bankName.value,
+            accountName: accountName.value,
+            accountNumber: accountNumber.value,
+            giftcardImage: giftcardImage.value,
+            exchangePlatform: exchangePlatform.value,
+        };
+        
+      const id: string = giftcard?.id ? giftcard.id : '';
+      UPDATE_GIFTCARD(id, data)
+        .then((res: AxiosResponse<ApiResponse>) => {
+            const { message, payload } = res.data;
+            setLoading(false);
+            notify("success", message);
+            dispatch(UPDATE_GIFTCARD_STATE(payload));
+            clearFormStates();
+        })
+        .catch((err: any) => {
+            const { message } = err.response.data;
+            notify("error", message);
+            setLoading(false);
+        });
+         
     };
+
+    useEffect(() => {
+        setGiftcardImage({value: giftcard?.giftcardImage, error: false});
+        setName({value: giftcard?.name, error: false});
+        setType({value: giftcard?.type, error: false});
+        setRate({value: giftcard?.rate, error: false});
+        setBankName({value: giftcard?.bankName, error: false});
+        setAccountName({value: giftcard?.accountName, error: false});
+        setAccountNumber({value: giftcard?.accountNumber, error: false});
+        setExchangePlatform({value: giftcard?.exchangePlatform, error: false});
+    }, [])
 
 
     return (
@@ -373,7 +329,7 @@ const GiftcardForm = () => {
                                 onClick={() => handleSubmit()}
                                 className="bg-[#8652A4] text-white py-1 px-10 rounded-2xl"
                             >
-                                {loading ? "Processing..." : "Create"}
+                                {loading ? "Processing..." : "Update"}
                             </button>
                         </div>
                     </div>
@@ -385,4 +341,4 @@ const GiftcardForm = () => {
     )
 }
 
-export default GiftcardForm;
+export default GiftcardUpdateForm;

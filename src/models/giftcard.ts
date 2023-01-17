@@ -9,11 +9,15 @@ export type Currency = {
 export type GiftCard = {
     id: string;
     name: string;
+    shortName: string;
     code: string;
     rate: number;
     bankName: string;
     accountName: string;
     accountNumber: string;
+    exchangePlatform: string;
+    walletAddress: string;
+    barcode: string;
     giftcardImage: string;
     type: GIFTCARD_TYPE;
     currencies: Currency[];

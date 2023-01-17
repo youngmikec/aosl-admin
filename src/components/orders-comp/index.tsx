@@ -18,12 +18,17 @@ import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { INITIALIZE_ORDERS, REMOVE_ORDER } from '../../store/orders';
 import { DELETE_ORDER, RETRIEVE_ORDERS } from '../../service';
 import { BiEditAlt } from 'react-icons/bi';
+import SortComp from '../../shared/sort-comp';
+import OrderDetailComp from './order-detail';
 
 const OrdersComp = () => {
     const dispatch = useDispatch();
     const Orders: Order[] = useSelector((state: RootState) => state.ordersState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
+    const [searching, setSearching] = useState<boolean>(false);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
@@ -43,7 +48,7 @@ const OrdersComp = () => {
     };
 
     const retrieveOrders = () => {
-        const query: string = `?sort=-createdAt&populate=user`;
+        const query: string = `?sort=-createdAt&populate=user,createdBy,airtime,giftcard,cryptocurrency`;
         RETRIEVE_ORDERS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
@@ -63,6 +68,18 @@ const OrdersComp = () => {
           setOrders(sortedArray);
         }
     };
+
+    const handleSearchQuery = () => {
+        setSearching(true);
+        if(searchQuery !== '') {
+            const filteredResults: Order[] = orders.filter((item: Order) => Object.values(item).includes(searchQuery));
+            setOrders(filteredResults);
+            setSearching(false);
+        }else {
+            setOrders(Orders);
+            setSearching(false);
+        }
+    }
 
     const openCryptoModal = (mode: string = 'create', id: string = '') => {
         setModalMode(mode);
@@ -109,16 +126,26 @@ const OrdersComp = () => {
 
                         <div className="flex justify-between">
                             <div>
-                                <div className='w-max text-[#7F7F80] text-sm text-sm py-1 px-4 border-2 border-[#ececec] rounded-md'>
-                                    <span className='mx-1 inline-block'>sort by type</span>
-                                    <span className='mx-1 inline-block'> <BsFillCaretDownFill /> </span>
-                                </div>
+                                <SortComp sortData={sortData} />
                             </div>
 
                             <div>
                                 <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input type="text" className='lg:w-80' />
-                                    <button className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'>Search</button>
+                                    <input 
+                                        type="text" 
+                                        className='lg:w-80 px-3 py-1'
+                                        value={searchQuery}
+                                        onChange={(e) => {
+                                            setSearchQuery(e.target.value)
+                                            handleSearchQuery()
+                                        }}
+                                    />
+                                    <button 
+                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
+                                        onClick={() => handleSearchQuery()}
+                                    >
+                                        { searching ? 'searching...' : 'Search' }
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -252,11 +279,11 @@ const OrdersComp = () => {
             <AppModalComp title=''>
                 {/* {
                     modalMode === 'create' && <CryptoForm />
-                }
+                } */}
                 {
-                    modalMode === 'view' && <div>welcome to view product modal</div>
+                    modalMode === 'view' && <OrderDetailComp order={selectedOrder} />
                 }
-                {
+                {/* {
                     modalMode === 'update' && <CryptoUpdateForm crypto={selectedCrypto}  />
                 } */}
                 {
