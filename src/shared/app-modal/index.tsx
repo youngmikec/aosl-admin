@@ -25,7 +25,7 @@ const AppModalComp = ({ children, title }: Props) => {
                 <div className="fixed top-0 bottom-0 left-0 right-0 bg-[#4242428f] w-full h-full z-30 overflow-scroll">
                     <div className='my-12'>
 
-                        <div className="bg-white p-4 rounded-2xl mx-auto w-11/12 sm:w-11/12 md:w-10/12 lg:w-7/12">
+                        <div className="bg-white p-2 lg:p-4 rounded-2xl mx-auto w-11/12 sm:w-11/12 md:w-10/12 lg:w-7/12">
                             <div className='flex justify-between'>
                                 <div>
                                     <h3>{ title }</h3>

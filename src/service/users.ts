@@ -11,6 +11,14 @@ export const RETRIEVE_USER_BY_ID = async (id: string) => {
   return axios.get(`${url}/users/?_id=${id}`);
 };
 
+export const RETRIEVE_PROFILE = async () => {
+  return axios.get(`${url}/users/me`);
+};
+
+export const UPDATE_PROFILE = async (data: {[key: string]: any}) => {
+  return axios.put(`${url}/user/me/update`, data);
+};
+
 
 export const LOGIN = async (data: any) => {
   const payload = { ...data };

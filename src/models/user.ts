@@ -1,5 +1,10 @@
 import { UserType } from "./enums";
 
+export type Step = {
+    title: string;
+    isActive: boolean;
+}
+
 export type User = {
     id: string;
     userType: UserType;

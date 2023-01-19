@@ -121,7 +121,7 @@ const AirtimeComp = () => {
                 <Card type='lg'>
                     {/* Title section */}
                     <div id="title">
-                        <div className="flex justify-between w-full">
+                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='mb-8'>
                                 <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Airtime Records Table</h3>
                                 <p className='text-[#7F7F80] text-sm'>Displaying {airtimes.length} of {airtimes.length} Airtime Record(s)</p>
@@ -138,7 +138,7 @@ const AirtimeComp = () => {
 
                         </div>
 
-                        <div className="flex justify-between">
+                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div>
                                 <SortComp sortData={sortData} />
                             </div>
@@ -147,7 +147,7 @@ const AirtimeComp = () => {
                                 <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
                                     <input 
                                         type="text" 
-                                        className='lg:w-80 px-3 py-1'
+                                        className='w-40 md:w-60 lg:w-80 px-3 py-1'
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
@@ -163,111 +163,110 @@ const AirtimeComp = () => {
                     </div>
                     {/* Title section */}
 
-                    <div className='my-8'>
-                        <div className='w-full overflow-x-scroll'>
-                            <table className='table border w-full'>
-                                <thead>
-                                    <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Airtime code</th>
-                                        <th>Name</th>
-                                        <th>Rate</th>
-                                        <th>Image</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody className='text-[#7F7F80]'>
-                                    {
-                                        airtimes.length > 0 ?
-                                        airtimes.map((item: Airtime) => {
-                                            return <tr key={item.code}>
-                                                <td className='text-left border-spacing-y-4'>{item?.code}</td>
-                                                <td className="text-center py-3">{item?.name}</td>
-                                                <td className="text-center py-3">{ item?.rate}</td>
-                                                <td className="text-center py-3">
-                                                    <img src={item?.networkImage || defaultImg } width="25px" height="25px" alt="crypto" />
-                                                </td>
-                                                <td className="text-center py-3">
-                                                    {
-                                                        item.status === 'ACTIVE' ? 
-                                                        <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                        :
-                                                        <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                    }
-                                                </td>
-                                                <td className="text-center py-3">
-                                                    {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                                </td>
-                                                
-                                                <td className="text-center py-3">
-                                                    <div
-                                                    className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
-                                                    id="button_pm"
+                    <div className='my-8 w-full overflow-x-scroll'>
+                        <table className='table border w-full'>
+                            <thead>
+                                <tr className='border-spacing-y-4'>
+                                    <th className="text-left">Airtime code</th>
+                                    <th>Name</th>
+                                    <th>Rate</th>
+                                    <th>Image</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody className='text-[#7F7F80]'>
+                                {
+                                    airtimes.length > 0 ?
+                                    airtimes.map((item: Airtime) => {
+                                        return <tr key={item.code}>
+                                            <td className='text-left border-spacing-y-4'>{item?.code}</td>
+                                            <td className="text-center py-3">{item?.name}</td>
+                                            <td className="text-center py-3">{ item?.rate}</td>
+                                            <td className="text-center py-3">
+                                                <img src={item?.networkImage || defaultImg } width="25px" height="25px" alt="crypto" />
+                                            </td>
+                                            <td className="text-center py-3">
+                                                {
+                                                    item.status === 'ACTIVE' ? 
+                                                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                                                    :
+                                                    <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                                                }
+                                            </td>
+                                            <td className="text-center py-3">
+                                                {moment(item?.createdAt).format("MM-DD-YYYY")}
+                                            </td>
+                                            
+                                            <td className="text-center py-3">
+                                                <div
+                                                className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
+                                                id="button_pm"
+                                                >
+                                                <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
+                                                    <BiEditAlt className="text-blue hover:cursor-pointer inline" />
+                                                </span>
+                                                <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
+                                                    <svg
+                                                    className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
                                                     >
-                                                    <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
-                                                        <BiEditAlt className="text-blue hover:cursor-pointer inline" />
-                                                    </span>
-                                                    <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
-                                                        <svg
-                                                        className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        >
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        </svg>
-                                                                                                                
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedAirtime(item)
-                                                                    openModal('view');
-                                                                }}
-                                                            >
-                                                                View Detail
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedAirtime(item)
-                                                                    openModal('update');
-                                                                }}
-                                                            >
-                                                                Update Airtime
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
+                                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                                    </svg>
+                                                                                                            
+                                                    <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
+                                                    <span 
+                                                            className="items-left px-2 py-2"
+                                                            onClick={() => {
                                                                 setSelectedAirtime(item)
-                                                                openModal('delete')
-                                                                }}
-                                                            >
-                                                                Delete Airtime
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }) : 
-                                            <tr>
-                                                <td colSpan={7} className="text-center py-3">No Crypto Record available</td>
-                                            </tr>
-                                    }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
+                                                                openModal('view');
+                                                            }}
+                                                        >
+                                                            View Detail
+                                                        </span>
+                                                    </li>
+
+                                                    <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
+                                                        <span 
+                                                            className="items-left px-2 py-2"
+                                                            onClick={() => {
+                                                                setSelectedAirtime(item)
+                                                                openModal('update');
+                                                            }}
+                                                        >
+                                                            Update Airtime
+                                                        </span>
+                                                    </li>
+
+                                                    <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
+                                                        <span 
+                                                            className="items-left px-2 py-2"
+                                                            onClick={() => {
+                                                            setSelectedAirtime(item)
+                                                            openModal('delete')
+                                                            }}
+                                                        >
+                                                            Delete Airtime
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }) : 
+                                        <tr>
+                                            <td colSpan={7} className="text-center py-3">No Crypto Record available</td>
+                                        </tr>
+                                }
+                                
+                                
+                            </tbody>
+                        </table>
                     </div>
+                
                 </Card>
             </div>
 

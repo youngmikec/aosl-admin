@@ -120,7 +120,7 @@ const CryptoComp = () => {
                 <Card type='lg'>
                     {/* Title section */}
                     <div id="title">
-                        <div className="flex justify-between w-full">
+                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='mb-8'>
                                 <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Crypto Records Table</h3>
                                 <p className='text-[#7F7F80] text-sm'>Displaying {cryptos.length} of {cryptos.length} Crypto Record(s)</p>
@@ -137,8 +137,8 @@ const CryptoComp = () => {
 
                         </div>
 
-                        <div className="flex justify-between">
-                            <div>
+                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
+                            <div className='my-2 md:my-0 lg:my-0'>
                                 <SortComp sortData={sortData} />
                             </div>
 

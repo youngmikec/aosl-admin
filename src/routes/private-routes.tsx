@@ -5,12 +5,17 @@ import Giftcard from '../pages/giftcard';
 import Airtime from '../pages/airtime';
 import OrdersPage from '../pages/orders';
 import UsersPage from "../pages/users";
+import Account from "../pages/account";
 // import NotFoundPage from "../pages/Not-found";
 
 const privateRoutes: RouteType[] = [
     {
         path: '/dashboard',
         component: <Dashboard />
+    },
+    {
+        path: '/profile',
+        component:<Account />
     },
     {
         path: '/cryptos',

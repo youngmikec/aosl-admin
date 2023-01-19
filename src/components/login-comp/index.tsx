@@ -72,7 +72,7 @@ const LoginComp = () => {
 
     return (
         <>
-            <div className='flex justify-between'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
                 <div className='flex-1'>
                     <div className="flex justify-start mb-4">
                         <div>
@@ -133,7 +133,7 @@ const LoginComp = () => {
                     </div>
                 </div>
 
-                <div className='auth-bg flex-1'></div>
+                <div className='hidden md:block lg:block auth-bg flex-1'></div>
             </div>
 
             <ToastContainer />

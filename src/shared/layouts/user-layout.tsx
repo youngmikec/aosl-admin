@@ -19,7 +19,7 @@ const UserLayout = ({children}: Props) =>  {
           >
               <Sidebar />
           </div>
-          <div className='flex-1'>
+          <div className='w-full lg:flex-1'>
               <div className='mx-auto w-11/12'>
                 <Navbar />
                 { children }

@@ -47,7 +47,7 @@ const Navbar = () => {
                         <CiBellOn className='inline-flex text-xl font-semibold my-auto text-[#8c8c8c]'/>
                     </div>
                     <div className="inline-flex rounded-full bg-[#b1bbdf]">
-                        <Link to="/account">
+                        <Link to="/profile">
                             <img src={profile} alt="profile" className='' width='40px' height='40px'  />
                         </Link>
                     </div>

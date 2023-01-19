@@ -16,7 +16,7 @@ import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { INITIALIZE_ORDERS, REMOVE_ORDER } from '../../store/orders';
-import { DELETE_ORDER, RETRIEVE_ORDERS } from '../../service';
+import { DELETE_ORDER, RETRIEVE_ORDERS, UPDATE_ORDER } from '../../service';
 import { BiEditAlt } from 'react-icons/bi';
 import SortComp from '../../shared/sort-comp';
 import OrderDetailComp from './order-detail';
@@ -104,6 +104,20 @@ const OrdersComp = () => {
             notify("error", message);
         });
     }
+
+    const handleOrderComplete = (id: string, status: string) => {
+        const data = { status };
+        UPDATE_ORDER(id, data)
+          .then((res: AxiosResponse<ApiResponse>) => {
+            const { message } = res.data;
+            notify("success", message);
+            retrieveOrders();
+          })
+          .catch((err: any) => {
+            const { message } = err.response.data;
+            notify("error", message);
+          });
+    };
     
     useEffect(() => {
         retrieveOrders();
@@ -124,8 +138,8 @@ const OrdersComp = () => {
                             <p className='text-[#7F7F80] text-sm'>Displaying {orders.length} of {Orders.length} Order(s)</p>
                         </div>
 
-                        <div className="flex justify-between">
-                            <div>
+                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
+                            <div className='my-2 md:my-0 lg:my-0'>
                                 <SortComp sortData={sortData} />
                             </div>
 
@@ -246,6 +260,19 @@ const OrdersComp = () => {
                                                                 Update Crypto
                                                             </span>
                                                         </li>
+
+                                                        {item.status !== "COMPLETED" && (
+                                                            <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">
+                                                                <span
+                                                                className="items-left px-2 py-3"
+                                                                onClick={() =>
+                                                                    handleOrderComplete(item.id, "COMPLETED")
+                                                                }
+                                                                >
+                                                                    Complete Order
+                                                                </span>
+                                                            </li>
+                                                        )}
 
                                                         <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
                                                             <span 
