@@ -6,6 +6,7 @@ export type Step = {
 }
 
 export type User = {
+    _id: string;
     id: string;
     userType: UserType;
     code: string;
@@ -18,6 +19,7 @@ export type User = {
     gender: 'MALE' | 'FEMALE'
     address: string;
     password: string;
+    profileImage: string;
     email: string;
     phone: string;
     

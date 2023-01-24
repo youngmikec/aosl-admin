@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+//icons
 import { CgLogOff } from 'react-icons/cg';
 import { AiOutlineDollar } from 'react-icons/ai';
 import { RiDashboardFill } from 'react-icons/ri';

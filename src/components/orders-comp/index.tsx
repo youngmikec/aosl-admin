@@ -249,7 +249,7 @@ const OrdersComp = () => {
                                                             </span>
                                                         </li>
 
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
+                                                        {/* <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
                                                             <span 
                                                                 className="items-left px-2 py-2"
                                                                 onClick={() => {
@@ -259,7 +259,7 @@ const OrdersComp = () => {
                                                             >
                                                                 Update Crypto
                                                             </span>
-                                                        </li>
+                                                        </li> */}
 
                                                         {item.status !== "COMPLETED" && (
                                                             <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">

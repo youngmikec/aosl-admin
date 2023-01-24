@@ -139,7 +139,6 @@ const DashboardComp = () => {
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <br />
                             <tbody className='text-[#7F7F80]'>
                                 {
                                     recentOrders.length > 0 ?

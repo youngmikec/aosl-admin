@@ -173,13 +173,12 @@ const UsersComp = () => {
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <br />
                                 <tbody className='text-[#7F7F80]'>
                                     {
                                         users.length > 0 ? 
                                         users.map((item: User, idx: number) => {
                                             return <tr key={idx} className="my-4">
-                                                <td className='text-left border-spacing-y-4'>{item?.firstName} - {item?.lastName}</td>
+                                                <td className='text-left border-spacing-y-4'>{item?.firstName}</td>
                                                 <td className="text-center py-3">{item?.email}</td>
                                                 <td className="text-center py-3">{item?.userType}</td>
                                                 <td className="text-center py-3">{item?.isVerified ? 'Verified' : 'Not Verified'}</td>
@@ -208,7 +207,7 @@ const UsersComp = () => {
                                                             <span
                                                             className="items-left px-2 py-3"
                                                             onClick={() =>
-                                                                handleUserUpgrade(item.id, "ADMIN")
+                                                                handleUserUpgrade(item._id, "ADMIN")
                                                             }
                                                             >
                                                                 Upgrade to Admin
@@ -221,7 +220,7 @@ const UsersComp = () => {
                                                             <span
                                                             className="items-left px-2 py-2"
                                                             onClick={() =>
-                                                                handleUserUpgrade(item.id, "USER")
+                                                                handleUserUpgrade(item._id, "USER")
                                                             }
                                                             >
                                                                 Downgrade to User
@@ -231,7 +230,7 @@ const UsersComp = () => {
 
                                                         <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
                                                         <span className="items-left px-2 py-2">
-                                                            <Link to={`${item.id}`}>View Detail</Link>
+                                                            <Link to={`/users/${item._id}`}>View Detail</Link>
                                                         </span>
                                                         </li>
 
