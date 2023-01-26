@@ -79,6 +79,7 @@ const Navbar = () => {
                             </button>
                         </div>
                     </div>
+                    {/* mobile view */}
                     <div className="flex justify-start border-2 border-[#f0f0f0] rounded-md">
                         <CiSearch className="text-xl my-auto text-[#8c8c8c] ml-2 mr-4" />
                         <input type="text" placeholder='Search.....' className='w-36 sm:w-50 md:w-60 lg:w-80' onChange={(e)=>setSearch(e.target.value)}/>
