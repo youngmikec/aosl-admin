@@ -5,33 +5,28 @@ import "react-toastify/dist/ReactToastify.css";
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
 
-//icons
-import { BiEditAlt } from 'react-icons/bi';
 
 import Card from '../../shared/card';
-import { sortArray } from '../../utils';
 import { RootState } from '../../store';
-import { DELETE_AIRTIME, RETREIVE_AIRTIME } from '../../service';
-import { Airtime, ApiResponse } from '../../models';
-import { CloseAppModal, OpenAppModal } from '../../store/modal';
+import { sortArray } from '../../utils';
+import { ApiResponse, Newsletter } from '../../models';
 import AppModalComp from '../../shared/app-modal';
-import DeleteComp from '../../shared/delete-comp/delete-comp';
-import defaultImg from '../../assets/images/default.jpg';
-import { INITIALIZE_AIRTIMES, REMOVE_AIRTIME } from '../../store/airtime';
-import AirtimeForm from './airtime-form';
+import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import SortComp from '../../shared/sort-comp';
-import AirtimeDetailComp from './airtime-details';
-import AirtimeUpdateForm from './airtime-update-form';
+import { BiEditAlt } from 'react-icons/bi';
+import DeleteComp from '../../shared/delete-comp/delete-comp';
+import { DELETE_NEWSLETTER, RETREIVE_NEWSLETTERS } from '../../service';
+import { INITIALIZE_NEWSLETTERS, REMOVE_NEWSLETTER } from '../../store/newsletter';
 
-const AirtimeComp = () => {
+const NewsletterComp = () => {
     const dispatch = useDispatch();
-    const Airtimes: Airtime[] = useSelector((state: RootState) => state.airtimeState.value);
+    const Newsletter: Newsletter[] = useSelector((state: RootState) => state.newsletterState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
     const [searching, setSearching] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [airtimes, setAirtimes] = useState<Airtime[]>([]);
-    const [selectedAirtime, setSelectedAirtime] = useState<Airtime | undefined>();
+    const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+    const [selectedNewsletter, setSelectedNewsletter] = useState<Newsletter | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
 
 
@@ -49,14 +44,14 @@ const AirtimeComp = () => {
         }
     };
 
-    const retrieveAirtimes = () => {
+    const retrieveNewsletters = () => {
         const query: string = `?sort=-name&populate=createdBy`;
-        RETREIVE_AIRTIME(query)
+        RETREIVE_NEWSLETTERS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
-            setAirtimes(payload);
-            dispatch(INITIALIZE_AIRTIMES(payload));
+            setNewsletters(payload);
+            dispatch(INITIALIZE_NEWSLETTERS(payload));
         })
         .catch((err: any) => {
             const { message } = err.response.data;
@@ -65,9 +60,9 @@ const AirtimeComp = () => {
     };
 
     const sortData = (field: string) => {
-        const sortedArray: any[] = sortArray(airtimes, field);
+        const sortedArray: any[] = sortArray(newsletters, field);
         if (sortedArray.length > 0) {
-          setAirtimes(sortedArray);
+          setNewsletters(sortedArray);
         }
     };
 
@@ -78,13 +73,13 @@ const AirtimeComp = () => {
 
     const handleDeleteRecord = (id: string) => {
         setDeleting(true);
-        DELETE_AIRTIME(id)
+        DELETE_NEWSLETTER(id)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload, success } = res.data;
             if(success){
                 setDeleting(false);
                 notify("success", message);
-                dispatch(REMOVE_AIRTIME(payload.id));
+                dispatch(REMOVE_NEWSLETTER(payload.id));
                 dispatch(CloseAppModal());
             }
         })
@@ -98,22 +93,22 @@ const AirtimeComp = () => {
     const handleSearchQuery = () => {
         setSearching(true);
         if(searchQuery !== '') {
-            const filteredResults: Airtime[] = airtimes.filter((item: Airtime) => Object.values(item).includes(searchQuery));
-            setAirtimes(filteredResults);
+            const filteredResults: Newsletter[] = newsletters.filter((item: Newsletter) => Object.values(item).includes(searchQuery));
+            setNewsletters(filteredResults);
             setSearching(false);
         }else {
-            setAirtimes(Airtimes);
+            setNewsletters(newsletters);
             setSearching(false);
         }
     }
     
     useEffect(() => {
-        retrieveAirtimes();
+        retrieveNewsletters();
     }, []);
 
     useEffect(() => {
-        setAirtimes(Airtimes)
-    }, [Airtimes]);
+        setNewsletters(newsletters)
+    }, [newsletters]);
 
     return (
         <>
@@ -123,8 +118,8 @@ const AirtimeComp = () => {
                     <div id="title">
                         <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='mb-8'>
-                                <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Airtime Records Table</h3>
-                                <p className='text-[#7F7F80] text-sm'>Displaying {airtimes.length} of {airtimes.length} Airtime Record(s)</p>
+                                <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Newletter Records Table</h3>
+                                <p className='text-[#7F7F80] text-sm'>Displaying {newsletters.length} of {newsletters.length} Newsletter Record(s)</p>
                             </div>
 
                             <div className='mb-8'>
@@ -132,7 +127,7 @@ const AirtimeComp = () => {
                                     className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
                                     onClick={() => openModal('create')}
                                 >
-                                    create Airtime
+                                    create Newsletter
                                 </button>
                             </div>
 
@@ -167,10 +162,10 @@ const AirtimeComp = () => {
                         <table className='table border w-full'>
                             <thead>
                                 <tr className='border-spacing-y-4'>
-                                    <th className="text-left">Airtime code</th>
-                                    <th>Name</th>
-                                    <th>Rate</th>
-                                    <th>Image</th>
+                                    <th className="text-left">code</th>
+                                    <th>Title</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th>Action</th>
@@ -179,18 +174,18 @@ const AirtimeComp = () => {
                             
                             <tbody className='text-[#7F7F80]'>
                                 {
-                                    airtimes.length > 0 ?
-                                    airtimes.map((item: Airtime) => {
+                                    newsletters.length > 0 ?
+                                    newsletters.map((item: Newsletter) => {
                                         return <tr key={item.code}>
                                             <td className='text-left border-spacing-y-4'>{item?.code}</td>
-                                            <td className="text-center py-3">{item?.name}</td>
-                                            <td className="text-center py-3">{ item?.rate}</td>
+                                            <td className="text-center py-3">{item?.title}</td>
+                                            <td className="text-center py-3">{ item?.subject}</td>
                                             <td className="text-center py-3">
-                                                <img src={item?.networkImage || defaultImg } width="25px" height="25px" alt="crypto" />
+                                                { item?.message }
                                             </td>
                                             <td className="text-center py-3">
                                                 {
-                                                    item.status === 'ACTIVE' ? 
+                                                    item.status === 'PUBLISHED' ? 
                                                     <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
                                                     :
                                                     <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
@@ -221,7 +216,7 @@ const AirtimeComp = () => {
                                                     <span 
                                                             className="items-left px-2 py-2"
                                                             onClick={() => {
-                                                                setSelectedAirtime(item)
+                                                                setSelectedNewsletter(item)
                                                                 openModal('view');
                                                             }}
                                                         >
@@ -233,7 +228,7 @@ const AirtimeComp = () => {
                                                         <span 
                                                             className="items-left px-2 py-2"
                                                             onClick={() => {
-                                                                setSelectedAirtime(item)
+                                                                setSelectedNewsletter(item)
                                                                 openModal('update');
                                                             }}
                                                         >
@@ -245,7 +240,7 @@ const AirtimeComp = () => {
                                                         <span 
                                                             className="items-left px-2 py-2"
                                                             onClick={() => {
-                                                            setSelectedAirtime(item)
+                                                            setSelectedNewsletter(item)
                                                             openModal('delete')
                                                             }}
                                                         >
@@ -258,7 +253,7 @@ const AirtimeComp = () => {
                                         </tr>
                                     }) : 
                                         <tr>
-                                            <td colSpan={7} className="text-center py-3">No Aritime Record available</td>
+                                            <td colSpan={7} className="text-center py-3">No Newsletter Record available</td>
                                         </tr>
                                 }
                                 
@@ -271,17 +266,17 @@ const AirtimeComp = () => {
             </div>
 
             <AppModalComp title=''>
-                {
+                {/* {
                     modalMode === 'create' && <AirtimeForm />
                 }
                 {
-                    modalMode === 'view' && <AirtimeDetailComp airtime={selectedAirtime} />
+                    modalMode === 'view' && <AirtimeDetailComp airtime={selectedNewsletter} />
                 }
                 {
-                    modalMode === 'update' && <AirtimeUpdateForm airtime={selectedAirtime}  />
-                }
+                    modalMode === 'update' && <AirtimeUpdateForm airtime={selectedNewsletter}  />
+                } */}
                 {
-                    modalMode === 'delete' && <DeleteComp id={selectedAirtime?.id} action={handleDeleteRecord} deleting={deleting} />
+                    modalMode === 'delete' && <DeleteComp id={selectedNewsletter?.id} action={handleDeleteRecord} deleting={deleting} />
                 }
             </AppModalComp>
 
@@ -291,4 +286,4 @@ const AirtimeComp = () => {
     )
 }
 
-export default AirtimeComp;
+export default NewsletterComp;

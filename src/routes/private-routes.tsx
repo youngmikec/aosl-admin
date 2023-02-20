@@ -7,6 +7,7 @@ import OrdersPage from '../pages/orders';
 import UsersPage from "../pages/users";
 import Account from "../pages/account";
 import UserDetailPage from "../pages/user-detail";
+import NewsletterPage from "../pages/newsletter";
 // import NotFoundPage from "../pages/Not-found";
 
 const privateRoutes: RouteType[] = [
@@ -41,6 +42,10 @@ const privateRoutes: RouteType[] = [
     {
         path: '/users/:id',
         component: <UserDetailPage />
+    },
+    {
+        path: '/newsletter',
+        component: <NewsletterPage />
     },
     // {
     //     path: '*',

@@ -1,21 +1,31 @@
-import { Airtime, CryptoCurrency, GiftCard, User } from "../../models"
-import { Order } from "../../models/order"
+import {
+  Airtime,
+  CryptoCurrency,
+  GiftCard,
+  Newsletter,
+  User,
+} from "../../models";
+import { Order } from "../../models/order";
 
 export type AirtimeState = {
-    value: Airtime[]
-}
+  value: Airtime[];
+};
 
 export type CryptosState = {
-    value: CryptoCurrency[]
-}
+  value: CryptoCurrency[];
+};
 
 export type GiftcardState = {
-    value: GiftCard[]
-}
+  value: GiftCard[];
+};
+
+export type NewsletterState = {
+  value: Newsletter[];
+};
 
 export type OrdersState = {
-    value: Order[]
-}
+  value: Order[];
+};
 export type UsersState = {
-    value: User[]
-}
+  value: User[];
+};

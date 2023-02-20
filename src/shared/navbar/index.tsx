@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 //  icons
 import{CiSearch} from 'react-icons/ci';
+import { BiNews } from 'react-icons/bi';
 import {CiBellOn} from 'react-icons/ci';
 import { FiMenu } from 'react-icons/fi';
 import { FaTimes } from 'react-icons/fa';
@@ -157,6 +158,18 @@ const Navbar = () => {
                                         <div className='flex justify-start'>
                                             <div><span><IoCardOutline className='text-xl'/></span></div>
                                             <div className='mx-2'>Giftcards</div>
+                                        </div>           
+                                    </Link>
+                                </li>
+
+                                <li 
+                                    className={`${ pathname === '/newsletter' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    title="Newsletter"
+                                >
+                                    <Link to="/newsletter">
+                                        <div className='flex justify-start'>
+                                            <div><span><BiNews className='text-xl'/></span></div>
+                                            <div className='mx-2'>Newsletter</div>
                                         </div>           
                                     </Link>
                                 </li>
