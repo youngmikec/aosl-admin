@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { AxiosResponse } from 'axios';
 
 //editor
+import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
@@ -161,6 +161,9 @@ const NewsletterForm = () => {
                             /> */}
                             <Editor
                                 editorState={editorState}
+                                editorClassName={`bg-white text-[#6A6A6A] border-2 ${
+                                    message.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full h-60`}
                                 onEditorStateChange={setEditorState}
                             />
                         </div>

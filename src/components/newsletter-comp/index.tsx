@@ -17,6 +17,7 @@ import { BiEditAlt } from 'react-icons/bi';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { DELETE_NEWSLETTER, RETREIVE_NEWSLETTERS } from '../../service';
 import { INITIALIZE_NEWSLETTERS, REMOVE_NEWSLETTER } from '../../store/newsletter';
+import NewsletterForm from './newsletter-form';
 
 const NewsletterComp = () => {
     const dispatch = useDispatch();
@@ -266,13 +267,13 @@ const NewsletterComp = () => {
             </div>
 
             <AppModalComp title=''>
+                {
+                    modalMode === 'create' && <NewsletterForm />
+                }
                 {/* {
-                    modalMode === 'create' && <AirtimeForm />
-                }
-                {
                     modalMode === 'view' && <AirtimeDetailComp airtime={selectedNewsletter} />
-                }
-                {
+                } */}
+                {/* {
                     modalMode === 'update' && <AirtimeUpdateForm airtime={selectedNewsletter}  />
                 } */}
                 {
