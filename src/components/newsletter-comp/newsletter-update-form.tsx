@@ -5,29 +5,33 @@ import { useDispatch } from 'react-redux';
 import { AxiosResponse } from 'axios';
 
 //editor
-import { EditorState } from 'draft-js';
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import { EditorState } from 'draft-js';
+// import { Editor } from "react-draft-wysiwyg";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
-import { ApiResponse } from '../../models';
-import { CREATE_NEWLETTER } from '../../service';
-import { ADD_TO_NEWSLETTERS } from '../../store/newsletter';
+import { ApiResponse, Newsletter } from '../../models';
+import { CREATE_NEWLETTER, UPDATE_NEWSLETTER } from '../../service';
+import { ADD_TO_NEWSLETTERS, UPDATE_NEWSLETTER_STATE } from '../../store/newsletter';
 
 
-const NewsletterForm = () => {
+type Props = {
+    newsletter?: Newsletter
+}
+
+const NewsletterUpdateForm = ({ newsletter }: Props) => {
     const dispatch = useDispatch();
     //input states
     const [loading, setLoading] = useState<boolean>(false);
-    const [title, setTitle] = useState<{value: string, error: boolean}>({ value: '', error: false});
-    const [subject, setSubject] = useState<{value: string, error: boolean}>({ value: '', error: false});
-    const [message, setMessage] = useState<{value: string, error: boolean}>({ value: '', error: false});
-    const [status, setStatus] = useState<{value: string, error: boolean}>({ value: 'PUBLISHED', error: false});
+    const [title, setTitle] = useState<{value: string, error: boolean} | any>({ value: '', error: false});
+    const [subject, setSubject] = useState<{value: string, error: boolean} | any>({ value: '', error: false});
+    const [message, setMessage] = useState<{value: string, error: boolean} | any>({ value: '', error: false});
+    const [status, setStatus] = useState<{value: string, error: boolean} | any>({ value: '', error: false});
     
     //editor state
-    const [editorState, setEditorState] = useState(() =>
-        EditorState.createEmpty()
-    );
+    // const [editorState, setEditorState] = useState(() =>
+    //     EditorState.createEmpty()
+    // );
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -92,12 +96,13 @@ const NewsletterForm = () => {
                 status: status.value,
             };
           // axios.defaults.withCredentials = true;
-          CREATE_NEWLETTER(data)
+          const id: string = newsletter?.id ? newsletter.id : '';
+          UPDATE_NEWSLETTER(id, data)
             .then((res: AxiosResponse<ApiResponse>) => {
                 const { message, payload } = res.data;
                 setLoading(false);
-                notify("success", `Newsletter sent ${message}ly`);
-                dispatch(ADD_TO_NEWSLETTERS(payload));
+                notify("success", `Newsletter updated ${message}ly`);
+                dispatch(UPDATE_NEWSLETTER_STATE(payload));
                 clearFormStates();
             })
             .catch((err: any) => {
@@ -110,9 +115,16 @@ const NewsletterForm = () => {
         }  
     };
 
+    // useEffect(() => {
+    //     console.log(editorState);
+    // }, [editorState]);
     useEffect(() => {
-        console.log(editorState);
-    }, [editorState]);
+        setTitle({value: newsletter?.title, error: false});
+        setSubject({value: newsletter?.subject, error: false});
+        setMessage({value: newsletter?.message, error: false});
+        setStatus({value: newsletter?.status, error: false});
+        
+    }, [])
 
 
     return (
@@ -212,7 +224,7 @@ const NewsletterForm = () => {
                                 onClick={() => handleSubmit()}
                                 className="bg-[#8652A4] text-white py-1 px-10 rounded-2xl"
                             >
-                                {loading ? "Processing..." : "Create"}
+                                {loading ? "Processing..." : "update"}
                             </button>
                         </div>
                     </div>
@@ -222,4 +234,4 @@ const NewsletterForm = () => {
     )
 }
 
-export default NewsletterForm;
+export default NewsletterUpdateForm;

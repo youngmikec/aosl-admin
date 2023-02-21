@@ -18,10 +18,12 @@ import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { DELETE_NEWSLETTER, RETREIVE_NEWSLETTERS } from '../../service';
 import { INITIALIZE_NEWSLETTERS, REMOVE_NEWSLETTER } from '../../store/newsletter';
 import NewsletterForm from './newsletter-form';
+import NewsletterUpdateForm from './newsletter-update-form';
+import NewsletterDetailComp from './newsletter-details';
 
 const NewsletterComp = () => {
     const dispatch = useDispatch();
-    const Newsletter: Newsletter[] = useSelector((state: RootState) => state.newsletterState.value);
+    const Newsletters: Newsletter[] = useSelector((state: RootState) => state.newsletterState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
     const [searching, setSearching] = useState<boolean>(false);
@@ -98,7 +100,7 @@ const NewsletterComp = () => {
             setNewsletters(filteredResults);
             setSearching(false);
         }else {
-            setNewsletters(newsletters);
+            setNewsletters(Newsletters);
             setSearching(false);
         }
     }
@@ -108,8 +110,8 @@ const NewsletterComp = () => {
     }, []);
 
     useEffect(() => {
-        setNewsletters(newsletters)
-    }, [newsletters]);
+        setNewsletters(Newsletters)
+    }, [Newsletters]);
 
     return (
         <>
@@ -233,7 +235,7 @@ const NewsletterComp = () => {
                                                                 openModal('update');
                                                             }}
                                                         >
-                                                            Update Airtime
+                                                            Update Newsletter
                                                         </span>
                                                     </li>
 
@@ -245,7 +247,7 @@ const NewsletterComp = () => {
                                                             openModal('delete')
                                                             }}
                                                         >
-                                                            Delete Airtime
+                                                            Delete Newsletter
                                                         </span>
                                                     </li>
                                                 </ul>
@@ -270,12 +272,12 @@ const NewsletterComp = () => {
                 {
                     modalMode === 'create' && <NewsletterForm />
                 }
-                {/* {
-                    modalMode === 'view' && <AirtimeDetailComp airtime={selectedNewsletter} />
-                } */}
-                {/* {
-                    modalMode === 'update' && <AirtimeUpdateForm airtime={selectedNewsletter}  />
-                } */}
+                {
+                    modalMode === 'view' && <NewsletterDetailComp newsletter={selectedNewsletter} />
+                }
+                {
+                    modalMode === 'update' && <NewsletterUpdateForm newsletter={selectedNewsletter}  />
+                }
                 {
                     modalMode === 'delete' && <DeleteComp id={selectedNewsletter?.id} action={handleDeleteRecord} deleting={deleting} />
                 }
