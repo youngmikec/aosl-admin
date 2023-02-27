@@ -44,7 +44,7 @@ const AccountComp = () => {
 
     return (
         <>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2'>
+            <div className='w-full sm:w-11/12 md:w-9/12 lg:w-8/12 m-0 sm:ml-3 lg:ml-auto lg:ml-8'>
                 <div className='w-12/12'>
                     <AccountStepHeader 
                         title='Account Settings'

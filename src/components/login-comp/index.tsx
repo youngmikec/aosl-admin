@@ -10,8 +10,12 @@ import { LOGIN } from '../../service';
 import { ApiResponse } from '../../models';
 import { setItem } from '../../utils';
 
+//icons
+import { FiEyeOff, FiEye } from 'react-icons/fi';
+
 const LoginComp = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [pDisplay, setPDisplay] = useState<boolean>(false);
     const [email, setEmail] = useState<{value: string, error: boolean}>({value: '', error: false});
     const [password, setPassword] = useState<{value: string, error: boolean}>({value: '', error: false});
 
@@ -70,6 +74,10 @@ const LoginComp = () => {
         }
     }
 
+    const togglePasswordDisplay = () => {
+        setPDisplay(!pDisplay);
+    }
+
     return (
         <>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
@@ -101,12 +109,20 @@ const LoginComp = () => {
                         <div className='my-6'>
                             <label htmlFor="password" className='font-bold text-gray-400'>Password</label>
                             <div className={password.error ? 'error-border rounded-md' : 'input-border rounded-md'}>
-                                <input 
-                                    type="password" 
-                                    value={password.value}
-                                    onChange={(e) => setPassword({...password, value: e.target.value})}
-                                    className='w-full border-0 px-4 py-2 text-gray-400' 
-                                    placeholder='please enter your password' />
+                                <div className='flex' >
+                                    <input 
+                                        type={ pDisplay ? 'text' : 'password' } 
+                                        value={password.value}
+                                        onChange={(e) => setPassword({...password, value: e.target.value})}
+                                        className='w-full border-none px-4 py-2 text-gray-400 grow' 
+                                        placeholder='please enter your password' 
+                                    />
+                                    <span className='mx-2 p-2 my-auto text-gray-400 text-lg' onClick={() => togglePasswordDisplay() }>
+                                        {
+                                            pDisplay ? <FiEyeOff /> : <FiEye />
+                                        }
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
