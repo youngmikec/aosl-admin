@@ -9,7 +9,7 @@ type Props = {
 
 const NetworkAddComp = ({ networks, addFunc, removeFunc }: Props) => {
     const [networkName, setNetworkName] = useState<{value: string, error: boolean }>({value: '', error: false});
-
+    
     const cInputCheck = (): boolean => {
         let isValid: boolean = true;
         if (networkName.value === "" || undefined || null) {

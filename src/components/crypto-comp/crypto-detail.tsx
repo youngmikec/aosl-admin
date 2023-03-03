@@ -32,6 +32,9 @@ const CryptoDetailComp = ({ crypto }: Props) => {
                         <p className='my-3'><strong>Rate:</strong>  {crypto?.rate}</p>
                         <p className='my-3'><strong>Wallet Address:</strong>  {crypto?.walletAddress}</p>
                         <p className='my-3'><strong>Exchange Platform:</strong>  {crypto?.exchangePlatform}</p>
+                        <p className='my-3'><strong>Bank Name:</strong>  {crypto?.bankName}</p>
+                        <p className='my-3'><strong>Account Name:</strong>  {crypto?.accountName}</p>
+                        <p className='my-3'><strong>Account Number:</strong>  {crypto?.accountNumber}</p>
                         <p className='my-3'><strong>Created At:</strong>  {moment(crypto?.createdAt).format("MM-DD-YYYY")}</p>
                         <p className='my-3'><strong>Created By:</strong>  {getFullName(crypto?.createdBy)}</p>
                     </div>

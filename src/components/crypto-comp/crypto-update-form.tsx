@@ -27,14 +27,14 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
     const [bankName, setBankName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [accountName, setAccountName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
-    const [networks, setNetworks] = useState<{value: any[], error: boolean } | any>({value: [], error: false});
+    const [networks, setNetworks] = useState<{value: Network[], error: boolean } | any>({value: [], error: false});
 
     const handleAddNetwork = ( data: any ) => {
         setNetworks({value: [data, ...networks.value], error: false});
     }
 
     const removeNetwork = (name: string) => {
-        const filteredArray = networks.value.filter((item: Network) => item.networkName !== name);
+        const filteredArray: Network[] = networks.value.filter((item: Network) => item.networkName !== name);
         setNetworks({value: [...filteredArray], error: false});
     }
 
@@ -126,13 +126,20 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setName({value: crypto?.name, error: false});
         setShortName({value: crypto?.shortName, error: false});
         setRate({value: crypto?.rate, error: false});
-        setNetworks({value: crypto?.networks, error: false});
         setWalletAddress({value: crypto?.walletAddress, error: false});
         setExchangePlatform({value: crypto?.exchangePlatform, error: false});
         setBankName({value: crypto?.bankName, error: false});
         setAccountName({value: crypto?.accountName, error: false});
         setAccountNumber({value: crypto?.accountNumber, error: false});
         setCryptoImage({value: crypto?.cryptoImage, error: false});
+    }, [])
+
+    useEffect(() => {
+        const mappedNetworks: any[] | undefined = crypto?.networks.map((item: Network) => {
+            return { networkName: item.networkName}
+        })
+        console.log({ mappedNetworks })
+        setNetworks({value: mappedNetworks, error: false});
     }, [])
 
     return (
