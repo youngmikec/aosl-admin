@@ -23,15 +23,28 @@ const OrderDetailComp = ({ order }: Props) => {
                     md:grid-cols-2 md:space-x-2
                     lg:grid-cols-2 lg:space-x-2'
                 >
-                    <div >
-                        <img src={order?.proofImage || defaultImage } width="100%" alt="crypto" />
+                    <div className='flex justify-center items-center'>
+                        <img src={order?.proofImage || defaultImage } width="50%" className='object-cover' alt="crypto" />
                     </div>
 
                     <div className='px-4'>
                         <p className='my-2'><strong>Order Code:</strong>  {order?.code}</p>
                         <p className='my-3'><strong>Order Type:</strong>  {order?.orderType}</p>
-                        <p className='my-3'><strong>Amount:</strong>  {order?.amount}</p>
-                        <p className='my-3'><strong>Amount Receivable:</strong>  {order?.amountReceivable}</p>
+                        <p className='my-3'><strong>Amount:</strong>  ${order?.amount} worth
+                            {
+                                order?.airtime &&
+                                <p className='my-3'><strong>Airtime:</strong>  {order?.airtime?.name}</p>
+                            }
+                            {
+                                order?.giftcard &&
+                                <p className='my-3'><strong>Giftcard:</strong>  {order?.giftcard?.name}</p>
+                            }
+                            {
+                                order?.cryptocurrency &&
+                                <p className='my-3'><strong>Cryptocurrency:</strong>  {order?.cryptocurrency?.name}</p>
+                            }
+                        </p>
+                        <p className='my-3'><strong>Amount Receivable:</strong> NGN {order?.amountReceivable}</p>
                         {
                             order?.airtime &&
                             <p className='my-3'><strong>Airtime:</strong>  {order?.airtime?.name}</p>
@@ -48,6 +61,9 @@ const OrderDetailComp = ({ order }: Props) => {
                         <p className='my-3'><strong>User Last Name:</strong>  {order?.user?.lastName}</p>
                         <p className='my-3'><strong>User email:</strong>  {order?.user?.email}</p>
                         <p className='my-3'><strong>User Phone:</strong>  {order?.user?.phone}</p>
+                        <p className='my-3'><strong>Account Name:</strong>  {order?.accountName}</p>
+                        <p className='my-3'><strong>Account Number:</strong>  {order?.accountNumber}</p>
+                        <p className='my-3'><strong>Bank</strong>  {order?.bankName}</p>
                         <p className='my-3'><strong>Created At:</strong>  {moment(order?.createdAt).format("MM-DD-YYYY")}</p>
                         <p className='my-3'><strong>Created By:</strong>  {getFullName(order?.createdBy)}</p>
                     </div>

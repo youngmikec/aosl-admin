@@ -47,6 +47,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
     const handleFileRead = async (event: any) => {
         const file = event.target.files[0];
         const base64: any = await convertBase64(file);
+        setCryptoImage({...cryptoImage, value: ''});
         setCryptoImage({...cryptoImage, value: base64});
     }
 
@@ -76,6 +77,10 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         });
         }
     };
+
+    const removeImage = () => {
+        setCryptoImage({value: '', error: false});
+    }
 
 
     const clearFormStates = () => {
@@ -153,7 +158,10 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                     >
                         {
                             cryptoImage.value ? 
-                            <img src={cryptoImage?.value} alt="uploaded" /> :
+                            <div className='relative flex justify-center items-center'>
+                                <img src={cryptoImage?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} /> 
+                                <span onClick={() => removeImage()} className='absolute top-0 cursor-pointer right-0 z-10'>X</span>
+                            </div> :
                             <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
                                 + <br /> Choose file
                             </button>
