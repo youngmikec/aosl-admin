@@ -19,6 +19,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [cryptoImage, setCryptoImage] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [barcode, setBarcode] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [name, setName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [shortName, setShortName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [rate, setRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
@@ -39,18 +40,26 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
     }
 
     const fileRef = useRef<HTMLInputElement>(null);
+    const barcodeRef = useRef<HTMLInputElement>(null);
 
     const openFile = () => {
         return fileRef.current?.click();
+    }
+    const openBarcodeFile = () => {
+        return barcodeRef.current?.click();
     }
 
     const handleFileRead = async (event: any) => {
         const file = event.target.files[0];
         const base64: any = await convertBase64(file);
-        setCryptoImage({...cryptoImage, value: ''});
         setCryptoImage({...cryptoImage, value: base64});
     }
 
+    const handleBarcodeFileRead = async (event: any) => {
+        const file = event.target.files[0];
+        const base64: any = await convertBase64(file);
+        setBarcode({...barcode, value: base64});
+    }
     const convertBase64 = (file: any) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
@@ -106,6 +115,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
             walletAddress: walletAddress.value,
             exchangePlatform: exchangePlatform.value,
             cryptoImage: cryptoImage.value,
+            barcode: barcode.value,
             bankName: bankName.value,
             accountName: accountName.value,
             accountNumber: accountNumber.value,
@@ -137,6 +147,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setAccountName({value: crypto?.accountName, error: false});
         setAccountNumber({value: crypto?.accountNumber, error: false});
         setCryptoImage({value: crypto?.cryptoImage, error: false});
+        setBarcode({value: crypto?.barcode, error: false});
     }, [])
 
     useEffect(() => {
@@ -171,6 +182,26 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                             className='hidden'
                             ref={fileRef}
                             onChange={(e) => handleFileRead(e)}
+                        />
+                    </div>
+
+                    <div
+                        className={`border-2 rounded-md my-3 h-60 w-full flex justify-center ${
+                            barcode.error ? 'error-border' : 'input-border'
+                        } px-4 py-2 `}
+                    >
+                        {
+                            barcode.value ? 
+                            <img src={barcode?.value} alt="uploaded" /> :
+                            <button className='text-center text-[#7F7F80]' onClick={() => openBarcodeFile()}>
+                                + <br /> Upload Wallet QR code
+                            </button>
+                        }
+                        <input 
+                            type="file" 
+                            className='hidden'
+                            ref={barcodeRef}
+                            onChange={(e) => handleBarcodeFileRead(e)}
                         />
                     </div>
                 </div>

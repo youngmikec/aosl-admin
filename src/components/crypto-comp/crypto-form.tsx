@@ -16,6 +16,7 @@ const CryptoForm = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const [cryptoImage, setCryptoImage] = useState<{value: string, error: boolean }>({value: '', error: false});
+    const [barcode, setBarcode] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [name, setName] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [shortName, setShortName] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [rate, setRate] = useState<{value: number, error: boolean }>({value: 0, error: false});
@@ -36,15 +37,25 @@ const CryptoForm = () => {
     }
 
     const fileRef = useRef<HTMLInputElement>(null);
+    const barcodeRef = useRef<HTMLInputElement>(null);
 
     const openFile = () => {
         return fileRef.current?.click();
+    }
+    const openBarcodeFile = () => {
+        return barcodeRef.current?.click();
     }
 
     const handleFileRead = async (event: any) => {
         const file = event.target.files[0];
         const base64: any = await convertBase64(file);
         setCryptoImage({...cryptoImage, value: base64});
+    }
+
+    const handleBarcodeFileRead = async (event: any) => {
+        const file = event.target.files[0];
+        const base64: any = await convertBase64(file);
+        setBarcode({...barcode, value: base64});
     }
 
     const convertBase64 = (file: any) => {
@@ -132,6 +143,13 @@ const CryptoForm = () => {
           setCryptoImage({ ...cryptoImage, error: false });
         }
 
+        if (barcode.value === "" || undefined || null) {
+          isValid = false;
+          setBarcode({ ...barcode, error: true });
+        } else {
+          setBarcode({ ...barcode, error: false });
+        }
+
         if (rate.value === 0 || undefined || null) {
           isValid = false;
           setRate({ ...rate, error: true });
@@ -144,6 +162,7 @@ const CryptoForm = () => {
 
     const clearFormStates = () => {
         setCryptoImage({value: '', error: false});
+        setBarcode({value: '', error: false});
         setName({value: '', error: false});
         setShortName({value: '', error: false});
         setRate({value: 0, error: false});
@@ -169,6 +188,7 @@ const CryptoForm = () => {
                 bankName: bankName.value,
                 accountName: accountName.value,
                 accountNumber: accountNumber.value,
+                barcode: barcode.value
             };
           CREATE_CRYPTO(data)
             .then((res: AxiosResponse<ApiResponse>) => {
@@ -202,7 +222,7 @@ const CryptoForm = () => {
                             cryptoImage.value ? 
                             <img src={cryptoImage?.value} alt="uploaded" /> :
                             <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
-                                + <br /> Choose file
+                                + <br /> Upload Crypto image
                             </button>
                         }
                         <input 
@@ -210,6 +230,26 @@ const CryptoForm = () => {
                             className='hidden'
                             ref={fileRef}
                             onChange={(e) => handleFileRead(e)}
+                        />
+                    </div>
+
+                    <div
+                        className={`border-2 rounded-md my-3 h-60 w-full flex justify-center ${
+                            barcode.error ? 'error-border' : 'input-border'
+                        } px-4 py-2 `}
+                    >
+                        {
+                            barcode.value ? 
+                            <img src={barcode?.value} alt="uploaded" /> :
+                            <button className='text-center text-[#7F7F80]' onClick={() => openBarcodeFile()}>
+                                + <br /> Upload Wallet QR code
+                            </button>
+                        }
+                        <input 
+                            type="file" 
+                            className='hidden'
+                            ref={barcodeRef}
+                            onChange={(e) => handleBarcodeFileRead(e)}
                         />
                     </div>
                 </div>
