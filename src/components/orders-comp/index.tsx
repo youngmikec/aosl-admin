@@ -20,6 +20,8 @@ import { DELETE_ORDER, RETRIEVE_ORDERS, UPDATE_ORDER } from '../../service';
 import { BiEditAlt } from 'react-icons/bi';
 import SortComp from '../../shared/sort-comp';
 import OrderDetailComp from './order-detail';
+import AppTable, { TableHeader } from '../../shared/app-table';
+import DropdownComp, { DropdownList } from '../../shared/dropdown';
 
 const OrdersComp = () => {
     const dispatch = useDispatch();
@@ -28,10 +30,23 @@ const OrdersComp = () => {
     const [deleting, setDeleting] = useState<boolean>(false);
     const [searching, setSearching] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [tableRows, setTableRows] = useState<any[]>([]);
 
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
+
+    const tableHeaders: TableHeader[] = [
+        { key: 'sn', value: 'S/N' },
+        { key: 'orderCode', value: 'Order Code' },
+        { key: 'type', value: 'Type' },
+        { key: 'email', value: 'Email' },
+        { key: 'amount', value: 'Amount' },
+        { key: 'date', value: 'Date' },
+        { key: 'status', value: 'Status' },
+        { key: 'proofImg', value: 'Image' },
+        { key: 'actions', value: 'Actions' },
+    ]
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -47,6 +62,36 @@ const OrdersComp = () => {
         }
     };
 
+    const populateActions = (item: Order): DropdownList[] => {
+        const tableActions: DropdownList[] = [
+            { 
+                label: 'View Detail', 
+                disabled: false,
+                action: () => {
+                    setSelectedOrder(item)
+                    openCryptoModal('view');
+                }
+            },
+            { 
+                label: 'Complete Order', 
+                disabled: item.status !== "COMPLETED" ? false : true,
+                action: () => {
+                    handleOrderComplete(item.id, "COMPLETED")
+                }
+            },
+            { 
+                label: 'Delete Order', 
+                disabled: false,
+                action: () => {
+                    setSelectedOrder(item)
+                    openCryptoModal('delete')
+                }
+            },
+        ]
+        return tableActions;
+    }
+
+
     const retrieveOrders = () => {
         const query: string = `?sort=-createdAt&populate=user,createdBy,airtime,giftcard,cryptocurrency`;
         RETRIEVE_ORDERS(query)
@@ -54,6 +99,39 @@ const OrdersComp = () => {
             const { message, payload } = res.data;
             notify("success", message);
             setOrders(payload);
+            
+            const mappedDate = payload.map((item: Order, idx: number) => {
+                const actions = populateActions(item);
+                console.log('actions', actions);
+                return {
+                    sn: idx + 1,
+                    orderCode: item.orderCode,
+                    type: item.orderType,
+                    email: item.user?.email,
+                    amount: item.amount,
+                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                    status: item?.status === 'PENDING' ? 
+                    <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                    :
+                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
+                    proofImg: item.proofImage !== undefined || '' ? 
+                                <button 
+                                    className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'
+                                    onClick={() => {
+                                        setSelectedOrder(item)
+                                        openCryptoModal('preview')
+                                    }}
+                                >
+                                    <span className='mr-1 text-xs inline-flex'><BsImage /></span>
+                                    view
+                                </button>
+                                :
+                                <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>No proof</button>,
+                    actions: <DropdownComp dropdownList={actions} />
+                }
+            });
+            setTableRows(mappedDate);
+            console.log('tablerows', tableRows);
             dispatch(INITIALIZE_ORDERS(payload));
         })
         .catch((err: any) => {
@@ -137,169 +215,11 @@ const OrdersComp = () => {
                             <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Orders Table</h3>
                             <p className='text-[#7F7F80] text-sm'>Displaying {orders.length} of {Orders.length} Order(s)</p>
                         </div>
-
-                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
-                            <div className='my-2 md:my-0 lg:my-0'>
-                                <SortComp sortData={sortData} />
-                            </div>
-
-                            <div>
-                                <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input 
-                                        type="text" 
-                                        className='lg:w-80 px-3 py-1'
-                                        value={searchQuery}
-                                        onChange={(e) => {
-                                            setSearchQuery(e.target.value)
-                                            handleSearchQuery()
-                                        }}
-                                    />
-                                    <button 
-                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
-                                        onClick={() => handleSearchQuery()}
-                                    >
-                                        { searching ? 'searching...' : 'Search' }
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     {/* Title section */}
+                    <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />
+                    
 
-                    <div className='my-8'>
-                        <div className='w-full overflow-x-scroll'>
-                            <table className='table border w-full'>
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Type</th>
-                                        <th>Email address</th>
-                                        <th>Date/Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Card proof</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <br />
-                                <tbody className='text-[#7F7F80]'>
-                                    {
-                                        orders.length > 0 ?
-                                        orders.map((item: Order, idx: number) => {
-                                            return <tr key={idx}>
-                                                <td>{item.orderCode}</td>
-                                                <td>{item.orderType}</td>
-                                                <td>{item.user?.email}</td>
-                                                <td className="text-center py-3">
-                                                    {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                                </td>
-                                                <td>N {item.amount}</td>
-                                                <td>
-                                                    {
-                                                        item.status === 'PENDING' ? 
-                                                        <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                        :
-                                                        <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                    }
-                                                </td>
-                                                <td>
-                                                    {
-                                                        item.proofImage !== undefined || '' ? 
-                                                        <button 
-                                                            className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'
-                                                            onClick={() => {
-                                                                setSelectedOrder(item)
-                                                                openCryptoModal('preview')
-                                                            }}
-                                                        >
-                                                            <span className='mr-1 text-xs inline-flex'><BsImage /></span>
-                                                            view
-                                                        </button>
-                                                        :
-                                                        <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>No proof</button>
-                                                    }
-                                                </td>
-                                            
-                                                <td className="text-center py-3">
-                                                    <div
-                                                    className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
-                                                    id="button_pm"
-                                                    >
-                                                    <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
-                                                        <BiEditAlt className="text-blue hover:cursor-pointer inline" />
-                                                    </span>
-                                                    <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
-                                                        <svg
-                                                        className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        >
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        </svg>
-                                                                                                                
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedOrder(item)
-                                                                    openCryptoModal('view');
-                                                                }}
-                                                            >
-                                                                View Detail
-                                                            </span>
-                                                        </li>
-
-                                                        {/* <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedOrder(item)
-                                                                    openCryptoModal('update');
-                                                                }}
-                                                            >
-                                                                Update Crypto
-                                                            </span>
-                                                        </li> */}
-
-                                                        {item.status !== "COMPLETED" && (
-                                                            <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">
-                                                                <span
-                                                                className="items-left px-2 py-3"
-                                                                onClick={() =>
-                                                                    handleOrderComplete(item.id, "COMPLETED")
-                                                                }
-                                                                >
-                                                                    Complete Order
-                                                                </span>
-                                                            </li>
-                                                        )}
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                setSelectedOrder(item)
-                                                                openCryptoModal('delete')
-                                                                }}
-                                                            >
-                                                                Delete User
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }) :
-                                        <tr>
-                                            <td colSpan={7} className="text-center py-3">No Order Record available</td>
-                                        </tr>
-                                    }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </Card>
             </div>
 
