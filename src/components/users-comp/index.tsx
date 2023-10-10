@@ -51,6 +51,7 @@ const UsersComp = () => {
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
+            console.log('payload', payload);
             setUsers(payload);
             dispatch(ADD_TO_USERS(payload));
         })
@@ -77,7 +78,7 @@ const UsersComp = () => {
     const sortData = (field: string) => {
         const sortedArray: any[] = sortArray(users, field);
         if (sortedArray.length > 0) {
-        setUsers(sortedArray);
+            setUsers(sortedArray);
         }
     };
 
@@ -119,10 +120,6 @@ const UsersComp = () => {
     useEffect(() => {
         retrieveUsers();
     }, []);
-
-    useEffect(() => {
-        setUsers(usersState);
-    }, [usersState]);
 
     return (
         <>

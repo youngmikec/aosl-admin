@@ -130,7 +130,7 @@ const NewsletterComp = () => {
                                     className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
                                     onClick={() => openModal('create')}
                                 >
-                                    create Newsletter
+                                    Create Newsletter
                                 </button>
                             </div>
 

@@ -9,6 +9,7 @@ import { ApiResponse, CryptoCurrency, Network } from '../../models';
 import { UPDATE_CRYPTO } from '../../service';
 import NetworkAddComp from './network-add-comp';
 import { UPDATE_CRYPTO_STATE } from '../../store/cryptos';
+import ImgUploader from '../../shared/file-uploader';
 
 type Props = {
     crypto?: CryptoCurrency
@@ -87,8 +88,11 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         }
     };
 
-    const removeImage = () => {
+    const removeCryptoImage = () => {
         setCryptoImage({value: '', error: false});
+    }
+    const removeBarcodeImage = () => {
+        setBarcode({value: '', error: false});
     }
 
 
@@ -103,6 +107,10 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setAccountName({value: '', error: false});
         setAccountNumber({value: '', error: false});
         setNetworks({value: [], error: false});
+    }
+
+    const handleSetBarCode = (data: string) => {
+        setBarcode({ value: data, error: false })
     }
 
     const handleSubmit = () => {
@@ -165,13 +173,13 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                     <div
                         className={`border-2 rounded-md my-3 h-60 w-full flex justify-center ${
                             cryptoImage.error ? 'error-border' : 'input-border'
-                        } px-4 py-2 `}
+                        } px-4 py-2 relative`}
                     >
+                        {cryptoImage.value && <span onClick={() => removeCryptoImage()} className='absolute top-2 cursor-pointer right-3 z-10'>X</span>}
                         {
                             cryptoImage.value ? 
-                            <div className='relative flex justify-center items-center'>
+                            <div className='flex justify-center items-center'>
                                 <img src={cryptoImage?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} /> 
-                                <span onClick={() => removeImage()} className='absolute top-0 cursor-pointer right-0 z-10'>X</span>
                             </div> :
                             <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
                                 + <br /> Choose file
@@ -188,11 +196,14 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                     <div
                         className={`border-2 rounded-md my-3 h-60 w-full flex justify-center ${
                             barcode.error ? 'error-border' : 'input-border'
-                        } px-4 py-2 `}
+                        } px-4 py-2 relative`}
                     >
+                        {barcode.value && <span onClick={() => removeBarcodeImage()} className='absolute top-2 cursor-pointer right-3 z-10'>X</span>}
                         {
                             barcode.value ? 
-                            <img src={barcode?.value} alt="uploaded" /> :
+                            <div className='flex justify-center items-center'>
+                                <img src={barcode?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} />
+                            </div> :
                             <button className='text-center text-[#7F7F80]' onClick={() => openBarcodeFile()}>
                                 + <br /> Upload Wallet QR code
                             </button>
@@ -204,6 +215,11 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                             onChange={(e) => handleBarcodeFileRead(e)}
                         />
                     </div>
+                    {/* <ImgUploader
+                        error={barcode?.error}
+                        labelText='Upload Wallet QR code'
+                        onLoaded={handleSetBarCode}
+                    /> */}
                 </div>
 
                 <div>

@@ -27,6 +27,10 @@ const AirtimeForm = () => {
         return fileRef.current?.click();
     }
 
+    const removeImage = () => {
+        setNetworkImage({value: '', error: false});
+    }
+
     const handleFileRead = async (event: any) => {
         const file = event.target.files[0];
         const base64: any = await convertBase64(file);
@@ -154,11 +158,12 @@ const AirtimeForm = () => {
                     <div
                         className={`border-2 rounded-md my-3 h-60 w-full flex justify-center ${
                             networkImage.error ? 'error-border' : 'input-border'
-                        } px-4 py-2 `}
+                        } px-4 py-2 relative`}
                     >
+                        {networkImage.value && <span onClick={() => removeImage()} className='absolute top-2 cursor-pointer right-3 z-10'>X</span>}
                         {
                             networkImage.value ? 
-                            <img src={networkImage?.value} alt="uploaded" /> :
+                            <img src={networkImage?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} /> :
                             <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
                                 + <br /> Choose file
                             </button>
