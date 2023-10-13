@@ -21,6 +21,8 @@ import { INITIALIZE_GIFTCARDS, REMOVE_GIFTCARD } from '../../store/giftcard';
 import GiftcardForm from './giftcard-form';
 import GiftcardUpdateForm from './giftcard-update-form';
 import GiftcardDetailComp from './giftcard-detail';
+import AppTable, { TableHeader } from '../../shared/app-table';
+import DropdownComp, { DropdownList } from '../../shared/dropdown';
 
 const GiftcardComp = () => {
     const dispatch = useDispatch();
@@ -32,6 +34,8 @@ const GiftcardComp = () => {
     const [giftcards, setGiftcards] = useState<GiftCard[]>([]);
     const [selectedGiftcard, setSelectedGiftcard] = useState<GiftCard | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
+    const [tableRows, setTableRows] = useState<any[]>([]);
+
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -47,6 +51,47 @@ const GiftcardComp = () => {
         }
     };
 
+    const tableHeaders: TableHeader[] = [
+        { key: 'sn', value: 'S/N' },
+        { key: 'code', value: 'Giftcard Code' },
+        { key: 'name', value: 'Name' },
+        { key: 'rate', value: 'Rate' },
+        { key: 'status', value: 'Status' },
+        { key: 'date', value: 'Date' },
+        { key: 'actions', value: 'Actions' },
+    ];
+
+    const populateActions = (item: GiftCard): DropdownList[] => {
+        console.log('user', item);
+        const tableActions: DropdownList[] = [
+            { 
+                label: 'View Detail', 
+                disabled: false,
+                action: () => {
+                    setSelectedGiftcard(item)
+                    openModal('view');
+                }
+            },
+            { 
+                label: 'Update Giftcard', 
+                disabled: false,
+                action: () => {
+                    setSelectedGiftcard(item)
+                    openModal('update');
+                }
+            },
+            { 
+                label: 'Delete Giftcard', 
+                disabled: false,
+                action: () => {
+                    setSelectedGiftcard(item);
+                    openModal('delete');
+                }
+            },
+        ]
+        return tableActions;
+    }
+
     const retrieveGiftcards = () => {
         const query: string = `?sort=-createdAt&populate=createdBy`;
         RETRIEVE_GIFTCARDS(query)
@@ -54,6 +99,22 @@ const GiftcardComp = () => {
             const { message, payload } = res.data;
             notify("success", message);
             setGiftcards(payload);
+            const mappedDate = payload.map((item: GiftCard, idx: number) => {
+                const actions = populateActions(item);
+                return {
+                    sn: idx + 1,
+                    code: item?.code,
+                    name: item?.name,
+                    rate: item?.rate,
+                    status: item.status === 'ACTIVE' ? 
+                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                    :
+                    <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
+                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                    actions: <DropdownComp dropdownList={actions} />
+                }
+            });
+            setTableRows(mappedDate);
             dispatch(INITIALIZE_GIFTCARDS(payload));
         })
         .catch((err: any) => {
@@ -130,138 +191,16 @@ const GiftcardComp = () => {
                                     className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
                                     onClick={() => openModal('create')}
                                 >
-                                    Create giftcard
+                                    Create Giftcard
                                 </button>
                             </div>
 
                         </div>
 
-                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
-                            <div className='my-2 md:my-0 lg:my-0'>
-                                <SortComp sortData={sortData} />
-                            </div>
-
-                            <div>
-                                <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input 
-                                        type="text" 
-                                        className='lg:w-80 px-3 py-1'
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                    <button 
-                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
-                                        onClick={() => handleSearchQuery()}
-                                    >
-                                        { searching ? 'searching...' : 'Search' }
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     {/* Title section */}
 
-                    <div className='my-8'>
-                        <div className='w-full overflow-x-scroll'>
-                            <table className='table border w-full'>
-                                <thead>
-                                    <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Giftcard code</th>
-                                        <th>Name</th>
-                                        <th>Rate</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody className='text-[#7F7F80]'>
-                                    {
-                                        giftcards.length > 0 ?
-                                        giftcards.map((item: GiftCard) => {
-                                            return <tr key={item.code}>
-                                                <td className='text-left border-spacing-y-4'>{item?.code}</td>
-                                                <td className="text-center py-3">{item?.name}</td>
-                                                <td className="text-center py-3">{ item?.rate}</td>
-                                                <td className="text-center py-3">
-                                                    {
-                                                        item.status === 'ACTIVE' ? 
-                                                        <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                        :
-                                                        <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                    }
-                                                </td>
-                                                <td className="text-center py-3">
-                                                    {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                                </td>
-                                                
-                                                <td className="text-center py-3">
-                                                    <div
-                                                    className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
-                                                    id="button_pm"
-                                                    >
-                                                    <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
-                                                        <BiEditAlt className="text-blue hover:cursor-pointer inline" />
-                                                    </span>
-                                                    <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
-                                                        <svg
-                                                        className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        >
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        </svg>
-                                                                                                                
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedGiftcard(item)
-                                                                    openModal('view');
-                                                                }}
-                                                            >
-                                                                View Detail
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedGiftcard(item)
-                                                                    openModal('update');
-                                                                }}
-                                                            >
-                                                                Update Giftcard
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                setSelectedGiftcard(item)
-                                                                openModal('delete')
-                                                                }}
-                                                            >
-                                                                Delete Giftcard
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }) : 
-                                            <tr>
-                                                <td colSpan={7} className="text-center py-3">No Crypto Record available</td>
-                                            </tr>
-                                    }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />
                 </Card>
             </div>
 

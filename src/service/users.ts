@@ -29,7 +29,7 @@ export const LOGIN = async (data: any) => {
 
 export const UPDATE_USER_BY_ADMIN = async (id: string, data: any) => {
   const payload = { ...data };
-  return axios.post(`${url}/user/admin/${id}`, payload, {
+  return axios.put(`${url}/user/admin/${id}`, payload, {
     headers: {},
   });
 };

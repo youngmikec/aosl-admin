@@ -133,7 +133,7 @@ const DashboardComp = () => {
                                 <tr>
                                     <th>Order ID</th>
                                     <th>Type</th>
-                                    <th>Email address</th>
+                                    {/* <th>Email address</th> */}
                                     <th>Date/Time</th>
                                     <th>Amount</th>
                                     <th>Status</th>
@@ -144,13 +144,13 @@ const DashboardComp = () => {
                                     recentOrders.length > 0 ?
                                     recentOrders.map((item: Order, idx: number) => {
                                         return <tr key={idx}>
-                                            <td>#{idx + 1}</td>
-                                            <td>{item.orderType}</td>
-                                            <td>{item.user?.email}</td>
+                                            <td className='text-center'>#{idx + 1}</td>
+                                            <td className='text-center'>{item.orderType}</td>
+                                            {/* <td>{item.user?.email}</td> */}
                                             <td className="text-center py-3">
                                                 {moment(item?.createdAt).format("MM-DD-YYYY")}
                                             </td>
-                                            <td>N {item.amount}</td>
+                                            <td className='text-center'>NGN {item.amount}</td>
                                             <td>
                                                 {
                                                     item.status === 'PENDING' ? 

@@ -17,12 +17,16 @@ import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import { CloseAppModal, OpenAppModal } from '../../store/modal';
 import { DELETE_USER, RETRIEVE_USERS, UPDATE_USER_BY_ADMIN } from '../../service';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiEditAlt } from 'react-icons/bi';
 import SortComp from '../../shared/sort-comp';
+import AppTable, { TableHeader } from '../../shared/app-table';
+import DropdownComp, { DropdownList } from '../../shared/dropdown';
 
 const UsersComp = () => {
     const usersState = useSelector((state: RootState) => state.usersState.value);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // states
     const [users, setUsers] = useState<User[]>([]);
@@ -30,8 +34,8 @@ const UsersComp = () => {
     const [searching, setSearching] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [currentUser, setCurrentUser] = useState<User | undefined>();
+    const [tableRows, setTableRows] = useState<any[]>([]);
 
-    const dispatch = useDispatch()
     const notify = (type: string, msg: string) => {
         if (type === "success") {
         toast.success(msg, {
@@ -46,13 +50,71 @@ const UsersComp = () => {
         }
     };
 
+    const tableHeaders: TableHeader[] = [
+        { key: 'sn', value: 'S/N' },
+        { key: 'fullName', value: 'Full Name' },
+        { key: 'email', value: 'Email' },
+        { key: 'type', value: 'Type' },
+        { key: 'status', value: 'Status' },
+        { key: 'date', value: 'Date' },
+        { key: 'actions', value: 'Actions' },
+    ];
+
+    const populateActions = (item: User): DropdownList[] => {
+        console.log('user', item);
+        const tableActions: DropdownList[] = [
+            { 
+                label: 'Upgrade to Admin', 
+                disabled: item.userType == "ADMIN" ? true : false,
+                action: () => {
+                    handleUserUpgrade(item.id, "ADMIN")
+                }
+            },
+            { 
+                label: 'Downgrade to User', 
+                disabled: item.userType == "USER" ? true : false,
+                action: () => {
+                    handleUserUpgrade(item.id, "USER")
+                }
+            },
+            { 
+                label: 'View Detail', 
+                disabled: false,
+                action: () => {
+                    navigate(`/users/${item.id}`)
+                }
+            },
+            { 
+                label: 'Delete User', 
+                disabled: false,
+                action: () => {
+                    setCurrentUser(item)
+                    openModal()
+                }
+            },
+        ]
+        return tableActions;
+    }
+
     const retrieveUsers = () => {
         RETRIEVE_USERS()
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
-            console.log('payload', payload);
             setUsers(payload);
+            const mappedDate = payload.map((item: User, idx: number) => {
+                const actions = populateActions(item);
+                return {
+                    sn: idx + 1,
+                    fullName: `${item?.firstName} ${item?.lastName}`,
+                    email: item?.email,
+                    type: item?.userType,
+                    status: item?.isVerified ? 'Verified' : 'Not Verified',
+                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                    actions: <DropdownComp dropdownList={actions} />
+                }
+            });
+            setTableRows(mappedDate);
             dispatch(ADD_TO_USERS(payload));
         })
         .catch((err) => {
@@ -132,7 +194,7 @@ const UsersComp = () => {
                             <p className='text-[#7F7F80] text-sm'>Displaying {users.length} of {users.length} User Record(s)</p>
                         </div>
 
-                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
+                        {/* <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='my-2 md:my-0 lg:my-0'>
                                 <SortComp sortData={sortData} />
                             </div>
@@ -153,110 +215,10 @@ const UsersComp = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     {/* Title section */}
-
-                    <div className='my-8'>
-                        <div className='w-full overflow-x-scroll'>
-                            <table className='table border w-full'>
-                                <thead>
-                                    <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Full Name</th>
-                                        <th>Email address</th>
-                                        <th>Type</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='text-[#7F7F80]'>
-                                    {
-                                        users.length > 0 ? 
-                                        users.map((item: User, idx: number) => {
-                                            return <tr key={idx} className="my-4">
-                                                <td className='text-left border-spacing-y-4'>{item?.firstName}</td>
-                                                <td className="text-center py-3">{item?.email}</td>
-                                                <td className="text-center py-3">{item?.userType}</td>
-                                                <td className="text-center py-3">{item?.isVerified ? 'Verified' : 'Not Verified'}</td>
-                                                <td className="text-center py-3">
-                                                    {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                                </td>
-                                                
-                                                <td className="text-center py-3">
-                                                    <div
-                                                    className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
-                                                    id="button_pm"
-                                                    >
-                                                    <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
-                                                        <BiEditAlt className="text-blue hover:cursor-pointer inline" />
-                                                    </span>
-                                                    <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
-                                                        <svg
-                                                        className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        >
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        </svg>
-                                                        {item.userType === "USER" && (
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">
-                                                            <span
-                                                            className="items-left px-2 py-3"
-                                                            onClick={() =>
-                                                                handleUserUpgrade(item._id, "ADMIN")
-                                                            }
-                                                            >
-                                                                Upgrade to Admin
-                                                            </span>
-                                                        </li>
-                                                        )}
-
-                                                        {item.userType === "ADMIN" && (
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span
-                                                            className="items-left px-2 py-2"
-                                                            onClick={() =>
-                                                                handleUserUpgrade(item._id, "USER")
-                                                            }
-                                                            >
-                                                                Downgrade to User
-                                                            </span>
-                                                        </li>
-                                                        )}
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span className="items-left px-2 py-2">
-                                                            <Link to={`/users/${item._id}`}>View Detail</Link>
-                                                        </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span 
-                                                            className="items-left px-2 py-2"
-                                                            onClick={() => {
-                                                            setCurrentUser(item)
-                                                            openModal()
-                                                            }}
-                                                        >
-                                                            Delete User
-                                                        </span>
-                                                        </li>
-                                                    </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }) :
-                                        <tr>
-                                            <td colSpan={5} className="text-center py-3">No Users available</td>
-                                        </tr>
-                                    }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />
                 </Card>
             </div>
 

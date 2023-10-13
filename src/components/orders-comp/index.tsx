@@ -131,7 +131,6 @@ const OrdersComp = () => {
                 }
             });
             setTableRows(mappedDate);
-            console.log('tablerows', tableRows);
             dispatch(INITIALIZE_ORDERS(payload));
         })
         .catch((err: any) => {

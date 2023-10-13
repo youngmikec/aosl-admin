@@ -19,13 +19,16 @@ const NewsletterDetailComp = ({ newsletter }: Props) => {
                 </div>
 
                 <div className='px-4'>
-                    <p className='my-2'><strong>Title:</strong>  {newsletter?.title}</p>
-                    <p className='my-3'><strong>Newsletter Subject:</strong>  {newsletter?.subject}</p>
-                    <p className='my-3'><strong>Newsletter Status:</strong>  {newsletter?.status}</p>
-                    <p className='my-3'><strong>Created By:</strong>  {getFullName(newsletter?.createdBy)}</p>
-                    <p className='my-3'><strong>Created At:</strong>  {moment(newsletter?.createdAt).format("MM-DD-YYYY")}</p>
-                    <p className='my-3'><strong>Newsletter:</strong></p>
-                    <textarea className='my-3'>{newsletter?.message}</textarea>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Title:</strong>  {newsletter?.title}</p>
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Newsletter Subject:</strong>  {newsletter?.subject}</p>
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Newsletter Status:</strong>  {newsletter?.status}</p>
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Created By:</strong>  {getFullName(newsletter?.createdBy)}</p>
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Created At:</strong>  {moment(newsletter?.createdAt).format("MM-DD-YYYY")}</p>
+                        <p className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'><strong>Newsletter:</strong></p>
+
+                    </div>
+                    <textarea className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md'>{newsletter?.message}</textarea>
                 </div>
             </div>
         </>
