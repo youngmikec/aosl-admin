@@ -22,6 +22,8 @@ import SortComp from '../../shared/sort-comp';
 import CryptoForm from './crypto-form';
 import CryptoDetailComp from './crypto-detail';
 import CryptoUpdateForm from './crypto-update-form';
+import AppTable, { TableHeader } from '../../shared/app-table';
+import DropdownComp, { DropdownList } from '../../shared/dropdown';
 
 const CryptoComp = () => {
     const dispatch = useDispatch();
@@ -33,6 +35,8 @@ const CryptoComp = () => {
     const [cryptos, setCryptos] = useState<CryptoCurrency[]>([]);
     const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
+    const [tableRows, setTableRows] = useState<any[]>([]);
+
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -48,6 +52,48 @@ const CryptoComp = () => {
         }
     };
 
+    const tableHeaders: TableHeader[] = [
+        { key: 'sn', value: 'S/N' },
+        { key: 'code', value: 'Crypto Code' },
+        { key: 'name', value: 'Name' },
+        { key: 'rate', value: 'Rate' },
+        { key: 'image', value: 'Image' },
+        { key: 'status', value: 'Status' },
+        { key: 'date', value: 'Date' },
+        { key: 'actions', value: 'Actions' },
+    ];
+
+    const populateActions = (item: CryptoCurrency): DropdownList[] => {
+        console.log('user', item);
+        const tableActions: DropdownList[] = [
+            { 
+                label: 'View Detail', 
+                disabled: false,
+                action: () => {
+                    setSelectedCrypto(item)
+                    openModal('view');
+                }
+            },
+            { 
+                label: 'Update Crypto', 
+                disabled: false,
+                action: () => {
+                    setSelectedCrypto(item)
+                    openModal('update');
+                }
+            },
+            { 
+                label: 'Delete Crypto', 
+                disabled: false,
+                action: () => {
+                    setSelectedCrypto(item);
+                    openModal('delete');
+                }
+            },
+        ]
+        return tableActions;
+    }
+
     const retrieveCryptos = () => {
         const query: string = `?sort=-createdAt&populate=createdBy`;
         RETRIEVE_CRYPTOS(query)
@@ -55,6 +101,23 @@ const CryptoComp = () => {
             const { message, payload } = res.data;
             notify("success", message);
             setCryptos(payload);
+            const mappedDate = payload.map((item: CryptoCurrency, idx: number) => {
+                const actions = populateActions(item);
+                return {
+                    sn: idx + 1,
+                    code: item?.code,
+                    name: item?.name,
+                    rate: item?.rate,
+                    image: <img src={item?.cryptoImage || defaultImg } width="25px" height="25px" alt="crypto" />,
+                    status: item.status === 'ACTIVE' ? 
+                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                    :
+                    <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
+                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                    actions: <DropdownComp dropdownList={actions} />
+                }
+            });
+            setTableRows(mappedDate);
             dispatch(INITIALIZE_CRYPTOS(payload));
         })
         .catch((err: any) => {
@@ -137,7 +200,7 @@ const CryptoComp = () => {
 
                         </div>
 
-                        <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
+                        {/* <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='my-2 md:my-0 lg:my-0'>
                                 <SortComp sortData={sortData} />
                             </div>
@@ -158,115 +221,11 @@ const CryptoComp = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     {/* Title section */}
 
-                    <div className='my-8'>
-                        <div className='w-full overflow-x-scroll'>
-                            <table className='table border w-full'>
-                                <thead>
-                                    <tr className='border-spacing-y-4'>
-                                        <th className="text-left">Crypto code</th>
-                                        <th>Name</th>
-                                        <th>Rate</th>
-                                        <th>Image</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody className='text-[#7F7F80]'>
-                                    {
-                                        cryptos.length > 0 ?
-                                        cryptos.map((item: CryptoCurrency) => {
-                                            return <tr key={item.code}>
-                                                <td className='text-left border-spacing-y-4'>{item?.code}</td>
-                                                <td className="text-center py-3">{item?.name}</td>
-                                                <td className="text-center py-3">{ item?.rate}</td>
-                                                <td className="text-center py-3">
-                                                    <img src={item?.cryptoImage || defaultImg } width="25px" height="25px" alt="crypto" />
-                                                </td>
-                                                <td className="text-center py-3">
-                                                    {
-                                                        item.status === 'ACTIVE' ? 
-                                                        <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                        :
-                                                        <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                    }
-                                                </td>
-                                                <td className="text-center py-3">
-                                                    {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                                </td>
-                                                
-                                                <td className="text-center py-3">
-                                                    <div
-                                                    className="relative mx-1 px-1 py-2 group  mb-1 md:mb-0"
-                                                    id="button_pm"
-                                                    >
-                                                    <span className="firstlevel hover:text-red-500 whitespace-no-wrap text-gray-600 hover:text-blue-800">
-                                                        <BiEditAlt className="text-blue hover:cursor-pointer inline" />
-                                                    </span>
-                                                    <ul className="w-max absolute left-0 top-0 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-10 hidden group-hover:block">
-                                                        <svg
-                                                        className="block fill-current text-[#F6F6F6] w-4 h-4 absolute left-0 top-0 ml-3 -mt-3 z-0"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        >
-                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                                        </svg>
-                                                                                                                
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                        <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedCrypto(item)
-                                                                    openModal('view');
-                                                                }}
-                                                            >
-                                                                View Detail
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                    setSelectedCrypto(item)
-                                                                    openModal('update');
-                                                                }}
-                                                            >
-                                                                Update Crypto
-                                                            </span>
-                                                        </li>
-
-                                                        <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
-                                                            <span 
-                                                                className="items-left px-2 py-2"
-                                                                onClick={() => {
-                                                                setSelectedCrypto(item)
-                                                                openModal('delete')
-                                                                }}
-                                                            >
-                                                                Delete User
-                                                            </span>
-                                                        </li>
-                                                    </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }) : 
-                                            <tr>
-                                                <td colSpan={7} className="text-center py-3">No Crypto Record available</td>
-                                            </tr>
-                                    }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />
                 </Card>
             </div>
 

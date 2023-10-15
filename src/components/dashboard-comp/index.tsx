@@ -10,6 +10,7 @@ import DashboardCard from '../dashboard-card';
 import { RETRIEVE_APP_REPORTS } from '../../service';
 import { Order } from '../../models';
 import { BiEditAlt } from 'react-icons/bi';
+import AppTable, { TableHeader } from '../../shared/app-table';
 
 const DashboardComp = () => {
     const [searching, setSearching] = useState<boolean>(false);
@@ -20,20 +21,30 @@ const DashboardComp = () => {
     const [completedOrders, setCompletedOrders] = useState<number>(0);
     const [totalOrders, setTotalOrders] = useState<number>(0);
     const [users, setUsers] = useState<number>(0);
+    const [tableRows, setTableRows] = useState<any[]>([]);
 
     const notify = (type: string, msg: string) => {
-        if(type === 'success'){
+        if (type === "success") {
             toast.success(msg, {
-                position: toast.POSITION.TOP_RIGHT
+                position: toast.POSITION.TOP_RIGHT,
             });
         }
 
-        if(type === 'error'){
+        if (type === "error") {
             toast.error(msg, {
-              position: toast.POSITION.TOP_RIGHT
-            }); 
+                position: toast.POSITION.TOP_RIGHT,
+            });
         }
     };
+
+    const tableHeaders: TableHeader[] = [
+        { key: 'sn', value: 'S/N' },
+        { key: 'code', value: 'Order Code' },
+        { key: 'type', value: 'Type' },
+        { key: 'amount', value: 'Amount' },
+        { key: 'status', value: 'Status' },
+        { key: 'date', value: 'Date/Time' },
+    ];
 
     const retrieveAppReports = () => {
         RETRIEVE_APP_REPORTS().then(res => {
@@ -44,6 +55,20 @@ const DashboardComp = () => {
             setCompletedOrders(payload.completedOrders);
             setTotalOrders(payload.totalOrders);
             setUsers(payload.users);
+            const mappedDate = payload.recentOrders.map((item: Order, idx: number) => {
+                return {
+                    sn: idx + 1,
+                    code: item?.orderCode,
+                    type: item?.orderType,
+                    amount: item?.amount,
+                    status: item.status === 'PENDING' ? 
+                    <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                    :
+                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
+                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                }
+            });
+            setTableRows(mappedDate);
         }).catch(err => {
             const { message } = err.response.data;
             notify('error', message);
@@ -107,7 +132,7 @@ const DashboardComp = () => {
                             </div>
 
                             
-                            <div>
+                            {/* <div>
                                 <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
                                     <input 
                                         type="text" 
@@ -122,55 +147,13 @@ const DashboardComp = () => {
                                         { searching ? 'searching...' : 'Search' }
                                     </button>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
 
                     </div>
+
                     {/* Title section */}
-                    <div className='mt-4 w-full overflow-x-scroll'>
-                        <table className='table border w-full'>
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Type</th>
-                                    {/* <th>Email address</th> */}
-                                    <th>Date/Time</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className='text-[#7F7F80]'>
-                                {
-                                    recentOrders.length > 0 ?
-                                    recentOrders.map((item: Order, idx: number) => {
-                                        return <tr key={idx}>
-                                            <td className='text-center'>#{idx + 1}</td>
-                                            <td className='text-center'>{item.orderType}</td>
-                                            {/* <td>{item.user?.email}</td> */}
-                                            <td className="text-center py-3">
-                                                {moment(item?.createdAt).format("MM-DD-YYYY")}
-                                            </td>
-                                            <td className='text-center'>NGN {item.amount}</td>
-                                            <td>
-                                                {
-                                                    item.status === 'PENDING' ? 
-                                                    <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                    :
-                                                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                                                }
-                                            </td>
-                                            
-                                        </tr>
-                                    }) :
-                                    <tr>
-                                        <td colSpan={7} className="text-center py-3">No Order Record available</td>
-                                    </tr>
-                                }
-                                
-                                
-                            </tbody>
-                        </table>
-                    </div>
+                    <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />
                 </Card>
             </section>
 
