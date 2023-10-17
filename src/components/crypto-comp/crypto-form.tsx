@@ -21,6 +21,7 @@ const CryptoForm = () => {
     const [name, setName] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [shortName, setShortName] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [rate, setRate] = useState<{value: number, error: boolean }>({value: 0, error: false});
+    const [sellingRate, setSellingRate] = useState<{value: number, error: boolean }>({value: 0, error: false});
     const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [bankName, setBankName] = useState<{value: string, error: boolean }>({value: '', error: false});
@@ -171,6 +172,13 @@ const CryptoForm = () => {
           setRate({ ...rate, error: false });
         }
 
+        if (sellingRate.value === 0 || undefined || null) {
+          isValid = false;
+          setSellingRate({ ...sellingRate, error: true });
+        } else {
+          setSellingRate({ ...sellingRate, error: false });
+        }
+
         return isValid;
     };
 
@@ -180,6 +188,7 @@ const CryptoForm = () => {
         setName({value: '', error: false});
         setShortName({value: '', error: false});
         setRate({value: 0, error: false});
+        setSellingRate({value: 0, error: false});
         setWalletAddress({value: '', error: false});
         setExchangePlatform({value: '', error: false});
         setBankName({value: '', error: false});
@@ -195,6 +204,7 @@ const CryptoForm = () => {
                 name: name.value,
                 shortName: shortName.value,
                 rate: rate.value,
+                sellingRate: sellingRate.value,
                 networks: networks.value,
                 walletAddress: walletAddress.value,
                 exchangePlatform: exchangePlatform.value,
@@ -318,7 +328,7 @@ const CryptoForm = () => {
 
                         <div className="my-3">
                             <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
-                                Rate per dollar*
+                                Buy Rate per dollar*
                             </label>
                             <input
                                 type="number"
@@ -330,6 +340,24 @@ const CryptoForm = () => {
                                 }
                                 className={`bg-white text-[#6A6A6A] border-2 ${
                                     rate.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            />
+                        </div>
+
+                        <div className="my-3">
+                            <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
+                                Selling Rate per dollar*
+                            </label>
+                            <input
+                                type="number"
+                                name="sellingRate"
+                                min={0}
+                                value={sellingRate.value}
+                                onChange={(e) =>
+                                    setSellingRate({ ...sellingRate, value: parseInt(e.target.value) })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    sellingRate.error ? 'error-border' : 'input-border'
                                 } rounded-md px-4 py-2 w-full`}
                             />
                         </div>

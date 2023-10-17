@@ -21,6 +21,7 @@ const AirtimeUpdateForm = ({ airtime }: Props) => {
     const [name, setName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [shortName, setShortName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [rate, setRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
+    const [status, setStatus] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [txnNetwork, setTxnNetwork] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [txnNetworkNumber, setTxnNetworkNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
 
@@ -71,6 +72,7 @@ const AirtimeUpdateForm = ({ airtime }: Props) => {
         setNetworkImage({value: '', error: false});
         setName({value: '', error: false});
         setShortName({value: '', error: false});
+        setStatus({ value: '', error: false});
         setRate({value: 0, error: false});
         setTxnNetwork({value: '', error: false});
         setTxnNetworkNumber({value: '', error: false});
@@ -82,6 +84,7 @@ const AirtimeUpdateForm = ({ airtime }: Props) => {
             name: name.value,
             shortName: shortName.value,
             rate: rate.value,
+            status: status.value,
             networkImage: networkImage.value,
             txnNetwork: txnNetwork.value,
             txnNetworkNumber: txnNetworkNumber.value,
@@ -108,6 +111,7 @@ const AirtimeUpdateForm = ({ airtime }: Props) => {
         setName({value: airtime?.name, error: false});
         setShortName({value: airtime?.shortName, error: false});
         setRate({value: airtime?.rate, error: false});
+        setStatus({value: airtime?.status, error: false});
         setTxnNetwork({value: airtime?.txnNetwork, error: false});
         setTxnNetworkNumber({value: airtime?.txnNetworkNumber, error: false});
     }, [])
@@ -226,6 +230,27 @@ const AirtimeUpdateForm = ({ airtime }: Props) => {
                                     txnNetworkNumber.error ? 'error-border' : 'input-border'
                                 } rounded-md px-4 py-2 w-full`}
                             />
+                        </div>
+
+                        <div className="my-3">
+                            <label htmlFor="status" className="text-[#BFBFBF] text-sm block">
+                                Status*
+                            </label>
+                            <select 
+                                name="status" 
+                                id="status"
+                                value={status.value}
+                                onChange={(e) =>
+                                    setStatus({ ...status, value: e.target.value })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    status.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            >
+                                <option value="ACTIVE">Active</option>
+                                <option value="DEACTIVATED">Deactive</option>
+                            </select>
+                            
                         </div>
 
                         <div className="my-3 text-center">

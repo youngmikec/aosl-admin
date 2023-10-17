@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { GiftCard } from '../../models';
 import { getFullName } from '../../utils';
+import CustomDetailField from '../CustomDetailField';
 
 
 type Props = {
@@ -17,24 +18,23 @@ const GiftcardDetailComp = ({ giftcard }: Props) => {
                     <h2 className='font-bold text-2xl'>Giftcard Detail Modal</h2>
                 </div>
 
-                <div className='grid 
-                    grid-cols-1 
-                    sm:grid-cols-1 
-                    md:grid-cols-2 md:space-x-2
-                    lg:grid-cols-2 lg:space-x-2'
-                >
-                    <div >
-                        <img src={giftcard?.giftcardImage || defaultImage } width="100%" alt="crypto" />
-                    </div>
+                <div >
+                    <img src={giftcard?.giftcardImage || defaultImage } className='mx-auto w-2/12' alt="crypto" />
+                </div>
 
-                    <div className='px-4'>
-                        <p className='my-2'><strong>Name:</strong>  {giftcard?.name}</p>
-                        <p className='my-3'><strong>Short Name:</strong>  {giftcard?.shortName}</p>
-                        <p className='my-3'><strong>Rate:</strong>  {giftcard?.rate}</p>
-                        <p className='my-3'><strong>Wallet Address:</strong>  {giftcard?.walletAddress}</p>
-                        <p className='my-3'><strong>Exchange Platform:</strong>  {giftcard?.exchangePlatform}</p>
-                        <p className='my-3'><strong>Created At:</strong>  {moment(giftcard?.createdAt).format("MM-DD-YYYY")}</p>
-                        <p className='my-3'><strong>Created By:</strong>  {getFullName(giftcard?.createdBy)}</p>
+                <div className='px-4'>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <CustomDetailField label='Name:' value={giftcard?.name} />
+                        <CustomDetailField label='Short Name:' value={giftcard?.shortName} />
+                        <CustomDetailField label='Buy Rate:' value={giftcard?.rate} />
+                        <CustomDetailField label='Wallet Address:' value={giftcard?.walletAddress} />
+                        <CustomDetailField label='Exchange Platform:' value={giftcard?.exchangePlatform} />
+                        <CustomDetailField label='Bank Name:' value={giftcard?.bankName} />
+                        <CustomDetailField label='Account Name:' value={giftcard?.accountName} />
+                        <CustomDetailField label='Account Number:' value={giftcard?.accountNumber} />
+                        <CustomDetailField label='Status:' value={giftcard?.status} />
+                        <CustomDetailField label='Created At:' value={moment(giftcard?.createdAt).format("MM-DD-YYYY")} />
+                        <CustomDetailField label='Created By:' value={getFullName(giftcard?.createdBy)} />
                     </div>
                 </div>
             </div>

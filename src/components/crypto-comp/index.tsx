@@ -56,7 +56,8 @@ const CryptoComp = () => {
         { key: 'sn', value: 'S/N' },
         { key: 'code', value: 'Crypto Code' },
         { key: 'name', value: 'Name' },
-        { key: 'rate', value: 'Rate' },
+        { key: 'rate', value: 'Buy Rate' },
+        { key: 'sellingRate', value: 'Selling Rate' },
         { key: 'image', value: 'Image' },
         { key: 'status', value: 'Status' },
         { key: 'date', value: 'Date' },
@@ -108,6 +109,7 @@ const CryptoComp = () => {
                     code: item?.code,
                     name: item?.name,
                     rate: item?.rate,
+                    sellingRate: item?.sellingRate,
                     image: <img src={item?.cryptoImage || defaultImg } width="25px" height="25px" alt="crypto" />,
                     status: item.status === 'ACTIVE' ? 
                     <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>

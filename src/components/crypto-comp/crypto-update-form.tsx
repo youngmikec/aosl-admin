@@ -24,12 +24,14 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
     const [name, setName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [shortName, setShortName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [rate, setRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
+    const [sellingRate, setSellingRate] = useState<{value: number, error: boolean } | any>({value: 0, error: false});
     const [walletAddress, setWalletAddress] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [bankName, setBankName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [accountName, setAccountName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [networks, setNetworks] = useState<{value: Network[], error: boolean } | any>({value: [], error: false});
+    const [status, setStatus] = useState<{value: string, error: boolean } | any>({value: '', error: false});
 
     const handleAddNetwork = ( data: any ) => {
         setNetworks({value: [data, ...networks.value], error: false});
@@ -101,12 +103,14 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setName({value: '', error: false});
         setShortName({value: '', error: false});
         setRate({value: 0, error: false});
+        setSellingRate({value: 0, error: false});
         setWalletAddress({value: '', error: false});
         setExchangePlatform({value: '', error: false});
         setBankName({value: '', error: false});
         setAccountName({value: '', error: false});
         setAccountNumber({value: '', error: false});
         setNetworks({value: [], error: false});
+        setStatus({value: '', error: false});
     }
 
     const handleSetBarCode = (data: string) => {
@@ -119,12 +123,14 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
             name: name.value,
             shortName: shortName.value,
             rate: rate.value,
+            sellingRate: sellingRate.value,
             networks: networks.value,
             walletAddress: walletAddress.value,
             exchangePlatform: exchangePlatform.value,
             cryptoImage: cryptoImage.value,
             barcode: barcode.value,
             bankName: bankName.value,
+            status: status.value,
             accountName: accountName.value,
             accountNumber: accountNumber.value,
         };
@@ -149,6 +155,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setName({value: crypto?.name, error: false});
         setShortName({value: crypto?.shortName, error: false});
         setRate({value: crypto?.rate, error: false});
+        setSellingRate({value: crypto?.sellingRate, error: false});
         setWalletAddress({value: crypto?.walletAddress, error: false});
         setExchangePlatform({value: crypto?.exchangePlatform, error: false});
         setBankName({value: crypto?.bankName, error: false});
@@ -156,6 +163,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
         setAccountNumber({value: crypto?.accountNumber, error: false});
         setCryptoImage({value: crypto?.cryptoImage, error: false});
         setBarcode({value: crypto?.barcode, error: false});
+        setStatus({ value: crypto?.status, error: false});
     }, [])
 
     useEffect(() => {
@@ -261,7 +269,7 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
 
                         <div className="my-3">
                             <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
-                                Rate per dollar*
+                                Buy Rate per dollar*
                             </label>
                             <input
                                 type="number"
@@ -273,6 +281,24 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                                 }
                                 className={`bg-white text-[#6A6A6A] border-2 ${
                                     rate.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            />
+                        </div>
+
+                        <div className="my-3">
+                            <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
+                                Selling Rate per dollar*
+                            </label>
+                            <input
+                                type="number"
+                                name="sellingRate"
+                                min={0}
+                                value={sellingRate.value}
+                                onChange={(e) =>
+                                    setSellingRate({ ...sellingRate, value: parseInt(e.target.value) })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    sellingRate.error ? 'error-border' : 'input-border'
                                 } rounded-md px-4 py-2 w-full`}
                             />
                         </div>
@@ -362,11 +388,34 @@ const CryptoUpdateForm = ({ crypto }: Props) => {
                             />
                         </div>
 
+                        <div className="my-3">
+                            <label htmlFor="status" className="text-[#BFBFBF] text-sm block">
+                                Status*
+                            </label>
+                            <select 
+                                name="status" 
+                                id="status"
+                                value={status.value}
+                                onChange={(e) =>
+                                    setStatus({ ...status, value: e.target.value })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    status.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            >
+                                <option value="ACTIVE">Active</option>
+                                <option value="DEACTIVATED">Deactive</option>
+                            </select>
+                            
+                        </div>
+
                         <NetworkAddComp
                             networks={networks.value}
                             addFunc={handleAddNetwork}
                             removeFunc={removeNetwork}
                         />
+
+
 
                         <div className="my-3 text-center">
                             <button

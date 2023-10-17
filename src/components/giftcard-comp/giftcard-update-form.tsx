@@ -27,6 +27,7 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
     const [accountName, setAccountName] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [accountNumber, setAccountNumber] = useState<{value: string, error: boolean } | any>({value: '', error: false});
     const [exchangePlatform, setExchangePlatform] = useState<{value: string, error: boolean } | any>({value: '', error: false});
+    const [status, setStatus] = useState<{value: string, error: boolean } | any>({value: '', error: false});
 
     const fileRef = useRef<HTMLInputElement>(null);
 
@@ -83,6 +84,7 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
         setName({value: '', error: false});
         setType({value: '', error: false});
         setRate({value: 0, error: false});
+        setStatus({value: '', error: false});
         setBankName({value: '', error: false});
         setAccountName({value: '', error: false});
         setAccountNumber({value: '', error: false});
@@ -95,6 +97,7 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
             name: name.value,
             rate: rate.value,
             type: type.value,
+            status: status.value,
             walletAddress: walletAddress.value,
             bankName: bankName.value,
             accountName: accountName.value,
@@ -125,6 +128,7 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
         setName({value: giftcard?.name, error: false});
         setType({value: giftcard?.type, error: false});
         setRate({value: giftcard?.rate, error: false});
+        setStatus({value: giftcard?.status, error: false});
         setBankName({value: giftcard?.bankName, error: false});
         setAccountName({value: giftcard?.accountName, error: false});
         setAccountNumber({value: giftcard?.accountNumber, error: false});
@@ -327,6 +331,27 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
                                     exchangePlatform.error ? 'error-border' : 'input-border'
                                 } rounded-md px-4 py-2 w-full`}
                             />
+                        </div>
+
+                        <div className="my-3">
+                            <label htmlFor="status" className="text-[#BFBFBF] text-sm block">
+                                Status*
+                            </label>
+                            <select 
+                                name="status" 
+                                id="status"
+                                value={status.value}
+                                onChange={(e) =>
+                                    setStatus({ ...status, value: e.target.value })
+                                }
+                                className={`bg-white text-[#6A6A6A] border-2 ${
+                                    status.error ? 'error-border' : 'input-border'
+                                } rounded-md px-4 py-2 w-full`}
+                            >
+                                <option value="ACTIVE">Active</option>
+                                <option value="DEACTIVATED">Deactive</option>
+                            </select>
+                            
                         </div>
 
                         <div className="my-3 text-center">

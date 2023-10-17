@@ -17,6 +17,7 @@ export type CryptoCurrency = {
     accountNumber: string;
     code: string;
     rate: number;
+    sellingRate: number;
     cryptoImage: string;
     barcode: string;
     networks: Network[]
