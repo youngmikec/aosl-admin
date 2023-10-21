@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 //icons
@@ -11,6 +12,7 @@ import { IoCardOutline, IoCopyOutline } from 'react-icons/io5';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 import logo from '../../assets/images/logo.png';
+import { OpenLogoutModal } from '../../store/modal/logout-modal';
 
 type Props = {
     sidebarMenus?: any[]
@@ -18,16 +20,14 @@ type Props = {
 
 const Sidebar = ({sidebarMenus}: Props) => {
     const location = useLocation();
+    const dispatch = useDispatch();
     const { pathname } = location;
 
-    const handleLogout = () => {
-        localStorage.removeItem("auth");
-        localStorage.removeItem("clientId");
-        localStorage.removeItem("clientID");
-        localStorage.removeItem("clientD");
-        localStorage.removeItem("clientToken");
-        window.location.href = "/login";
-    };
+    const openModal = () => {
+        dispatch(OpenLogoutModal());
+    }
+
+    
     
 
     return (
@@ -117,7 +117,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     <li 
                         className={`${ pathname === '/account' && 'bg-[#8652A4] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
                         title="account"
-                        onClick={() => handleLogout()}
+                        onClick={() => openModal()}
                     >
                         <div className='flex justify-start'>
                             <div><span><CgLogOff className='text-xl'/></span></div>

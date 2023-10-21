@@ -64,7 +64,7 @@ const AirtimeComp = () => {
     ];
 
     const populateActions = (item: Airtime): DropdownList[] => {
-        console.log('user', item);
+        
         const tableActions: DropdownList[] = [
             { 
                 label: 'View Detail', 

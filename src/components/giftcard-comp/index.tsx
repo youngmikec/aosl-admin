@@ -62,7 +62,7 @@ const GiftcardComp = () => {
     ];
 
     const populateActions = (item: GiftCard): DropdownList[] => {
-        console.log('user', item);
+        
         const tableActions: DropdownList[] = [
             { 
                 label: 'View Detail', 

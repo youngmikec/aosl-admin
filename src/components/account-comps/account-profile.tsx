@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from 'react-redux';
 import { AxiosResponse } from 'axios';
 
+import './style.css';
+import { RootState } from '../../store';
+import { SET_PROFILE_DATA } from '../../store/profile';
 import { ApiResponse } from '../../models';
 import profile from '../../assets/images/arash.png';
 import { RETRIEVE_PROFILE, UPDATE_PROFILE } from '../../service';
 
 const AccountProfile = () => {
+    const userProfile = useSelector((state: RootState) => state.profileState.value);
+    const dispatch = useDispatch();
     const fileRef: any = useRef<HTMLButtonElement>(null)
     const [email, setEmail] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
@@ -63,6 +69,8 @@ const AccountProfile = () => {
                 setUpdating(false);
                 setProfile(payload);
                 notify('success', message);
+                dispatch(SET_PROFILE_DATA(null));
+                dispatch(SET_PROFILE_DATA(payload));
             }
         }).catch(err => {
             setUpdating(false);
@@ -89,34 +97,19 @@ const AccountProfile = () => {
         setProfileImage(payload.profileImage);
     }
 
-    const retreiveProfile = () => {
-        setLoading(true);
-        RETRIEVE_PROFILE().then((res: AxiosResponse<ApiResponse>) => {
-            setLoading(false);
-            const { success, message, payload } = res.data;
-            if(success){
-                notify('success', `${message} ${payload.length} records found!`);
-                setProfile(payload);
-            }
-        }).catch((err: any) => {
-            setLoading(false);
-            const { message } = err.response.data;
-            notify('error', message);
-        })
-    }
 
     useEffect(() => {
-        retreiveProfile();
-    }, [])
+        userProfile && setProfile(userProfile);
+    }, [userProfile])
 
     return (
         <>
             <div>
                 <div className='w-full border-b-2 border-[#7f7f8056] py-5 px-5'>
-                    <div className='flex justify-start'>
-                        <div className='mx-3'>
-                            <div className="rounded-full bg-[#b1bbdf] p-1">
-                                <img src={profileImage || profile} className="rounded-full" alt="profile" width='80px' height='80px'  />
+                    <div className='flex justify-start gap-4'>
+                        <div className=''>
+                            <div className="rounded-full object-contain bg-[#b1bbdf] w-[80px] h-[80px]">
+                                <img src={profileImage || profile} className="circular-image" alt="profile"  />
                             </div>
                         </div>
 

@@ -61,7 +61,7 @@ const UsersComp = () => {
     ];
 
     const populateActions = (item: User): DropdownList[] => {
-        console.log('user', item);
+        
         const tableActions: DropdownList[] = [
             { 
                 label: 'Upgrade to Admin', 

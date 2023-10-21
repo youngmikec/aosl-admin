@@ -62,7 +62,7 @@ const NewsletterComp = () => {
     ];
 
     const populateActions = (item: Newsletter): DropdownList[] => {
-        console.log('user', item);
+        
         const tableActions: DropdownList[] = [
             { 
                 label: 'View Detail', 

@@ -65,7 +65,6 @@ const CryptoComp = () => {
     ];
 
     const populateActions = (item: CryptoCurrency): DropdownList[] => {
-        console.log('user', item);
         const tableActions: DropdownList[] = [
             { 
                 label: 'View Detail', 

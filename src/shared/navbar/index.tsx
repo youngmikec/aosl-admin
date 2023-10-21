@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 //  icons
 import{CiSearch} from 'react-icons/ci';
@@ -17,13 +18,21 @@ import { MdOutlineDashboardCustomize } from 'react-icons/md';
 
 // styles
 import './style.css';
-
 // logo
-import profile from '../../assets/images/arash.png';
+import defaultProfileImg from '../../assets/images/arash.png';
+import { User } from "../../models";
+import AppLoader from "../../components/app-loader";
+import { OpenLogoutModal } from "../../store/modal/logout-modal";
+
+type Props = {
+    profile: User | null;
+    loading: boolean;
+}
 
 
-const Navbar = () => {
+const Navbar = ({ profile, loading}: Props) => {
     const location = useLocation();
+    const dispatch = useDispatch();
     const { pathname } = location;
     const[ toggle, setToggle] = useState<boolean>(true);
     const [headPadding, setHeadPadding] = useState<string>('pt-0');
@@ -48,6 +57,10 @@ const Navbar = () => {
         localStorage.removeItem("clientD");
         localStorage.removeItem("clientToken");
         window.location.href = "/login";
+    }
+
+    const openModal = () => {
+        dispatch(OpenLogoutModal());
     }
 
     useEffect(()=>{
@@ -89,9 +102,18 @@ const Navbar = () => {
                         <CiBellOn className='inline-flex text-xl font-semibold my-auto text-[#8c8c8c]'/>
                     </div>
                     <div className="inline-flex rounded-full bg-[#b1bbdf] w-full">
-                        <Link to="/profile">
-                            <img src={profile} alt="profile" className='' width='100%' height='40px'  />
-                        </Link>
+                        {
+                            loading ? <AppLoader color="black" /> :
+                            <Link to="/profile">
+                                <img 
+                                    src={profile?.profileImage ? profile.profileImage : defaultProfileImg } 
+                                    alt="profile" 
+                                    className='rounded-full object-cover w-[40px] h-[40px]' 
+                                    width='100%' 
+                                    height='40px'  
+                                />
+                            </Link>
+                        }
                     </div>
                 </div>
 
@@ -117,7 +139,7 @@ const Navbar = () => {
                                         </div>   
                                     </Link>
                                 </li>
-                                <li 
+                                <li
                                     className={`${ pathname === '/cryptos' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
                                     title="cryptos"
                                 >
@@ -189,7 +211,7 @@ const Navbar = () => {
                                 <li 
                                     className={`${ pathname === '/account' && 'bg-[#8652A4] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
                                     title="account"
-                                    onClick={() => handleLogout()}
+                                    onClick={() => openModal()}
                                 >
                                     <div className='flex justify-start'>
                                         <div><span><CgLogOff className='text-xl'/></span></div>
