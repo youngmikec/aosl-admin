@@ -357,7 +357,7 @@ const GiftcardUpdateForm = ({ giftcard }: Props) => {
                         <div className="my-3 text-center">
                             <button
                                 onClick={() => handleSubmit()}
-                                className="bg-[#8652A4] text-white py-1 px-10 rounded-2xl"
+                                className="bg-[#134FE7] text-white py-1 px-10 rounded-2xl"
                             >
                                 {loading ? "Processing..." : "Update"}
                             </button>

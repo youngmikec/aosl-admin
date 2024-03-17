@@ -36,7 +36,7 @@ const DropdownComp = ({ dropdownList }: Props) => {
                                 if(!item.disabled){
                                     return(
                                         <li key={idx}>
-                                            <span className="block rounded-md cursor-pointer hover:bg-[#8652A4] hover:text-white px-4 py-2  dark:hover:bg-[#8652A4] dark:hover:text-white" onClick={() => {
+                                            <span className="block rounded-md cursor-pointer hover:bg-[#134FE7] hover:text-white px-4 py-2  dark:hover:bg-[#134FE7] dark:hover:text-white" onClick={() => {
                                                 if(item.action){
                                                     item.action()
                                                 }

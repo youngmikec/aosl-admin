@@ -16,7 +16,7 @@ const Card = ({ children, title, type }: Props) => {
             {
                 title && 
                 <div className=''>
-                    <h3 className='text-2xl font-medium capitalize text-[#8652a4]'>{ title }</h3>
+                    <h3 className='text-2xl font-medium capitalize text-[#134FE7]'>{ title }</h3>
                 </div>
             }
             { children }

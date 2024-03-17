@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,34 +7,33 @@ import moment from 'moment';
 
 
 import Card from '../../shared/card';
-import { RootState } from '../../store';
 import { sortArray } from '../../utils';
-import { ApiResponse, Newsletter } from '../../models';
-import AppModalComp from '../../shared/app-modal';
+import { RootState } from '../../store';
+import { DELETE_AIRTIME, RETREIVE_AIRTIME } from '../../service';
+import { Application, ApiResponse } from '../../models';
 import { CloseAppModal, OpenAppModal } from '../../store/modal';
-import SortComp from '../../shared/sort-comp';
-import { BiEditAlt } from 'react-icons/bi';
+import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
-import { DELETE_NEWSLETTER, RETREIVE_NEWSLETTERS } from '../../service';
-import { INITIALIZE_NEWSLETTERS, REMOVE_NEWSLETTER } from '../../store/newsletter';
-import NewsletterForm from './newsletter-form';
-import NewsletterUpdateForm from './newsletter-update-form';
-import NewsletterDetailComp from './newsletter-details';
+import defaultImg from '../../assets/images/default.jpg';
+import { INITIALIZE_AIRTIMES, REMOVE_AIRTIME } from '../../store/airtime';
+import SortComp from '../../shared/sort-comp';
+import ApplicationDetailsComp from './application-details';
 import AppTable, { TableHeader } from '../../shared/app-table';
 import DropdownComp, { DropdownList } from '../../shared/dropdown';
+import { RETREIVE_APPLICATION } from '../../service/applications';
+import { INITIALIZE_APPLICATIONS } from '../../store/application';
 
-const NewsletterComp = () => {
+const ApplicationComp: FC = () => {
     const dispatch = useDispatch();
-    const Newsletters: Newsletter[] = useSelector((state: RootState) => state.newsletterState.value);
+    const Applications: Application[] = useSelector((state: RootState) => state.applicationState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
     const [searching, setSearching] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
-    const [selectedNewsletter, setSelectedNewsletter] = useState<Newsletter | undefined>();
+    const [applicationsData, setApplicationsData] = useState<Application[]>([]);
+    const [selectedRecord, setSelectedRecord] = useState<Application | undefined>();
     const [modalMode, setModalMode] = useState<string>('');
     const [tableRows, setTableRows] = useState<any[]>([]);
-
 
 
     const notify = (type: string, msg: string) => {
@@ -53,38 +52,39 @@ const NewsletterComp = () => {
 
     const tableHeaders: TableHeader[] = [
         { key: 'sn', value: 'S/N' },
-        { key: 'code', value: 'Code' },
-        { key: 'title', value: 'Title' },
-        { key: 'subject', value: 'Subject' },
+        { key: 'code', value: 'Airtime Code' },
+        { key: 'name', value: 'Name' },
+        { key: 'role', value: 'Role' },
+        { key: 'certLevel', value: 'Qualification' },
         { key: 'status', value: 'Status' },
         { key: 'date', value: 'Date' },
         { key: 'actions', value: 'Actions' },
     ];
 
-    const populateActions = (item: Newsletter): DropdownList[] => {
+    const populateActions = (item: Application): DropdownList[] => {
         
         const tableActions: DropdownList[] = [
             { 
                 label: 'View Detail', 
                 disabled: false,
                 action: () => {
-                    setSelectedNewsletter(item)
+                    setSelectedRecord(item)
                     openModal('view');
                 }
             },
             { 
-                label: 'Update Newsletter', 
+                label: 'Update Record', 
                 disabled: false,
                 action: () => {
-                    setSelectedNewsletter(item)
+                    setSelectedRecord(item)
                     openModal('update');
                 }
             },
             { 
-                label: 'Delete Newsletter', 
+                label: 'Delete Record', 
                 disabled: false,
                 action: () => {
-                    setSelectedNewsletter(item);
+                    setSelectedRecord(item);
                     openModal('delete');
                 }
             },
@@ -92,21 +92,23 @@ const NewsletterComp = () => {
         return tableActions;
     }
 
-    const retrieveNewsletters = () => {
-        const query: string = `?sort=-name&populate=createdBy`;
-        RETREIVE_NEWSLETTERS(query)
+    const retrieveAirtimes = () => {
+        const query: string = `?sort=-title&populate=createdBy`;
+        RETREIVE_APPLICATION(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
-            setNewsletters(payload);
-            const mappedDate = payload.map((item: Newsletter, idx: number) => {
+            setApplicationsData(payload);
+            const mappedDate = payload.map((item: Application, idx: number) => {
                 const actions = populateActions(item);
                 return {
                     sn: idx + 1,
                     code: item?.code,
-                    title: item?.title,
-                    subject: item?.subject,
-                    status: item.status === 'PUBLISHED' ? 
+                    name: `${item?.firstName} ${item?.lastName}`,
+                    certLeve: item?.certLevel,
+                    role: item?.role || '--',
+                    certLevel: item?.certLevel || '--',
+                    status: item.status === 'ACCEPTED' ? 
                     <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>
                     :
                     <button className='bg-[#7F7F80] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
@@ -115,7 +117,7 @@ const NewsletterComp = () => {
                 }
             });
             setTableRows(mappedDate);
-            dispatch(INITIALIZE_NEWSLETTERS(payload));
+            dispatch(INITIALIZE_APPLICATIONS(payload));
         })
         .catch((err: any) => {
             const { message } = err.response.data;
@@ -124,9 +126,9 @@ const NewsletterComp = () => {
     };
 
     const sortData = (field: string) => {
-        const sortedArray: any[] = sortArray(newsletters, field);
+        const sortedArray: any[] = sortArray(applicationsData, field);
         if (sortedArray.length > 0) {
-          setNewsletters(sortedArray);
+          setApplicationsData(sortedArray);
         }
     };
 
@@ -137,13 +139,13 @@ const NewsletterComp = () => {
 
     const handleDeleteRecord = (id: string) => {
         setDeleting(true);
-        DELETE_NEWSLETTER(id)
+        DELETE_AIRTIME(id)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload, success } = res.data;
             if(success){
                 setDeleting(false);
                 notify("success", message);
-                dispatch(REMOVE_NEWSLETTER(payload.id));
+                dispatch(REMOVE_AIRTIME(payload.id));
                 dispatch(CloseAppModal());
             }
         })
@@ -157,22 +159,22 @@ const NewsletterComp = () => {
     const handleSearchQuery = () => {
         setSearching(true);
         if(searchQuery !== '') {
-            const filteredResults: Newsletter[] = newsletters.filter((item: Newsletter) => Object.values(item).includes(searchQuery));
-            setNewsletters(filteredResults);
+            const filteredResults: Application[] = applicationsData.filter((item: Application) => Object.values(item).includes(searchQuery));
+            setApplicationsData(filteredResults);
             setSearching(false);
         }else {
-            setNewsletters(Newsletters);
+            setApplicationsData(applicationsData);
             setSearching(false);
         }
     }
     
     useEffect(() => {
-        retrieveNewsletters();
+        retrieveAirtimes();
     }, []);
 
     useEffect(() => {
-        setNewsletters(Newsletters);
-    }, [Newsletters]);
+        setApplicationsData(applicationsData);
+    }, [Applications]);
 
     return (
         <>
@@ -182,8 +184,8 @@ const NewsletterComp = () => {
                     <div id="title">
                         <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='mb-8'>
-                                <h3 className='text-[#134FE7] text-xl font-bold mb-1'>Newletter Records Table</h3>
-                                <p className='text-[#7F7F80] text-sm'>Displaying {newsletters.length} of {newsletters.length} Newsletter Record(s)</p>
+                                <h3 className='text-[#134FE7] text-xl font-bold mb-1'>Applications Records Table</h3>
+                                <p className='text-[#7F7F80] text-sm'>Displaying {applicationsData.length} of {applicationsData.length} Airtime Record(s)</p>
                             </div>
 
                             <div className='mb-8'>
@@ -191,7 +193,7 @@ const NewsletterComp = () => {
                                     className='bg-[#134FE7] text-white py-2 px-4 rounded-md'
                                     onClick={() => openModal('create')}
                                 >
-                                    Create Newsletter
+                                    Create Airtime
                                 </button>
                             </div>
 
@@ -228,18 +230,18 @@ const NewsletterComp = () => {
             </div>
 
             <AppModalComp title=''>
+                {/* {
+                    modalMode === 'create' && <AirtimeForm />
+                } */}
                 {
-                    modalMode === 'create' && <NewsletterForm />
+                    modalMode === 'view' && <ApplicationDetailsComp data={selectedRecord} />
                 }
-                {
-                    modalMode === 'view' && <NewsletterDetailComp newsletter={selectedNewsletter} />
-                }
-                {
-                    modalMode === 'update' && <NewsletterUpdateForm newsletter={selectedNewsletter}  />
-                }
-                {
-                    modalMode === 'delete' && <DeleteComp id={selectedNewsletter?.id} action={handleDeleteRecord} deleting={deleting} />
-                }
+                {/* {
+                    modalMode === 'update' && <AirtimeUpdateForm airtime={selectedAirtime}  />
+                } */}
+                {/* {
+                    modalMode === 'delete' && <DeleteComp id={selectedAirtime?.id} action={handleDeleteRecord} deleting={deleting} />
+                } */}
             </AppModalComp>
 
         <ToastContainer />
@@ -248,4 +250,4 @@ const NewsletterComp = () => {
     )
 }
 
-export default NewsletterComp;
+export default ApplicationComp;

@@ -13,7 +13,7 @@ const SortComp = ({ sortData }: Props) => {
             <span className='mx-1 inline-block'> <BsFillCaretDownFill /> </span>
 
             <ul className=" absolute -left-1 -top-3 mt-10 p-2 rounded-lg shadow-lg bg-[#F6F6F6] z-0 hidden group-hover:block">
-                <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">
+                <li className="hover:bg-[#134FE7] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap hover:text-white rounded-md text-sm md:text-base ">
                 <span
                     className="items-left px-2 py-3"
                     onClick={() => sortData("createdAt")}
@@ -21,7 +21,7 @@ const SortComp = ({ sortData }: Props) => {
                     By Date
                 </span>
                 </li>
-                <li className="hover:bg-[#8652A4] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
+                <li className="hover:bg-[#134FE7] hover:cursor-pointer pr-10 p-1 whitespace-no-wrap rounded-md hover:text-white text-sm md:text-base ">
                 <span
                     className="items-left px-2 py-2"
                     onClick={() => sortData("name")}

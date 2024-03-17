@@ -5,3 +5,5 @@ export * from "./giftcard";
 export * from "./newsletter";
 export * from "./order";
 export * from "./user";
+export * from "./job";
+export * from "./application";

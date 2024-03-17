@@ -4,11 +4,16 @@ import {
   GiftCard,
   Newsletter,
   User,
+  Application,
 } from "../../models";
 import { Order } from "../../models/order";
 
 export type AirtimeState = {
   value: Airtime[];
+};
+
+export type ApplicationState = {
+  value: Application[];
 };
 
 export type CryptosState = {

@@ -129,9 +129,9 @@ const LoginComp = () => {
                         <div className="flex justify-between my-4">
                             <div>
                                 <input type="checkbox" name="" id="" />
-                                <span className='text-[#8652A4] text-sm mx-3 font-semibold'>Remember me</span>
+                                <span className='text-[#134FE7] text-sm mx-3 font-semibold'>Remember me</span>
                             </div>
-                            <p className='text-[#8652A4] text-sm font-semibold'>
+                            <p className='text-[#134FE7] text-sm font-semibold'>
                                 <Link to="/forgot-password">
                                     Forgot Password?
                                 </Link>
@@ -141,7 +141,7 @@ const LoginComp = () => {
                         <div className="w-8/12 my-4 mx-auto text-center">
                             <button 
                                 onClick={() => handleLogin() } 
-                                className='bg-[#8652A4] text-white mb-6 block w-full rounded-lg py-4'
+                                className='bg-[#134FE7] text-white mb-6 block w-full rounded-lg py-4'
                             >
                                 { loading ? 'Processing...' : "Sign in" }
                             </button>

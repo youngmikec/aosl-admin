@@ -186,13 +186,13 @@ const CryptoComp = () => {
                     <div id="title">
                         <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
                             <div className='mb-8'>
-                                <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Crypto Records Table</h3>
+                                <h3 className='text-[#134FE7] text-xl font-bold mb-1'>Crypto Records Table</h3>
                                 <p className='text-[#7F7F80] text-sm'>Displaying {cryptos.length} of {cryptos.length} Crypto Record(s)</p>
                             </div>
 
                             <div className='mb-8'>
                                 <button 
-                                    className='bg-[#8652A4] text-white py-2 px-4 rounded-md'
+                                    className='bg-[#134FE7] text-white py-2 px-4 rounded-md'
                                     onClick={() => openModal('create')}
                                 >
                                     Create Crypto
@@ -215,7 +215,7 @@ const CryptoComp = () => {
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
                                     <button 
-                                        className='bg-[#8652A4] text-white text-sm px-6 py-2 rounded-md'
+                                        className='bg-[#134FE7] text-white text-sm px-6 py-2 rounded-md'
                                         onClick={() => handleSearchQuery()}
                                     >
                                         { searching ? 'searching...' : 'Search' }

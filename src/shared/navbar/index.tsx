@@ -76,7 +76,7 @@ const Navbar = ({ profile, loading}: Props) => {
         <>
             <nav className='bg-white flex justify-start md:justify-end lg:justify-end py-4 mb-4'>
                 {/* <div className='flex justify-between w-4/12'>
-                    <div className="text-[#8652A4] text-sm font-semibold">
+                    <div className="text-[#134FE7] text-sm font-semibold">
                         <span>
                             Welcome
                         </span>
@@ -131,7 +131,7 @@ const Navbar = ({ profile, loading}: Props) => {
                             </button>
 
                             <ul className="list-none text-[#8c8c8c]">
-                                <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
+                                <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white' title="Dashboard">
                                     <Link to="/dashboard">
                                         <div className='flex justify-start'>
                                             <div><span><RiDashboardFill /></span></div>
@@ -140,7 +140,7 @@ const Navbar = ({ profile, loading}: Props) => {
                                     </Link>
                                 </li>
                                 <li
-                                    className={`${ pathname === '/cryptos' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/cryptos' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="cryptos"
                                 >
                                     <Link to="/cryptos">
@@ -151,7 +151,7 @@ const Navbar = ({ profile, loading}: Props) => {
                                     </Link>
                                 </li>
                                 <li 
-                                    className={`${ pathname === '/users' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/users' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="users"
                                 >
                                     <Link to="/users">
@@ -162,18 +162,18 @@ const Navbar = ({ profile, loading}: Props) => {
                                     </Link>
                                 </li>
                                 <li 
-                                    className={`${ pathname === '/airtime' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
-                                    title="airtime"
+                                    className={`${ pathname === '/job-application' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                                    title="applications"
                                 >
-                                    <Link to="/airtime">
+                                    <Link to="/job-application">
                                         <div className='flex justify-start'>
                                             <div><span><IoCopyOutline className='text-xl'/></span></div>
-                                            <div className='mx-2'>Airtime</div>
+                                            <div className='mx-2'>Applications</div>
                                         </div>           
                                     </Link>
                                 </li>
                                 <li 
-                                    className={`${ pathname === '/giftcards' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/giftcards' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="giftcards"
                                 >
                                     <Link to="/giftcards">
@@ -185,7 +185,7 @@ const Navbar = ({ profile, loading}: Props) => {
                                 </li>
 
                                 <li 
-                                    className={`${ pathname === '/newsletter' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/newsletter' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="Newsletter"
                                 >
                                     <Link to="/newsletter">
@@ -197,7 +197,7 @@ const Navbar = ({ profile, loading}: Props) => {
                                 </li>
 
                                 <li 
-                                    className={`${ pathname === '/orders' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/orders' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="orders"
                                 >
                                     <Link to="/orders">
@@ -209,7 +209,7 @@ const Navbar = ({ profile, loading}: Props) => {
                                 </li>
 
                                 <li 
-                                    className={`${ pathname === '/account' && 'bg-[#8652A4] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                                    className={`${ pathname === '/account' && 'bg-[#134FE7] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="account"
                                     onClick={() => openModal()}
                                 >

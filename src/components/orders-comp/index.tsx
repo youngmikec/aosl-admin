@@ -211,7 +211,7 @@ const OrdersComp = () => {
                     {/* Title section */}
                     <div id="title">
                         <div className='mb-8'>
-                            <h3 className='text-[#8652A4] text-xl font-bold mb-1'>Orders Table</h3>
+                            <h3 className='text-[#134FE7] text-xl font-bold mb-1'>Orders Table</h3>
                             <p className='text-[#7F7F80] text-sm'>Displaying {orders.length} of {Orders.length} Order(s)</p>
                         </div>
                     </div>

@@ -37,7 +37,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     <img src={logo} alt="logo" width="100px" height="100px" />
                 </div>
                 <ul className="list-none text-[#8c8c8c]">
-                    <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white' title="Dashboard">
+                    <li className='my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white' title="Dashboard">
                         <Link to="/dashboard">
                             <div className='flex justify-start'>
                                 <div><span><RiDashboardFill /></span></div>
@@ -46,7 +46,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                         </Link>
                     </li>
                     <li 
-                        className={`${ pathname === '/cryptos' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/cryptos' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="cryptos"
                     >
                         <Link to="/cryptos">
@@ -57,7 +57,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                         </Link>
                     </li>
                     <li 
-                        className={`${ pathname === '/users' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/users' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="users"
                     >
                         <Link to="/users">
@@ -67,19 +67,19 @@ const Sidebar = ({sidebarMenus}: Props) => {
                             </div>           
                         </Link>
                     </li>
-                    <li 
-                        className={`${ pathname === '/airtime' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
-                        title="airtime"
+                    <li
+                        className={`${ pathname === '/job-application' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                        title="job-application"
                     >
-                        <Link to="/airtime">
+                        <Link to="/job-application">
                             <div className='flex justify-start'>
                                 <div><span><IoCopyOutline className='text-xl'/></span></div>
-                                <div className='mx-2'>Airtime</div>
+                                <div className='mx-2'>Applications</div>
                             </div>           
                         </Link>
                     </li>
                     <li 
-                        className={`${ pathname === '/giftcards' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/giftcards' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="giftcards"
                     >
                         <Link to="/giftcards">
@@ -91,7 +91,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     </li>
 
                     <li 
-                        className={`${ pathname === '/newsletter' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/newsletter' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="Newsletter"
                     >
                         <Link to="/newsletter">
@@ -103,7 +103,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     </li>
 
                     <li 
-                        className={`${ pathname === '/orders' && 'bg-[#8652A4] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/orders' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="orders"
                     >
                         <Link to="/orders">
@@ -115,7 +115,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                     </li>
 
                     <li 
-                        className={`${ pathname === '/account' && 'bg-[#8652A4] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#8652A4] hover:text-white` }
+                        className={`${ pathname === '/account' && 'bg-[#134FE7] text-white' } cursor-pointer my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="account"
                         onClick={() => openModal()}
                     >
