@@ -9,6 +9,7 @@ import Account from "../pages/account";
 import UserDetailPage from "../pages/user-detail";
 import NewsletterPage from "../pages/newsletter";
 import ApplicationPage from "../pages/application";
+import JobsPage from "../pages/Jobs";
 // import NotFoundPage from "../pages/Not-found";
 
 const privateRoutes: RouteType[] = [
@@ -27,6 +28,10 @@ const privateRoutes: RouteType[] = [
     {
         path: '/giftcards',
         component: <Giftcard />
+    },
+    {
+        path: '/jobs',
+        component: <JobsPage />
     },
     {
         path: '/job-application',

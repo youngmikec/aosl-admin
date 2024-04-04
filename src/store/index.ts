@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import applicationReducer from './application';
+import jobReducer from './jobs-training';
 import usersReducer from "./users";
 import modalReducer from "./modal";
 import logotModalReducer from "./modal/logout-modal";
@@ -13,6 +14,7 @@ import profileReducer from './profile';
 export const store = configureStore({
   reducer: {
     applicationState: applicationReducer,
+    jobState: jobReducer,
     airtimeState: airtimeReducer,
     appModal: modalReducer,
     logoutModal: logotModalReducer,

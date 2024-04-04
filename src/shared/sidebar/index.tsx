@@ -46,13 +46,13 @@ const Sidebar = ({sidebarMenus}: Props) => {
                         </Link>
                     </li>
                     <li 
-                        className={`${ pathname === '/cryptos' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
-                        title="cryptos"
+                        className={`${ pathname === '/jobs' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                        title="jobs/trainings"
                     >
-                        <Link to="/cryptos">
+                        <Link to="/jobs">
                             <div className='flex justify-start'>
                                 <div><span><AiOutlineDollar className='text-xl'/></span></div>
-                                <div className='mx-2'>Cryptos</div>
+                                <div className='mx-2'>Jobs & Trainings</div>
                             </div>           
                         </Link>
                     </li>
@@ -78,18 +78,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
                             </div>           
                         </Link>
                     </li>
-                    <li 
-                        className={`${ pathname === '/giftcards' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
-                        title="giftcards"
-                    >
-                        <Link to="/giftcards">
-                            <div className='flex justify-start'>
-                                <div><span><IoCardOutline className='text-xl'/></span></div>
-                                <div className='mx-2'>Giftcards</div>
-                            </div>           
-                        </Link>
-                    </li>
-
+                    
                     <li 
                         className={`${ pathname === '/newsletter' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                         title="Newsletter"
