@@ -245,13 +245,12 @@ const JobForm: FC<Props> = ({ mode, record }) => {
                           <select
                               name="jobtype"
                               value={type.value}
-                              onChange={(e) =>
-                                setType({ ...type, value: e.target.value })
-                              }
+                              onChange={(e) => setType({ ...type, value: e.target.value })}
                               className={`bg-white text-[#6A6A6A] border-2 ${
                                 type.error ? 'error-border' : 'input-border'
                               } rounded-md px-4 py-2 w-full`}
                           >
+                            <option value="">select option</option>
                             <option value="WORK">Work</option>
                             <option value="TRAINING">Training</option>
                           </select>
