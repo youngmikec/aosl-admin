@@ -6,9 +6,6 @@ import { AxiosResponse } from 'axios';
 
 import './style.css';
 import { ApiResponse, Application } from '../../models';
-import { CREATE_AIRTIME } from '../../service';
-import { ADD_TO_AIRTIMES } from '../../store/airtime';
-import { CREATE_APPLICATION } from '../../service/applications';
 import { CREATE_JOBS } from '../../service/jobs';
 import { ADD_TO_JOBS } from '../../store/jobs-training';
 

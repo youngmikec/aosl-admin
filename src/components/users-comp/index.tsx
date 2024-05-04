@@ -11,7 +11,7 @@ import { BsFillCaretDownFill } from 'react-icons/bs';
 import Card from '../../shared/card';
 import { sortArray } from "../../utils";
 import { RootState } from '../../store';
-import { ADD_TO_USERS, REMOVE_USER } from '../../store/users';
+import { ADD_TO_USERS, INITIALIZE_USERS, REMOVE_USER } from '../../store/users';
 import { ApiResponse, User } from '../../models';
 import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
@@ -60,6 +60,7 @@ const UsersComp = () => {
         { key: 'actions', value: 'Actions' },
     ];
 
+
     const populateActions = (item: User): DropdownList[] => {
         
         const tableActions: DropdownList[] = [
@@ -96,26 +97,31 @@ const UsersComp = () => {
         return tableActions;
     }
 
+    const mapUserData = (data: User[]) => {
+        const mappedData = data.map((item: User, idx: number) => {
+            const actions = populateActions(item);
+            return {
+                sn: idx + 1,
+                fullName: `${item?.firstName} ${item?.lastName}`,
+                email: item?.email,
+                type: item?.userType,
+                status: item?.isVerified ? 'Verified' : 'Not Verified',
+                date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                actions: <DropdownComp dropdownList={actions} />
+            }
+        });
+        return mappedData;
+    }
+
+
     const retrieveUsers = () => {
-        RETRIEVE_USERS()
+        RETRIEVE_USERS('?sort=-createdAt')
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
             notify("success", message);
             setUsers(payload);
-            const mappedDate = payload.map((item: User, idx: number) => {
-                const actions = populateActions(item);
-                return {
-                    sn: idx + 1,
-                    fullName: `${item?.firstName} ${item?.lastName}`,
-                    email: item?.email,
-                    type: item?.userType,
-                    status: item?.isVerified ? 'Verified' : 'Not Verified',
-                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
-                    actions: <DropdownComp dropdownList={actions} />
-                }
-            });
-            setTableRows(mappedDate);
-            dispatch(ADD_TO_USERS(payload));
+            setTableRows(mapUserData(payload));
+            dispatch(INITIALIZE_USERS(payload));
         })
         .catch((err) => {
             const { message } = err.response.data;
@@ -137,12 +143,6 @@ const UsersComp = () => {
         });
     };
 
-    const sortData = (field: string) => {
-        const sortedArray: any[] = sortArray(users, field);
-        if (sortedArray.length > 0) {
-            setUsers(sortedArray);
-        }
-    };
 
     const openModal = () => {
         dispatch(OpenAppModal());
@@ -180,8 +180,8 @@ const UsersComp = () => {
     }
 
     useEffect(() => {
-        retrieveUsers();
-    }, []);
+        (usersState.length > 0) ? setTableRows(mapUserData(usersState)) : retrieveUsers();
+    }, [usersState]);
 
     return (
         <>
@@ -193,29 +193,6 @@ const UsersComp = () => {
                             <h3 className='text-[#134FE7] text-xl font-bold mb-1'>Users Record Table</h3>
                             <p className='text-[#7F7F80] text-sm'>Displaying {users.length} of {users.length} User Record(s)</p>
                         </div>
-
-                        {/* <div className="flex flex-col sm:justify-between md:justify-between lg:flex-row lg:justify-between w-full">
-                            <div className='my-2 md:my-0 lg:my-0'>
-                                <SortComp sortData={sortData} />
-                            </div>
-
-                            <div>
-                                <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input 
-                                        type="text" 
-                                        className='lg:w-80 px-3 py-1'
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                    <button 
-                                        className='bg-[#134FE7] text-white text-sm px-6 py-2 rounded-md'
-                                        onClick={() => handleSearchQuery()}
-                                    >
-                                        { searching ? 'searching...' : 'Search' }
-                                    </button>
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                     {/* Title section */}
                     <AppTable tableHeaders={tableHeaders} tableRows={tableRows} />

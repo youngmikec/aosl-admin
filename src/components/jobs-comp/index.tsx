@@ -52,8 +52,8 @@ const JobsComp: FC = () => {
 
     const tableHeaders: TableHeader[] = [
       { key: 'sn', value: 'S/N' },
-      { key: 'code', value: 'Airtime Code' },
-      { key: 'title', value: 'Job Title' },
+      { key: 'code', value: 'Job/Training Code' },
+      { key: 'title', value: 'Title' },
       { key: 'type', value: 'Type' },
       { key: 'company', value: 'Company' },
       { key: 'status', value: 'Status' },

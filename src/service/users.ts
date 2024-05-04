@@ -3,8 +3,8 @@ import axios, { url } from "./config";
 
 // const url: string = "http://localhost:3000/api";
 
-export const RETRIEVE_USERS = async () => {
-  return axios.get(`${url}/users`);
+export const RETRIEVE_USERS = async (query: string = '') => {
+  return axios.get(`${url}/users/${query}`);
 };
 
 export const RETRIEVE_USER_BY_ID = async (id: string) => {

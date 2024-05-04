@@ -162,6 +162,17 @@ const Navbar = ({ profile, loading}: Props) => {
                                     </Link>
                                 </li>
                                 <li 
+                                    className={`${ pathname === '/chats' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                                    title="Users chats"
+                                >
+                                    <Link to="/chats">
+                                        <div className='flex justify-start'>
+                                            <div><span><FiUsers className='text-xl'/></span></div>
+                                            <div className='mx-2'>Chats</div>
+                                        </div>           
+                                    </Link>
+                                </li>
+                                <li 
                                     className={`${ pathname === '/job-application' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
                                     title="applications"
                                 >

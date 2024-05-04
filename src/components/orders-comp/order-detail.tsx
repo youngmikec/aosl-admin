@@ -30,33 +30,9 @@ const OrderDetailComp = ({ order }: Props) => {
                     <div className='px-4'>
                         <p className='my-2'><strong>Order Code:</strong>  {order?.code}</p>
                         <p className='my-3'><strong>Order Type:</strong>  {order?.orderType}</p>
-                        <p className='my-3'><strong>Amount:</strong>  ${order?.amount} worth
-                            {
-                                order?.airtime &&
-                                <p className='my-3'><strong>Airtime:</strong>  {order?.airtime?.name}</p>
-                            }
-                            {
-                                order?.giftcard &&
-                                <p className='my-3'><strong>Giftcard:</strong>  {order?.giftcard?.name}</p>
-                            }
-                            {
-                                order?.cryptocurrency &&
-                                <p className='my-3'><strong>Cryptocurrency:</strong>  {order?.cryptocurrency?.name}</p>
-                            }
-                        </p>
+                    
                         <p className='my-3'><strong>Amount Receivable:</strong> NGN {order?.amountReceivable}</p>
-                        {
-                            order?.airtime &&
-                            <p className='my-3'><strong>Airtime:</strong>  {order?.airtime?.name}</p>
-                        }
-                        {
-                            order?.giftcard &&
-                            <p className='my-3'><strong>Giftcard:</strong>  {order?.giftcard?.name}</p>
-                        }
-                        {
-                            order?.cryptocurrency &&
-                            <p className='my-3'><strong>Cryptocurrency:</strong>  {order?.cryptocurrency?.name}</p>
-                        }
+                        
                         <p className='my-3'><strong>User First Name:</strong>  {order?.user?.firstName}</p>
                         <p className='my-3'><strong>User Last Name:</strong>  {order?.user?.lastName}</p>
                         <p className='my-3'><strong>User email:</strong>  {order?.user?.email}</p>

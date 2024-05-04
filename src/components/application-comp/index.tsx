@@ -88,7 +88,7 @@ const ApplicationComp: FC = () => {
     }
 
     const retrieveAirtimes = () => {
-        const query: string = `?sort=-title&populate=createdBy`;
+        const query: string = `?sort=-createdAt&populate=createdBy`;
         RETREIVE_APPLICATION(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;

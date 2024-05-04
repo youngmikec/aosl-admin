@@ -1,25 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import applicationReducer from './application';
+import chatReducer from './Chat';
 import jobReducer from './jobs-training';
 import usersReducer from "./users";
 import modalReducer from "./modal";
 import logotModalReducer from "./modal/logout-modal";
-import cryptoReducer from "./cryptos";
 import newsletterReducer from "./newsletter";
 import ordersReducer from "./orders";
-import airtimeReducer from "./airtime";
-import giftcardReducer from "./giftcard";
 import profileReducer from './profile';
 
 export const store = configureStore({
   reducer: {
     applicationState: applicationReducer,
+    chatState: chatReducer,
     jobState: jobReducer,
-    airtimeState: airtimeReducer,
     appModal: modalReducer,
     logoutModal: logotModalReducer,
-    cryptosState: cryptoReducer,
-    giftcardsState: giftcardReducer,
     newsletterState: newsletterReducer,
     ordersState: ordersReducer,
     usersState: usersReducer,
