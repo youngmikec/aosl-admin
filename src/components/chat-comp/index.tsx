@@ -9,9 +9,10 @@ import ChatInputComp from "./chat-input-comp";
 import { ChatMessage } from "../../models/chat";
 import ChatProfileComp from "./chat-profile-comp"
 import { ChatRoom } from "../../models/chat-room";
-import { RETREIVE_CHATE_ROOMS } from "../../service/chat-rooms";
+import { RETREIVE_CHAT_ROOMS } from "../../service/chat-rooms";
 import { RETREIVE_CHAT_MESSAGES, SEND_CHAT_MESSAGE } from "../../service";
 import { ADD_CHAT_MESSAGE, SET_CHAT_MESSAGES } from "../../store/Chat";
+import { User } from "../../models";
 
 
 const ChatComp = () => {
@@ -64,7 +65,9 @@ const ChatComp = () => {
   useEffect(() => {
     if(ActiveChatRoom) {
       setRoomId(ActiveChatRoom.id);
-      setRecipientId(ActiveChatRoom.members.filter((member: any) => (member.id !== senderId))[0].id);
+      if(ActiveChatRoom.members.length > 0){
+        setRecipientId(ActiveChatRoom.members.filter((member: User) => (member.userType !== 'ADMIN'))[0].id);
+      }
     }
   }, [ActiveChatRoom]);
 
@@ -80,6 +83,10 @@ const ChatComp = () => {
       }
     }
   }, [roomId]);
+
+  useEffect(() => {
+    setChatMessages(ChatMessages)
+  }, [ChatMessages]);
 
 
 

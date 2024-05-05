@@ -27,7 +27,7 @@ const MessageComp: FC<Props> = ({ chatMessage, direction }) => {
         {
           direction === 'outgoing' && (
             <div className="flex justify-end">
-              <p className="text[$c8ecff] text-sm font-bold">{chatMessage.sender?.firstName} {chatMessage.sender?.lastName}</p>
+              <p className="text[$c8ecff] text-[10px] font-bold">Admin {chatMessage.sender?.firstName} {chatMessage.sender?.lastName}</p>
             </div>
           )
         }

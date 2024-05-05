@@ -3,7 +3,7 @@ import axios, { url } from './config';
 
 // const url: string | undefined = process.env.REACT_APP_BASE_URL;
 
-export const RETREIVE_CHATE_ROOMS = async (query: string = '') => {
+export const RETREIVE_CHAT_ROOMS = async (query: string = '') => {
     return axios.get(`${url}/chat-rooms/${query}`);
 };
 

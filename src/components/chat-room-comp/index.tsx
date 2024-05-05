@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { ChatRoom } from '../../models/chat-room';
-import { RETREIVE_CHATE_ROOMS } from '../../service/chat-rooms';
+import { RETREIVE_CHAT_ROOMS } from '../../service/chat-rooms';
 import { BiSearch } from 'react-icons/bi';
 import RoomComp from './room-comp';
 
@@ -12,7 +12,7 @@ const ChatRoomsComp: FC = () => {
 
   const retrieveChatRooms = () => {
     const query: string = `?sort=-createdAt&populate=members,createdBy`;
-    RETREIVE_CHATE_ROOMS(query).then(res => {
+    RETREIVE_CHAT_ROOMS(query).then(res => {
       const { payload } = res.data;
       setChatRooms(payload);
     }).catch(err => {

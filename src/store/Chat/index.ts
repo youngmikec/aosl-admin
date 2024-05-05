@@ -27,7 +27,7 @@ export const chatSlice = createSlice({
     }, 
     ADD_CHAT_MESSAGE: (state, action: PayloadAction<ChatMessage>) => {
       const { chatMessages } = state.value
-      state.value.chatMessages = [action.payload, ...chatMessages]
+      state.value.chatMessages = [...chatMessages, action.payload];
     }
   }
 })
