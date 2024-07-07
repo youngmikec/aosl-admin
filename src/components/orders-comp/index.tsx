@@ -46,7 +46,7 @@ const OrdersComp = () => {
         { key: 'status', value: 'Status' },
         { key: 'proofImg', value: 'Image' },
         { key: 'actions', value: 'Actions' },
-    ]
+    ];
 
     const notify = (type: string, msg: string) => {
         if (type === "success") {
@@ -139,12 +139,6 @@ const OrdersComp = () => {
         });
     };
 
-    const sortData = (field: string) => {
-        const sortedArray: any[] = sortArray(orders, field);
-        if (sortedArray.length > 0) {
-          setOrders(sortedArray);
-        }
-    };
 
     const handleSearchQuery = () => {
         setSearching(true);

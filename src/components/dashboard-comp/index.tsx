@@ -14,7 +14,6 @@ import AppTable, { TableHeader } from '../../shared/app-table';
 
 const DashboardComp = () => {
     const [searching, setSearching] = useState<boolean>(false);
-    const [searchQuery, setSearchQuery] = useState<string>('');
     
     const [recentApplications, setRecentApplications] = useState<Order[]>([]);
     const [pendingApplications, setPendingApplications] = useState<number>(0);
@@ -132,24 +131,6 @@ const DashboardComp = () => {
                                 <h3 className='text-[#134FE7] text-xl mb-1'>Job/Training Applications Table</h3>
                                 <p className='text-[#7F7F80] text-sm'>Displaying {recentApplications.length} of { recentApplications.length } Order Record(s)</p>
                             </div>
-
-                            
-                            {/* <div>
-                                <div className='border-2 border-[#ececec] flex justify-start w-max rounded-md'>
-                                    <input 
-                                        type="text" 
-                                        className='w-40 md:w-60 lg:w-80 px-3 py-1'
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                    <button 
-                                        className='bg-[#134FE7] text-white text-sm px-6 py-2 rounded-md'
-                                        onClick={() => handleSearchQuery()}
-                                    >
-                                        { searching ? 'searching...' : 'Search' }
-                                    </button>
-                                </div>
-                            </div> */}
                         </div>
 
                     </div>

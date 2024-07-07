@@ -8,6 +8,7 @@ import NewsletterPage from "../pages/newsletter";
 import ApplicationPage from "../pages/application";
 import JobsPage from "../pages/Jobs";
 import ChatPage from "../pages/chat";
+import InvoicePage from "../pages/invoices";
 // import NotFoundPage from "../pages/Not-found";
 
 const privateRoutes: RouteType[] = [
@@ -34,6 +35,10 @@ const privateRoutes: RouteType[] = [
     {
         path: '/orders',
         component: <OrdersPage />
+    },
+    {
+        path: '/invoices',
+        component: <InvoicePage />
     },
     {
         path: '/users',

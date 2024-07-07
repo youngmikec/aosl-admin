@@ -3,6 +3,7 @@ import {
   User,
   Application,
   Job,
+  Invoice,
 } from "../../models";
 import { Order } from "../../models/order";
 
@@ -20,6 +21,11 @@ export type NewsletterState = {
 export type OrdersState = {
   value: Order[];
 };
+
+export type InvoiceState = {
+  value: Invoice[];
+};
+
 export type UsersState = {
   value: User[];
 };

@@ -9,6 +9,7 @@ import logotModalReducer from "./modal/logout-modal";
 import newsletterReducer from "./newsletter";
 import ordersReducer from "./orders";
 import profileReducer from './profile';
+import invoiceReducer from './invoice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     chatState: chatReducer,
     jobState: jobReducer,
     appModal: modalReducer,
+    invoiceState: invoiceReducer,
     logoutModal: logotModalReducer,
     newsletterState: newsletterReducer,
     ordersState: ordersReducer,

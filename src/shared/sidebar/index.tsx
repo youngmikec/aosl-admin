@@ -89,6 +89,17 @@ const Sidebar = ({sidebarMenus}: Props) => {
                             </div>           
                         </Link>
                     </li>
+                    <li
+                        className={`${ pathname === '/invoices' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                        title="invoices"
+                    >
+                        <Link to="/invoices">
+                            <div className='flex justify-start'>
+                                <div><span><IoCopyOutline className='text-xl'/></span></div>
+                                <div className='mx-2'>Invoices</div>
+                            </div>           
+                        </Link>
+                    </li>
                     
                     <li 
                         className={`${ pathname === '/newsletter' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
