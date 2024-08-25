@@ -1,6 +1,6 @@
-import axios, { url } from './config';
+import axios from './config';
 
-
+const url: string = "http://localhost:3000/api";
 // const url: string | undefined = process.env.REACT_APP_BASE_URL;
 
 export const RETREIVE_JOBS = async (query: string = '') => {

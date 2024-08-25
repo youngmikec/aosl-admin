@@ -18,9 +18,11 @@ import AppModalComp from '../../shared/app-modal';
 import DeleteComp from '../../shared/delete-comp/delete-comp';
 import InvoiceDetailsComp from './invoice-details';
 import InvoiceForm from './invoice-form';
+import { useNavigate } from 'react-router-dom';
 
 const InvoiceComp: FC = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const Invoices: Invoice[] = useSelector((state: RootState) => state.invoiceState.value);
 
     const [deleting, setDeleting] = useState<boolean>(false);
@@ -88,7 +90,10 @@ const InvoiceComp: FC = () => {
 
     const openModal = (mode: string = 'create', id: string = '') => {
       setModalMode(mode);
-      dispatch(OpenAppModal());
+      mode === 'create' ?
+      navigate(`/invoices/create`) :
+      navigate(`/invoices/edit/${selectedInvoice?.id}`);
+      // dispatch(OpenAppModal());
   }
 
 
@@ -102,7 +107,6 @@ const InvoiceComp: FC = () => {
             
             const mappedDate = payload.map((item: Invoice, idx: number) => {
                 const actions = populateActions(item);
-                console.log('actions', actions);
                 return {
                     sn: idx + 1,
                     code: item?.invoiceCode,

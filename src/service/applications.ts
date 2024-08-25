@@ -1,7 +1,7 @@
-import axios, { url } from './config';
+import axios from './config';
 
 
-// const url: string | undefined = process.env.REACT_APP_BASE_URL;
+const url: string | undefined = process.env.REACT_APP_BASE_URL;
 
 export const RETREIVE_APPLICATION = async (query: string = '') => {
     return axios.get(`${url}/applications/${query}`);

@@ -24,7 +24,7 @@ const InvoiceDetailsComp: FC<Props> = ({ data }) => {
                 <div className='px-4 my-6'>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <CustomDetailField label='First Name:' value={data?.invoiceCode} />
-                      <CustomDetailField label='Invoice url:' value={data?.invoiceUrl} />
+                      <CustomDetailField label='Invoice url:' value={data?.invoiceUrl.slice(0, 40).concat('...')} hasCopyBtn={true} />
                       <CustomDetailField label='Total amount:' value={formatCurrency(data?.totalAmount, data?.currency)} />
                       <CustomDetailField label='Currency:' value={data?.currency} />
                       <CustomDetailField label='Status:' value={data?.status} />

@@ -3,6 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from 'react-redux';
 import { AxiosResponse } from 'axios';
+import { FaPlus, FaMinus } from "react-icons/fa";
+
 
 import './style.css';
 import { ApiResponse, Application } from '../../models';
@@ -15,20 +17,78 @@ type Props = {
   record?: Application
 }
 
+type FormGroup = {
+  name: string;
+  amount: number;
+  quantity: number;
+  totalAmount: number;
+}
+
 const InvoiceForm: FC<Props> = ({ mode, record }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false);
     const [productServices, setProductServices] = useState<any[]>([]);
+    const [selectedServices, setSelectedServices] = useState<any[]>([]);
 
     const [issueDate, setIssueDate] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [dueDate, setDueDate] = useState<{value: string, error: boolean }>({value: '', error: false});
-    const [totalAmount, setTotalAmount] = useState<{value: number, error: boolean }>({value: 0, error: false});
+    const [totalAmount, setTotalAmount] = useState<number>(0);
     const [clientName, setClientName] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [clientEmail, setClientEmail] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [clientPhone, setClientPhone] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [clientAddress, setClientAddress] = useState<{value: string, error: boolean }>({value: '', error: false});
     const [tax, setTax] = useState<{value: number, error: boolean }>({value: 0, error: false});
     const [discount, setDiscount] = useState<{value: number, error: boolean }>({value: 0, error: false});
+
+    const [serviceArray, setServiceArray] = useState<FormGroup[]>([
+      {
+        name: '',
+        amount: 0,
+        quantity: 1,
+        totalAmount:0
+      }
+    ]);
+
+    const AddFormGroup = () => {
+      const formGroup: FormGroup = {
+        name: '',
+        amount: 0,
+        quantity: 1,
+        totalAmount:0
+      }
+      setServiceArray(prev => [...prev, formGroup ])
+    }
+
+    const RemoveFormGroup = (index: number) => {
+      setServiceArray((prev: FormGroup[]) => {
+        const newFormArray = prev.filter((item: FormGroup, idx: number) => idx !== index);
+        const totalAmount = newFormArray.map(item => item.totalAmount).reduce((a, b) => (!Number.isNaN(b)) ? (a + b) : (a + 0));
+        setTotalAmount(totalAmount);
+        return newFormArray;
+      });
+    }
+
+    const setFormGroupValue = (name: string, value: any, index: number) => {
+      setServiceArray((prev: FormGroup[]) => {
+        const newFormArray = prev.map((fg: FormGroup, idx: number, arr: FormGroup[]) => {
+          if(idx === index){
+            let newData: FormGroup | any = {...fg};
+            if(name === 'amount' || name === 'quantity'){
+              newData[`${name}`] = value;
+              newData.totalAmount = (!Number.isNaN(newData.amount) && !Number.isNaN(newData.quantity)) ? (newData.amount * newData.quantity) : 0;
+            }else {
+              newData[`${name}`] = value;
+            }
+            return newData;
+          }else {
+            return fg;
+          }
+        });
+        const totalAmount = newFormArray.map(item => item.totalAmount).reduce((a, b) => (!Number.isNaN(b)) ? (a + b) : (a + 0));
+        setTotalAmount(totalAmount);
+        return newFormArray;
+      })
+    }
 
     const retrieveProductServices = () => {
       RETRIEVE_PRODUCT_SERVICES().then((res: AxiosResponse<ApiResponse>) => {
@@ -72,12 +132,6 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
         setDueDate({ ...dueDate, error: false });
       }
       
-      if(totalAmount.value === 0 || undefined || null) {
-        isValid = false;
-        setTotalAmount({ ...totalAmount, error: true });
-      } else {
-        setTotalAmount({ ...totalAmount, error: false });
-      }
 
       if(clientName.value === "" || undefined || null) {
         isValid = false;
@@ -93,39 +147,55 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
       }
       if(clientPhone.value === "" || undefined || null) {
         isValid = false;
-        setClientName({ ...clientPhone, error: true });
+        setClientPhone({ ...clientPhone, error: true });
       } else {
-        setClientName({ ...clientPhone, error: false });
+        setClientPhone({ ...clientPhone, error: false });
+      }
+      if(clientAddress.value === "" || undefined || null) {
+        isValid = false;
+        setClientAddress({ ...clientAddress, error: true });
+      } else {
+        setClientAddress({ ...clientAddress, error: false });
       }
 
       return isValid;
     };
 
     const clearFormStates = () => {
+      setTotalAmount(0);
       setIssueDate({value: '', error: false});
       setDueDate({value: '', error: false});
-      setTotalAmount({value: 0, error: false});
       setClientName({value: '', error: false});
       setClientEmail({value: '', error: false});
       setClientPhone({value: '', error: false});
       setClientAddress({value: '', error: false});
       setTax({value: 0, error: false});
       setDiscount({value: 0, error: false});
+      setServiceArray([
+        {
+          name: '',
+          amount: 0,
+          quantity: 1,
+          totalAmount:0
+        }
+      ])
     }
 
     const handleSubmit = () => {
       if (inputCheck()) {
           setLoading(true);
+          const formattedServices = serviceArray.map((item: FormGroup) => ({...item, totalAmount: (item.quantity * item.amount)}));
           const data = { 
             issueDate: issueDate.value,
             dueDate: dueDate.value,
-            totalAmount: totalAmount.value,
+            totalAmount: totalAmount,
             clientName: clientName.value,
             clientEmail: clientEmail.value,
             clientPhone: clientPhone.value,
             clientAddress: clientAddress.value,
             tax: tax.value,
             discount: discount.value,
+            services: formattedServices
           };
         CREATE_INVOICE(data)
         .then((res: AxiosResponse<ApiResponse>) => {
@@ -140,9 +210,7 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             notify("error", message);
             setLoading(false);
         });
-      }else {
-        notify("error", `Fill in all required fields`);
-      }  
+      }
     };
 
     useEffect(() => {
@@ -156,13 +224,14 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
 
             <div className="my-3">
-                <label htmlFor="name" className="text-[#BFBFBF] text-sm block">
+                <label htmlFor="name" className="text-black text-sm block">
                     Client Name*
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={clientName.value}
+                  placeholder='Enter your full name'
                   onChange={(e) =>
                     setClientName({ ...clientName, value: e.target.value })
                   }
@@ -173,12 +242,13 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             </div>
 
             <div className="my-3">
-                <label htmlFor="shortName" className="text-[#BFBFBF] text-sm block">
+                <label htmlFor="shortName" className="text-black text-sm block">
                     Client Email*
                 </label>
                 <input
                     type="text"
                     name="clientEmail"
+                    placeholder="example@gmail.com"
                     value={clientEmail.value}
                     onChange={(e) =>
                       setClientEmail({ ...clientEmail, value: e.target.value })
@@ -190,12 +260,13 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             </div>
 
             <div className="my-3">
-                <label htmlFor="rate" className="text-[#BFBFBF] text-sm block">
+                <label htmlFor="rate" className="text-black text-sm block">
                   Client Phone*
                 </label>
                 <input
                   type="text"
                   name="clientPhone"
+                  placeholder='+234 881'
                   min={0}
                   value={clientPhone.value}
                   onChange={(e) =>
@@ -208,12 +279,13 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             </div>
 
             <div className="my-3">
-              <label htmlFor="txnNetwork" className="text-[#BFBFBF] text-sm block">
+              <label htmlFor="txnNetwork" className="text-black text-sm block">
                 Client Address
               </label>
               <input
                 type="text"
                 name="clientAddress"
+                placeholder='enter your address.'
                 value={clientAddress.value}
                 onChange={(e) =>
                   setClientAddress({ ...clientAddress, value: e.target.value })
@@ -225,7 +297,7 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             </div>
 
             <div className="my-3">
-              <label htmlFor="issueDate" className="text-[#BFBFBF] text-sm block">
+              <label htmlFor="issueDate" className="text-black text-sm block">
                 Date Issued*
               </label>
               <input
@@ -242,7 +314,7 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
             </div>
 
             <div className="my-3">
-              <label htmlFor="issueDate" className="text-[#BFBFBF] text-sm block">
+              <label htmlFor="issueDate" className="text-black text-sm block">
                 Due Date*
               </label>
               <input
@@ -257,80 +329,104 @@ const InvoiceForm: FC<Props> = ({ mode, record }) => {
                 } rounded-md px-4 py-2 w-full`}
               />
             </div>
-
-            <div className="my-3">
-              <label htmlFor="totalAmount" className="text-[#BFBFBF] text-sm block">
-                Total Amount*
-              </label>
-              <input
-                type="number"
-                name="totalAmount"
-                value={totalAmount.value}
-                onChange={(e) =>
-                  setTotalAmount({ ...totalAmount, value: parseInt(e.target.value)})
-                }
-                className={`bg-white text-[#6A6A6A] border-2 ${
-                  totalAmount.error ? 'error-border' : 'input-border'
-                } rounded-md px-4 py-2 w-full`}
-              />
-            </div>
-
-            <div className="my-3">
-              <label htmlFor="tax" className="text-[#BFBFBF] text-sm block">
-                Tax
-              </label>
-              <input
-                type="number"
-                name="tax"
-                value={tax.value}
-                onChange={(e) =>
-                  setTax({ ...tax, value: parseInt(e.target.value) })
-                }
-                className={`bg-white text-[#6A6A6A] border-2 ${
-                    tax.error ? 'error-border' : 'input-border'
-                } rounded-md px-4 py-2 w-full`}
-              />
-            </div>
-
-            <div className="my-3">
-              <label htmlFor="discount" className="text-[#BFBFBF] text-sm block">
-                Discount
-              </label>
-              <input
-                type="number"
-                name="discount"
-                value={discount.value}
-                onChange={(e) =>
-                  setDiscount({ ...discount, value: parseInt(e.target.value) })
-                }
-                className={`bg-white text-[#6A6A6A] border-2 ${
-                    discount.error ? 'error-border' : 'input-border'
-                } rounded-md px-4 py-2 w-full`}
-              />
-            </div>
-
-            <div className="my-3">
-              <label htmlFor="discount" className="text-[#BFBFBF] text-sm block">
-                Services
-              </label>
-              <select
-                name="discount"
-                onChange={(e) =>
-                  console.log(e.target.value)
-                }
-                className={`bg-white text-[#6A6A6A] border-2 ${
-                  discount.error ? 'error-border' : 'input-border'
-                } rounded-md px-4 py-2 w-full`}
-              >
-                <option value="">select</option>
-                {
-                  productServices.map((service: any, index: number) => (
-                    <option key={index} value={service.id}>{service.title}</option>
-                  ))
-                }
-              </select>
-            </div>
           </div>
+
+          <hr />
+          <div className="flex justify-between my-4">
+            <h1>
+              <strong>Services Included</strong>
+            </h1>
+            <p>
+              <strong>
+              Amount {totalAmount} (GBP)
+              </strong>
+            </p>
+          </div>
+            {
+              serviceArray.length > 0 && serviceArray.map((row: FormGroup, idx: number) => {
+                return (
+                  <div 
+                    key={idx} 
+                    className="my-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 border-b-[1px] border-[#e3e3e3]"
+                  >
+                    <div className="my-3">
+                      <label htmlFor="tax" className="text-black text-sm block">
+                        Service
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={row.name}
+                        placeholder='service name'
+                        onChange={(e) =>
+                          setFormGroupValue('name', e.target.value, idx)
+                        }
+                        className={`bg-white text-[#6A6A6A] border-2 ${
+                            tax.error ? 'error-border' : 'input-border'
+                        } rounded-md px-4 py-2 w-full`}
+                      />
+                    </div>
+                    <div className="my-3">
+                      <label htmlFor="tax" className="text-black text-sm block">
+                        Quantity
+                      </label>
+                      <input
+                        type="number"
+                        name="quantity"
+                        value={row.quantity}
+                        onChange={(e) =>
+                          setFormGroupValue('quantity', parseInt(e.target.value), idx)
+                        }
+                        className={`bg-white text-[#6A6A6A] border-2 ${
+                            tax.error ? 'error-border' : 'input-border'
+                        } rounded-md px-4 py-2 w-full`}
+                      />
+                    </div>
+                    <div className="my-3">
+                      <label htmlFor="tax" className="text-black text-sm block">
+                        Amount (GBP)
+                      </label>
+                      <input
+                        type="number"
+                        name="amount"
+                        value={row.amount}
+                        onChange={(e) =>
+                          setFormGroupValue('amount', parseInt(e.target.value), idx)
+                        }
+                        className={`bg-white text-[#6A6A6A] border-2 ${
+                            tax.error ? 'error-border' : 'input-border'
+                        } rounded-md px-4 py-2 w-full`}
+                      />
+                    </div>
+
+                    <div className="my-auto flex justify-center gap-2">
+                      <div>
+                        <button 
+                          disabled={serviceArray.length <= 1}
+                          onClick={() => RemoveFormGroup(idx)}
+                          className="flex justify-center items-center border-[1px] border-[#1041be] rounded-lg bg-white text-[#1041be] hover:bg-[#e3e3e3] hover:text-[#1041be] py-2 px-4"
+                        >
+                          <FaMinus size={16} color="#1041be" />
+                        </button>
+                      </div>
+                      {
+                        (serviceArray.length === (idx + 1)) && (
+                          <div>
+                            <button 
+                              onClick={() => AddFormGroup()}
+                              className="flex justify-center items-center border-[1px] border-[#1041be] rounded-lg bg-white text-[#1041be] hover:bg-[#e3e3e3] hover:text-[#1041be] py-2 px-4"
+                            >
+                              <FaPlus size={16} color="#1041be" />
+                            </button>
+                          </div>
+                        )
+                      }
+                    </div>
+                    <hr />
+                  </div>
+                )
+              })
+            }
 
           <div className="my-3 flex justify-center">
               <button

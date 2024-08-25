@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import './style.css';
 import logo from '../../assets/images/logo.png';
-import { LOGIN } from '../../service';
+import { LOGIN, WELCOME_ROUTE } from '../../service';
 import { ApiResponse } from '../../models';
 import { setItem } from '../../utils';
 
@@ -74,9 +74,17 @@ const LoginComp = () => {
         }
     }
 
+    const checkServerHealth = () => {
+        WELCOME_ROUTE().then().catch((error: AxiosError) => notify('error', error.message))
+    }
+
     const togglePasswordDisplay = () => {
         setPDisplay(!pDisplay);
     }
+
+    useEffect(() => {
+        checkServerHealth()
+    }, []);
 
     return (
         <>

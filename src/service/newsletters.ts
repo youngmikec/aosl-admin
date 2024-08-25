@@ -1,6 +1,7 @@
-import axios, { url } from "./config";
+import axios from "./config";
 
 // const url: string | undefined = process.env.REACT_APP_BASE_URL;
+const url: string = "http://localhost:3000/api";
 
 export const RETREIVE_NEWSLETTERS = async (query: string = "") => {
   return axios.get(`${url}/newsletters/${query}`);

@@ -7,6 +7,10 @@ export const RETRIEVE_USERS = async (query: string = '') => {
   return axios.get(`${url}/users/${query}`);
 };
 
+export const WELCOME_ROUTE = async () => {
+  return axios.get(`${url}/welcome`);
+};
+
 export const RETRIEVE_USER_BY_ID = async (id: string) => {
   return axios.get(`${url}/users/?_id=${id}`);
 };
