@@ -1,6 +1,6 @@
-import axios from "./config";   
+import axios, { url } from "./config";   
 
-const url: string = "http://localhost:3000/api";
+// const url: string = "http://localhost:3000/api";
 
 export const RETRIEVE_ORDERS = async (query: string = '') => {
     let uri: string = `${url}/orders/${query}`;
