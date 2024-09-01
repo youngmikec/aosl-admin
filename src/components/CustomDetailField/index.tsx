@@ -35,7 +35,9 @@ const CustomDetailField: FC<Props> = ({label, value, hasCopyBtn = false }) => {
                 <div className='my-3 w-full border-[1px] border-[#7F7F80] p-4 rounded-md relative'>
                     <p>
                         <strong>{label}</strong>
-                        <span className="mx-1 text-md text-justify">{value.slice(0, 40).concat('...')}</span>
+                        <span className="mx-1 text-md text-justify">
+                            { (value && value.length >= 40) ? value.slice(0, 40).concat('...') : value }
+                        </span>
                     </p>
 
                     {

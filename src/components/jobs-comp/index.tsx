@@ -97,7 +97,6 @@ const JobsComp: FC = () => {
         RETREIVE_JOBS(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
-            notify("success", message);
             setJobssData(payload);
             const mappedDate = payload.map((item: Job, idx: number) => {
                 const actions = populateActions(item);

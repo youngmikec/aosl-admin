@@ -87,12 +87,14 @@ const ApplicationComp: FC = () => {
         return tableActions;
     }
 
-    const retrieveAirtimes = () => {
+    const retrieveApplications = () => {
         const query: string = `?sort=-createdAt&populate=createdBy`;
         RETREIVE_APPLICATION(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
-            notify("success", message);
+            if(payload.length < 1){
+                notify("success", message);
+            }
             setApplicationsData(payload);
             const mappedDate = payload.map((item: Application, idx: number) => {
                 const actions = populateActions(item);
@@ -152,7 +154,7 @@ const ApplicationComp: FC = () => {
     }
     
     useEffect(() => {
-        retrieveAirtimes();
+        retrieveApplications();
     }, []);
 
     useEffect(() => {
@@ -191,15 +193,27 @@ const ApplicationComp: FC = () => {
             </div>
 
             <AppModalComp title=''>
-                {/* {
-                    modalMode === 'create' && <ApplicationForm mode={modalMode} />
-                } */}
+                {
+                    modalMode === 'create' && 
+                    <ApplicationForm 
+                        jobId={''} 
+                        mode={modalMode} 
+                        record={null} 
+                        onSuccess={retrieveApplications}
+                    />
+                }
                 {
                     modalMode === 'view' && <ApplicationDetailsComp data={selectedRecord} />
                 }
-                {/* {
-                    modalMode === 'update' && <ApplicationForm mode={modalMode} record={selectedRecord}  />
-                } */}
+                {
+                    modalMode === 'update' && 
+                    <ApplicationForm 
+                        mode={modalMode} 
+                        jobId={selectedRecord ? selectedRecord?.id : ''} 
+                        record={selectedRecord ? selectedRecord : null}  
+                        onSuccess={retrieveApplications}
+                    />
+                }
                 {
                     modalMode === 'delete' && <DeleteComp id={selectedRecord?.id} action={handleDeleteRecord} deleting={deleting} />
                 }

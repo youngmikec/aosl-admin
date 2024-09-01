@@ -49,7 +49,6 @@ const DashboardComp = () => {
     const retrieveAppReports = () => {
         RETRIEVE_APP_REPORTS().then(res => {
             const { message, payload } = res.data;
-            notify('success', message);
             setRecentApplications(payload.recentApplications);
             setPendingApplications(payload.pendingApplications);
             setAcceptedApplications(payload.acceptedApplications);

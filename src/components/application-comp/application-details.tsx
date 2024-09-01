@@ -40,7 +40,7 @@ const ApplicationDetailComp: FC<Props> = ({ data }) => {
                         <CustomDetailField label='Created At:' value={moment(data?.createdAt).format("MM-DD-YYYY")} />
                         <CustomDetailField label='Created By:' value={getFullName(data?.createdBy)} />
                     </div>
-                    <CustomDetailField label='Job Description:' value={data?.job?.description} />
+                    <CustomDetailField label='Biography:' value={data?.biography} />
                 </div>
             </div>
         </>

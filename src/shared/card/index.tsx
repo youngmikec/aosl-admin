@@ -11,7 +11,7 @@ const Card = ({ children, title, type }: Props) => {
   return (
     <>
         <div className={
-            `bg-white shadow-xl w-full h-max ${type === 'sm' ? 'p-4 rounded-lg' : 'p-8 rounded-xl'}`
+            `bg-white dark:bg-gray-900 shadow-xl w-full h-max ${type === 'sm' ? 'p-4 rounded-lg' : 'p-8 rounded-xl'}`
         }>
             {
                 title && 
@@ -19,7 +19,9 @@ const Card = ({ children, title, type }: Props) => {
                     <h3 className='text-2xl font-medium capitalize text-[#134FE7]'>{ title }</h3>
                 </div>
             }
-            { children }
+            <div className="dark:bg-gray-900">
+                { children }
+            </div>
         </div>
     </>
   )

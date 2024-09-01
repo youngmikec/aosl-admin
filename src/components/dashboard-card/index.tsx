@@ -24,12 +24,12 @@ const DashboardCard = ({ title, value, bgColor, txtColor }: Props) => {
         <>
             <div className={`rounded-md flex justify-start px-3 py-5`} style={style}>
                 <div>
-                    <span>
+                    <span className="my-auto">
                         <MdOutlinePeopleAlt />
                     </span>
                 </div>
                 <div className="mx-2">
-                    <p>{title}</p>
+                    <p className="text-lg md:text-xl lg:text-xl font-semibold">{title}</p>
                     <h1 className='text-2xl'>{value}</h1>
                 </div>
             </div>

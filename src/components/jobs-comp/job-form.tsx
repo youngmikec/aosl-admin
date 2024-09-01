@@ -1,4 +1,4 @@
-import React, { useState, useRef, FC } from 'react';
+import React, { useState, useRef, FC, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from 'react-redux';
@@ -6,8 +6,9 @@ import { AxiosResponse } from 'axios';
 
 import './style.css';
 import { ApiResponse, Job } from '../../models';
-import { CREATE_JOBS } from '../../service/jobs';
-import { ADD_TO_JOBS } from '../../store/jobs-training';
+import { CREATE_JOBS, UPDATE_JOBS } from '../../service/jobs';
+import { ADD_TO_JOBS, UPDATE_JOB_STATE } from '../../store/jobs-training';
+import { OpenAppModal } from '../../store/modal';
 
 type Props = {
   mode: string;
@@ -174,6 +175,51 @@ const JobForm: FC<Props> = ({ mode, record }) => {
         }  
     };
 
+    const handleUpdate = () => {
+      if(record){
+        setLoading(true);
+        const data = { 
+          title: title.value,
+          type: type.value,
+          jobImage: jobImage.value,
+          companyName: companyName.value,
+          description: description.value,
+          termDuration: termDuration.value,
+          paymentDuration: paymentDuration.value,
+          paymentMethod: paymentMethod.value,
+          jobRequirements: jobRequirements.value
+        };
+  
+        UPDATE_JOBS(record?.id, data)
+        .then((res: AxiosResponse<ApiResponse>) => {
+            const { message, payload } = res.data;
+            setLoading(false);
+            notify("success", message);
+            dispatch(UPDATE_JOB_STATE(payload));
+            dispatch(OpenAppModal());
+        })
+        .catch((err: any) => {
+            const { message } = err.response.data;
+            notify("error", message);
+            setLoading(false);
+        }); 
+      }
+    };
+
+    useEffect(() => {
+      if(mode !== 'create' && record){
+        setJobImage({value: record?.jobImage, error: false});
+        setTitle({value: record?.title, error: false});
+        setCompanyName({value: record?.companyName, error: false});
+        setType({value: record?.type, error: false});
+        setDescription({value: record?.description, error: false});
+        setTermDuration({value: record?.termDuration, error: false});
+        setPaymentDuration({value: record?.paymentDuration, error: false});
+        setPaymentMethod({value: record?.paymentMethod, error: false});
+        setJobRequirements({value: record.jobRequirements, error: false});
+      }
+      
+  }, [mode, record]);
 
     return (
         <>
@@ -186,17 +232,17 @@ const JobForm: FC<Props> = ({ mode, record }) => {
                     >
                         {jobImage.value && <span onClick={() => removeImage()} className='absolute top-2 cursor-pointer right-3 z-10'>X</span>}
                         {
-                            jobImage.value ? 
-                            <img src={jobImage?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} /> :
-                            <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
-                                + <br /> Choose file
-                            </button>
+                          jobImage.value ? 
+                          <img src={jobImage?.value} width="30%" className='cursor-pointer' alt="uploaded" onClick={() => openFile()} /> :
+                          <button className='text-center text-[#7F7F80]' onClick={() => openFile()}>
+                              + <br /> Choose file
+                          </button>
                         }
                         <input 
-                            type="file" 
-                            className='hidden'
-                            ref={fileRef}
-                            onChange={(e) => handleFileRead(e)}
+                          type="file" 
+                          className='hidden'
+                          ref={fileRef}
+                          onChange={(e) => handleFileRead(e)}
                         />
                     </div>
                 </div>
@@ -302,7 +348,7 @@ const JobForm: FC<Props> = ({ mode, record }) => {
                             </label>
                             <select
                                 name="paymentMethod"
-                                value={paymentDuration.value}
+                                value={paymentMethod.value}
                                 onChange={(e) =>
                                   setPaymentMethod({ ...type, value: e.target.value })
                                 }
@@ -338,10 +384,10 @@ const JobForm: FC<Props> = ({ mode, record }) => {
 
                         <div className="my-3 text-center">
                             <button
-                                onClick={() => handleSubmit()}
-                                className="bg-[#134FE7] text-white py-1 px-10 rounded-2xl"
+                              onClick={() => mode !== 'create' ? handleUpdate() :  handleSubmit()}
+                              className="bg-[#134FE7] text-white py-1 px-10 rounded-2xl"
                             >
-                                {loading ? "Processing..." : "Create"}
+                              { loading ? "Processing..." : mode !== 'create' ? "Update" : "Create" }
                             </button>
                         </div>
                     </div>

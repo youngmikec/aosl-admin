@@ -42,7 +42,7 @@ const UserLayout = ({children}: Props) =>  {
 
   return (
     <>
-      <div className='content-wrapper flex'>
+      <div className='content-wrapper flex dark:bg-gray-900'>
           <div className='flex-2 hidden min-h-screen
               sm:hidden
               md:block
@@ -50,8 +50,8 @@ const UserLayout = ({children}: Props) =>  {
           >
               <Sidebar />
           </div>
-          <div className='w-full lg:flex-1'>
-              <div className='mx-auto w-11/12'>
+          <div className='w-full lg:flex-1 dark:bg-gray-800'>
+              <div className='mx-auto w-11/12 dark:bg-gray-800'>
                 <Navbar profile={profile} loading={loadingProfile} />
                 { children }
               </div>

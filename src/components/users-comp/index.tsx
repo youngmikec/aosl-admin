@@ -93,7 +93,7 @@ const UsersComp = () => {
                     openModal()
                 }
             },
-        ]
+        ];
         return tableActions;
     }
 
@@ -118,7 +118,6 @@ const UsersComp = () => {
         RETRIEVE_USERS('?sort=-createdAt')
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
-            notify("success", message);
             setUsers(payload);
             setTableRows(mapUserData(payload));
             dispatch(INITIALIZE_USERS(payload));

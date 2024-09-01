@@ -32,7 +32,7 @@ const Sidebar = ({sidebarMenus}: Props) => {
 
     return (
         <>
-            <div className="bg-white min-h-screen max-h-fit px-4 py-5">
+            <div className="bg-white dark:bg-gray-900 min-h-screen max-h-fit px-4 py-5">
                 <div className="my-5 px-4">
                     <img src={logo} alt="logo" width="100px" height="100px" />
                 </div>

@@ -102,7 +102,6 @@ const InvoiceComp: FC = () => {
         RETRIEVE_INVOICES(query)
         .then((res: AxiosResponse<ApiResponse>) => {
             const { message, payload } = res.data;
-            notify("success", message);
             setInvoices(payload);
             
             const mappedDate = payload.map((item: Invoice, idx: number) => {
