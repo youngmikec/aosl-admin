@@ -10,9 +10,11 @@ import newsletterReducer from "./newsletter";
 import ordersReducer from "./orders";
 import profileReducer from './profile';
 import invoiceReducer from './invoice';
+import blogReducer from './blog';
 
 export const store = configureStore({
   reducer: {
+    blogState: blogReducer,
     applicationState: applicationReducer,
     chatState: chatReducer,
     jobState: jobReducer,

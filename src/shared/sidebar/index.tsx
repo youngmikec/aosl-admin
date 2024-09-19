@@ -10,6 +10,8 @@ import { RiDashboardFill } from 'react-icons/ri';
 import { FiUsers } from 'react-icons/fi';
 import { IoCardOutline, IoCopyOutline } from 'react-icons/io5';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
+import { RiArticleLine } from "react-icons/ri";
+
 
 import logo from '../../assets/images/logo.png';
 import { OpenLogoutModal } from '../../store/modal/logout-modal';
@@ -64,6 +66,17 @@ const Sidebar = ({sidebarMenus}: Props) => {
                             <div className='flex justify-start'>
                                 <div><span><FiUsers className='text-xl'/></span></div>
                                 <div className='mx-2'>Users</div>
+                            </div>           
+                        </Link>
+                    </li>
+                    <li 
+                        className={`${ pathname === '/blogs' && 'bg-[#134FE7] text-white' } my-6 py-3 px-4 text-center rounded-md hover:bg-[#134FE7] hover:text-white` }
+                        title="blogs"
+                    >
+                        <Link to="/blogs">
+                            <div className='flex justify-start'>
+                                <div><span><RiArticleLine className='text-xl'/></span></div>
+                                <div className='mx-2'>Blogs</div>
                             </div>           
                         </Link>
                     </li>

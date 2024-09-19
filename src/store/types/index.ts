@@ -4,11 +4,15 @@ import {
   Application,
   Job,
   Invoice,
+  BlogPost,
 } from "../../models";
 import { Order } from "../../models/order";
 
 export type ApplicationState = {
   value: Application[];
+};
+export type BlogState = {
+  value: any[];
 };
 export type JobState = {
   value: Job[];

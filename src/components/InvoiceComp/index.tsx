@@ -105,21 +105,21 @@ const InvoiceComp: FC = () => {
             setInvoices(payload);
             
             const mappedDate = payload.map((item: Invoice, idx: number) => {
-                const actions = populateActions(item);
-                return {
-                    sn: idx + 1,
-                    code: item?.invoiceCode,
-                    issuedDate: moment(item?.issueDate).format("MM-DD-YYYY"),
-                    dueDate: moment(item?.dueDate).format("MM-DD-YYYY"),
-                    totalAmount: formatCurrency(item?.totalAmount, item?.currency),
-                    date: moment(item?.createdAt).format("MM-DD-YYYY"),
-                    status: item?.status === 'PENDING' ? 
-                    <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
-                    :
-                    <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
-                    currency: item?.currency,
-                    actions: <DropdownComp dropdownList={actions} />
-                }
+              const actions = populateActions(item);
+              return {
+                  sn: idx + 1,
+                  code: item?.invoiceCode,
+                  issuedDate: moment(item?.issueDate).format("MM-DD-YYYY"),
+                  dueDate: moment(item?.dueDate).format("MM-DD-YYYY"),
+                  totalAmount: formatCurrency(item?.totalAmount, item?.currency),
+                  date: moment(item?.createdAt).format("MM-DD-YYYY"),
+                  status: item?.status === 'PENDING' ? 
+                  <button className='border-[#FF3E1D] border-2 text-[#FF3E1D] text-sm py-1 px-4 rounded-md'>{item.status}</button>
+                  :
+                  <button className='bg-[#71DD37] text-white text-sm py-1 px-4 rounded-md'>{item.status}</button>,
+                  currency: item?.currency,
+                  actions: <DropdownComp dropdownList={actions} />
+              }
             });
             setTableRows(mappedDate);
             dispatch(INITIALIZE_INVOICES(payload));

@@ -10,6 +10,7 @@ import JobsPage from "../pages/Jobs";
 import ChatPage from "../pages/chat";
 import InvoicePage from "../pages/invoices";
 import CreateInvoicePage from "../pages/invoices/Create-Invoice-page";
+import BlogPage from "../pages/blog";
 // import NotFoundPage from "../pages/Not-found";
 
 const privateRoutes: RouteType[] = [
@@ -32,6 +33,10 @@ const privateRoutes: RouteType[] = [
     {
         path: '/job-application',
         component: <ApplicationPage />
+    },
+    {
+        path: '/blogs',
+        component: <BlogPage />
     },
     {
         path: '/orders',
