@@ -13,3 +13,23 @@ export const CertLevels: string[] = [
     "DEGREE", 
     "DOCTORATE"
 ];
+
+export const BlogCategories: string[] = [
+    'TRANSPORTATION',
+    'ACCOMODATION',
+    'HEALTH',
+    'CONSULTATION',
+    'SERVICE',
+    'FOOD',
+    'LIFESTYLE',
+    'BUSINESS',
+    'FASHION',
+    'TRAVEL',
+    'GENERAL'
+];
+
+export const BlogStatusOptions: string[] = [
+    'DRAFT',
+    'PUBLISHED',
+    'UNPUBLISHED'
+];

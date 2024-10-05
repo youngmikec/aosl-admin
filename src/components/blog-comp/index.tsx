@@ -21,6 +21,7 @@ import { REMOVE_BLOG } from '../../store/blog';
 // import ApplicationForm from './application-form';
 import { RETREIVE_BLOGS } from '../../service/blogs';
 import { INITIALIZE_BLOGS } from '../../store/blog';
+import BlogForm from './blog-form';
 
 const BlogComp: FC = () => {
     const dispatch = useDispatch();
@@ -197,16 +198,15 @@ const BlogComp: FC = () => {
             </div>
 
             <AppModalComp title=''>
-                {/* {
+                {
                     modalMode === 'create' && 
-                    <ApplicationForm 
-                        jobId={''} 
+                    <BlogForm 
                         mode={modalMode} 
                         record={null} 
-                        onSuccess={retrieveApplications}
+                        onSuccess={retrieveBlogs}
                     />
                 }
-                {
+                {/* {
                     modalMode === 'view' && <ApplicationDetailsComp data={selectedRecord} />
                 }
                 {
